@@ -19,6 +19,9 @@ if __name__ == "__main__":
         dir = input(f"\nPlayer {my_board.player + 1}, enter your move -> ")
         try:
             bst = my_board.move(dir)
+            while bst == board.state.NO_CHANGE:
+                dir = input(f"Nothing changed, Player {my_board.player + 1}, move again -> ")
+                bst = my_board.move(dir)
         except ValueError:
             print("invalid move, try again")
 

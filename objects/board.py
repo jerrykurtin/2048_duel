@@ -6,6 +6,7 @@ class state(Enum):
     WIN1 = 1
     CONTINUE = 0
     LOSS = -1
+    NO_CHANGE = -2
 
 class Board:
     def __init__(self, board_size=4, win_state=2048):
@@ -32,6 +33,7 @@ class Board:
         self.p2score = 2
 
     def move(self, dir):
+        prev_state = [[col for col in row] for row in self.board]
         # call the proper move function
         dir = dir.lower()
         if dir == "w":
@@ -44,6 +46,10 @@ class Board:
             self.right()
         else:
             raise ValueError("invalid move direction")
+
+        # check for no change
+        if self.board == prev_state:
+            return state.NO_CHANGE
         
         # check for win condition and add squares
         cands = []
