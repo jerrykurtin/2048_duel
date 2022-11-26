@@ -44,6 +44,8 @@ class Board:
             self.left()
         elif dir == "d":
             self.right()
+        elif dir == "p":
+            _ = input("Paused, press enter to continue...")
         else:
             raise ValueError("invalid move direction")
 
