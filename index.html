@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+    <meta charset="utf-8" />
+    <title>2048 Duel</title>
+    <style>
+        * {
+        padding: 0;
+        margin: 10;
+        }
+        canvas {
+        background: #eee;
+        display: block;
+        margin: 0 auto;
+        }
+    </style>
+    </head>
+    <body>
+        <canvas id="myCanvas" width="600" height="600"></canvas>
+
+        <script>
+            // JavaScript code goes here
+            // Build the canvas
+            let size = 150
+            const canvas = document.getElementById("myCanvas");
+            const ctx = canvas.getContext("2d");
+
+            // draw the grid
+            for (let row = 0; row < 4; ++row){
+                for (let col = 0; col < 4; ++col){
+                    ctx.beginPath();
+                    ctx.rect(size * row + .1 * size, size * col + .1 * size, .8 * size, .8 * size);
+                    ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+        </script>
+    </body>
+</html>

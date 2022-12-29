@@ -1,4 +1,4 @@
-from random import randint, sample
+from random import randint, sample, choice
 from enum import Enum
 
 class state(Enum):
@@ -14,6 +14,7 @@ class Board:
         self.win_state = win_state
         self.squares_added = 1
         self.player = 0
+        self.first_round = True
 
         self.board = [[0 for r in range(board_size)] for c in range(board_size)]
         self.owner = [[-1 for r in range(board_size)] for c in range(board_size)]
@@ -83,9 +84,15 @@ class Board:
             return state.WIN1
 
         # add new values to board
+        if self.first_round:
+            new_square = 4
+            self.first_round = False
+        else:
+            new_square = choice([2] * 75 + [4] *  24 + [8] * 1)
+
         added = sample(cands, self.squares_added)
         for val in added:
-            self.board[val[0]][val[1]] = 2
+            self.board[val[0]][val[1]] = new_square
             self.owner[val[0]][val[1]] = self.player
             if self.player == 0:
                 self.p1score += 2

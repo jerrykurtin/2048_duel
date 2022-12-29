@@ -33,7 +33,7 @@ if __name__ == "__main__":
     print(f"the first person to steal all squares or reach a square of {my_board.win_state} wins!")
     time_limit = ""
     while True:
-        time_limit = input("Enter the time limit for moves (seconds): ")
+        time_limit = input("\nEnter the time limit for moves (seconds): ")
         if time_limit == "":
             time_limit = 0
             break
@@ -67,6 +67,7 @@ if __name__ == "__main__":
                 dir, success = get_dir(time_limit)
                 if not success:
                     print(f"Time limit exceeded, auto-selecting ->{dir}")
+                # move the board
                 bst = my_board.move(dir)
 
         except ValueError:
