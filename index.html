@@ -16,25 +16,71 @@
     </style>
     </head>
     <body>
+        <!-- Objects and listeners -->
         <canvas id="myCanvas" width="600" height="600"></canvas>
-
+        
         <script>
-            // JavaScript code goes here
-            // Build the canvas
-            let size = 150
-            const canvas = document.getElementById("myCanvas");
-            const ctx = canvas.getContext("2d");
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+            var size = 150
+            var paddleHeight = 10;
+            var paddleWidth = 75;
+            var paddleX = (canvas.width-paddleWidth)/2;
+            var rightPressed = false;
+            var leftPressed = false;
+
+            document.addEventListener("keydown", keyDownHandler, false);
+            document.addEventListener("keyup", keyUpHandler, false);
+
+            function keyDownHandler(e) {
+                if(e.key == "Right" || e.key == "ArrowRight") {
+                    rightPressed = true;
+                }
+                else if(e.key == "Left" || e.key == "ArrowLeft") {
+                    leftPressed = true;
+                }
+            }
+
+            function keyUpHandler(e) {
+                if(e.key == "Right" || e.key == "ArrowRight") {
+                    rightPressed = false;
+                }
+                else if(e.key == "Left" || e.key == "ArrowLeft") {
+                    leftPressed = false;
+                }
+            }
+
+            function drawPaddle() {
+                ctx.beginPath();
+                ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+                ctx.fillStyle = "#0095DD";
+                ctx.fill();
+                ctx.closePath();
+            }
 
             // draw the grid
-            for (let row = 0; row < 4; ++row){
-                for (let col = 0; col < 4; ++col){
+            function drawGrid(){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (var row = 0; row < 4; ++row){
+                    for (var col = 0; col < 4; ++col){
+                        ctx.beginPath();
+                        ctx.rect(size * row + .1 * size, size * col + .1 * size, .8 * size, .8 * size);
+                        ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+
+                if (rightPressed){
                     ctx.beginPath();
-                    ctx.rect(size * row + .1 * size, size * col + .1 * size, .8 * size, .8 * size);
-                    ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
+                    ctx.rect(0, 0, 100, 100);
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
                     ctx.fill();
                     ctx.closePath();
                 }
             }
+            
+            setInterval(drawGrid, 10);
         </script>
     </body>
 </html>
