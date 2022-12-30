@@ -16,28 +16,84 @@
     </style>
     </head>
     <body>
-        <!-- Objects and listeners -->
-        <canvas id="myCanvas" width="600" height="600"></canvas>
+        <canvas id="myCanvas" width="615" height="615"></canvas>
+        <p id="debug1"></p>
+        <p id="debug2"></p>
+        <button onclick="updateBoard()">Get Board</button>
+        <!-- <p id="request_status"></p> -->
+        <textarea id="board_printer" rows="10" cols="40"></textarea>
+
         
         <script>
+            // document.write("hello world")
+            // ----------------------- Settings and Setup -----------------------
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
+            
             var size = 150
-            var paddleHeight = 10;
-            var paddleWidth = 75;
-            var paddleX = (canvas.width-paddleWidth)/2;
+
+            // fonts
+            block_font = "75px Standard";
+            block_font2 = "75px Palatino";
+
+            // colors
+            var green = "121, 130, 101";
+            var salmon = "203, 141, 126";
+            var navy = "33, 51, 67";
+            
+            var black = "67,67,67";
+            var grey = "147,152,157";
+            var white = "250,250,250";
+            var cream = "250,249,243";
+
             var rightPressed = false;
             var leftPressed = false;
+            var upPressed = false;
+            var downPressed = false;
 
+            // block settings
+            ctx.font = block_font2;
+            ctx.textAlign = "center";
+
+            // board information
+            board_info = null;
+            var keypress_active = false;
+            var update_needed = false;
+            var move_type = null;
+
+            // holds the http request object
+            var xhr = null;
+
+            // ------------------------------------------------------------------
+
+            // --------------------- Listeners and Handlers ---------------------
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
 
             function keyDownHandler(e) {
                 if(e.key == "Right" || e.key == "ArrowRight") {
                     rightPressed = true;
+                    move_type = "right";
                 }
                 else if(e.key == "Left" || e.key == "ArrowLeft") {
                     leftPressed = true;
+                    move_type = "left";
+                }
+                else if (e.key == "Up" || e.key == "ArrowUp"){
+                    upPressed = true;
+                    move_type = "up";
+                }
+                else if (e.key == "Down" || e.key == "ArrowDown"){
+                    downPressed = true;
+                    move_type = "down";
+                }
+
+                // set keypress active variable
+                if (rightPressed || leftPressed || upPressed || downPressed){
+                    if (!keypress_active){
+                        keypress_active = true;
+                        update_needed = true;
+                    }
                 }
             }
 
@@ -48,39 +104,153 @@
                 else if(e.key == "Left" || e.key == "ArrowLeft") {
                     leftPressed = false;
                 }
+                else if (e.key == "Up" || e.key == "ArrowUp"){
+                    upPressed = false;
+                }
+                else if (e.key == "Down" || e.key == "ArrowDown"){
+                    downPressed = false;
+                }
+
+                if (!rightPressed && !leftPressed && !upPressed && !downPressed){
+                    if (keypress_active){
+                        keypress_active = false;
+                    }
+                }
+            }
+            // ------------------------------------------------------------------
+            
+            // ------------------------ Backend Requests ------------------------
+            // build the http request object
+            getXmlHttpRequestObject = function () {
+                if (!xhr) {
+                    // Create a new XMLHttpRequest object 
+                    xhr = new XMLHttpRequest();
+                }
+                return xhr;
+            };
+
+            // function to control getBoard response behavior
+            function boardCallback() {
+                // Check response is ready or not
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log("User data received!");
+                    
+                    // Update board_info with new text
+                    board_info = JSON.parse(xhr.responseText);
+
+                    // debugging
+                    dataDiv = document.getElementById('board_printer');
+                    dataDiv.innerHTML = xhr.responseText;
+
+                    // update the screen
+                    drawGrid(board_info);
+                }
             }
 
-            function drawPaddle() {
-                ctx.beginPath();
-                ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-                ctx.fillStyle = "#0095DD";
-                ctx.fill();
-                ctx.closePath();
+            // Gets updated board information and updates the screen
+            function updateBoard() {
+                console.log("Getting board...");
+                xhr = getXmlHttpRequestObject();
+                xhr.onreadystatechange = boardCallback;
+
+                // asynchronous requests
+                xhr.open("GET", "http://localhost:6969/board", true);
+
+                // Send the request over the network
+                xhr.send(null);
             }
+
+            function makeMove(direction){
+                xhr = getXmlHttpRequestObject();
+                xhr.onreadystatechange = boardCallback;
+
+                // asynchronous requests
+                // todo: make synchronous to clean up logic
+                xhr.open("POST", "http://localhost:6969/move", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                var data = JSON.stringify({"move" : direction});
+                
+                // Send the request over the network
+                xhr.send(data);
+            }
+
+            // ------------------------------------------------------------------
+
 
             // draw the grid
-            function drawGrid(){
+            function drawGrid(board_info){
+                // grab the updated board
+                // clear the grid
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (board_info){
+                    console.log("board info recieved in drawGrid");
+                    console.log("board: " + board_info.board);
+                    console.log("owner: " + board_info.owner);
+                }
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
                         ctx.beginPath();
-                        ctx.rect(size * row + .1 * size, size * col + .1 * size, .8 * size, .8 * size);
-                        ctx.fillStyle = "rgba(0, 0, 255, 0.5)";
+
+                        text = "0";
+                        owner = null;
+                        player = -1;
+
+                        // parse the current number
+                        if (board_info != null){
+                            console.log("board information recieved in drawGrid()")
+                            text = board_info["board"][col][row].toString();                            
+                            
+                            // set the owner
+                            if (text != 0){
+                                if (board_info["owner"][col][row] == 0){
+                                    player = 1;
+                                }
+                                else {
+                                    player = 2;
+                                }
+                            }
+                        }
+                        
+                        // draw the rectangle backgrounds
+                        ctx.rect(size * row + .1 * size, size * col + .1 * size, .9 * size, .9 * size);
+                        if (player == 1){
+                            ctx.fillStyle = "rgb(" + salmon + ", 0.5)";
+                        }
+                        else if (player == 2){
+                            ctx.fillStyle = "rgb(" + green + ", 0.5)";
+                        }
+                        else{
+                            ctx.fillStyle = "rgb(" + grey + ", 0.25)";
+                        }
                         ctx.fill();
+                        
+                        // draw the numbers
+                        if (text != "0"){
+                            ctx.fillStyle = "rgba(" + white + ", .9)";
+                            ctx.fillText(text, size * row + .55 * size, size * col + .675 * size);
+                        }
+                        
                         ctx.closePath();
                     }
                 }
+            }
 
-                if (rightPressed){
-                    ctx.beginPath();
-                    ctx.rect(0, 0, 100, 100);
-                    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-                    ctx.fill();
-                    ctx.closePath();
+            function mainLoop(){
+
+                // process keypress
+                if (update_needed){
+                    console.log("making move " + move_type);
+                    makeMove(move_type);
+                    update_needed = false;
                 }
+
+                document.getElementById("debug1").innerHTML = "up: " + upPressed + ", down: " + downPressed;
+                document.getElementById("debug2").innerHTML = "left: " + leftPressed + ", right: " + rightPressed;
             }
             
-            setInterval(drawGrid, 10);
+            updateBoard();
+            setInterval(mainLoop, 10);
         </script>
     </body>
 </html>

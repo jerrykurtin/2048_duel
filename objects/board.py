@@ -1,7 +1,7 @@
 from random import randint, sample, choice
-from enum import Enum
+from enum import IntEnum
 
-class state(Enum):
+class state(IntEnum):
     WIN2 = 2
     WIN1 = 1
     CONTINUE = 0
@@ -34,18 +34,19 @@ class Board:
         self.p2score = 2
 
     def move(self, dir):
+        print("moving ", dir)
         prev_state = [[col for col in row] for row in self.board]
         # call the proper move function
         dir = dir.lower()
-        if dir == "w":
+        if dir == "up":
             self.up()
-        elif dir == "s":
+        elif dir == "down":
             self.down()
-        elif dir == "a":
+        elif dir == "left":
             self.left()
-        elif dir == "d":
+        elif dir == "right":
             self.right()
-        elif dir == "p":
+        elif dir == "pause":
             _ = input("Paused, press enter to continue...")
         else:
             raise ValueError("invalid move direction")

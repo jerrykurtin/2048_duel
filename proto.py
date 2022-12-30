@@ -61,6 +61,8 @@ if __name__ == "__main__":
         if not success:
             print(f"Time limit exceeded, auto-selecting {dir}")
         try:
+            dir_translate = { "w" : "up", "a" : "left", "s" : "down", "d" : "right", "p": "pause"}
+            dir = dir_translate[dir]
             bst = my_board.move(dir)
             while bst == board.state.NO_CHANGE:
                 print(f"Nothing changed, Player {my_board.player + 1}, move again")
