@@ -103,9 +103,14 @@ class Board:
         # switch to the next player
         self.player = (self.player + 1) % 2
         
-        # check for loss
+        # check for win: filled up squares
         if len(cands) <= self.squares_added:
-            return state.LOSS
+            if self.p1score > self.p2score:
+                return state.WIN1
+            elif self.p1score < self.p2score:
+                return state.WIN2
+            else:
+                return state.LOSS
         else:
             return state.CONTINUE
     

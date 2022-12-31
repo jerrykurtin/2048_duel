@@ -8,7 +8,6 @@ from objects import board
 app = Flask(__name__)
 CORS(app)
 
-
 # health check
 @app.route("/")
 def hello():
@@ -17,6 +16,7 @@ def hello():
 # returns the current board state
 @app.route("/board", methods=["GET"])
 def setup():
+    print("bst: ", bst)
     data = {
         "board" : my_board.board,
         "owner" : my_board.owner,
@@ -30,13 +30,16 @@ def setup():
 # makes a move
 @app.route("/move", methods=["POST"])
 def move():
-    # read the move
-    in_data = request.get_json()
-    usr_move = in_data["move"]
-    print("moving", usr_move)
+    global bst
+    print("bst:", bst)
+    if bst == board.state.CONTINUE or bst == board.state.NO_CHANGE:
+        # read the move
+        in_data = request.get_json()
+        usr_move = in_data["move"]
 
-    # make the move
-    my_board.move(usr_move)
+        # make the move
+        print("moving", usr_move)
+        bst = my_board.move(usr_move)
 
 
     data = {
@@ -55,5 +58,4 @@ if __name__ == "__main__":
     # setup the objects
     my_board = board.Board(4, 64)
     bst = board.state.CONTINUE
-
     app.run("localhost", 6969)
