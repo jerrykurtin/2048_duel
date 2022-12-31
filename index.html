@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css">
-    <title>2048 Duel</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css">
+        <title>2048 Duel</title>
     </head>
     <body>
         <h1 id="title_field">2048 Duel!</h1>
@@ -11,12 +11,6 @@
         <p class="game-intro">How to play: use the arrow keys to move all pieces in one of the 4 directions. When the same number move into each other, the
             pieces merge and double. If you merge one of your pieces with one of your opponents, you steal the piece. Take turns with your opponent, and try to be the first one to reach 64 or fill up the board with the 
             highest score. Have fun :)</p>
-        <!-- <p id="debug1"></p>
-        <p id="debug2"></p> -->
-        <!-- <button onclick="updateBoard()">Get Board</button> -->
-        <!-- <p id="request_status"></p> -->
-        <!-- <textarea id="board_printer" rows="10" cols="40"></textarea> -->
-
         
         <script>
             // document.write("hello world")
@@ -66,6 +60,127 @@
 
             // holds the http request object
             var xhr = null;
+
+            // ------------------------------------------------------------------
+
+            // --------------------------- Game Logic ---------------------------
+            class Board {
+                constructor(win_condition=64) {
+                    // board variables
+                    this.board_size = 4;
+                    this.win_condition = win_condition;
+                    this.squares_added = 1;
+                    this.board_state = "continue";
+                    this.player = 0;
+                    this.first_round = true;
+
+                    // create board
+                    this.board = new Array(this.board_size);
+                    for (let r = 0; r < this.board.length; ++r){
+                        this.board[r] = new Array(this.board_size).fill(0);
+                    }
+                    this.owner = new Array(this.board_size);
+                    for (let r = 0; r < this.owner.length; ++r){
+                        this.owner[r] = new Array(this.board_size).fill(-1);
+                    }
+
+                    // initialize the first numbers
+                    var st1 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+                    var st2 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+                    while (st1[0] == st2[0] || st1[1] == st2[1])
+                        st2 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+
+                    this.board[st1[0]][st1[1]] = 2
+                    this.owner[st1[0]][st1[1]] = 0
+
+                    this.board[st2[0]][st2[1]] = 2
+                    this.owner[st2[0]][st2[1]] = 1
+
+
+                    this.p1score = 2;
+                    this.p2score = 2;
+
+                    console.log("board: " + this.board);
+                    console.log("owner: ", this.owner);
+                }
+
+                left(){
+                    /* make a left movement */
+                    for (let row = 0; row < this.board.length; ++row){
+                        // store the new row
+                        var newrow = Array(this.board.length).fill(0);
+                        var newowner = Array(this.board.length).fill(-1);
+                        var newidx = 0;
+
+                        for (let col = 0; col < this.board[0].length; ++col){
+                            if (this.board[row][col] != 0){
+
+                                // merge
+                                if (newidx > 0 && this.board[row][col] == newrow[newidx - 1]){
+                                    newrow[newidx - 1] = newrow[newidx - 1] * -2; // negative prevents double merging
+
+                                    // determine ownership of square
+                                    if (newowner[newidx - 1] != this.owner[row][col]){
+                                        newowner[newidx - 1] = this.player;
+                                    }
+                                }
+
+                                // move without merging
+                                else{
+                                    newrow[newidx] = this.board[row][col]
+                                    newowner[newidx] = this.owner[row][col]
+                                    newidx += 1
+                                }
+                            }
+                        }
+
+                        // update the board
+                        for (let col = 0; col < this.board[0].length; ++col)
+                            newrow[col] = Math.abs(newrow[col]);
+                        this.board[row] = newrow;
+
+                        // update the owner
+                        this.owner[row] = newowner;
+                    }
+
+                }
+            }
+
+            // helper functions ---------------------------
+            function randint(min, max){
+                /* random number between min and max, inclusive */
+                return Math.floor(Math.random() * (max - min + 1) ) + min;
+            }
+
+            const deepCopy = (arr) => {
+                /* deep copy a multi-dimensional array */
+                let copy = [];
+                arr.forEach(elem => {
+                    if(Array.isArray(elem)){
+                    copy.push(deepCopy(elem))
+                    }else{
+                    if (typeof elem === 'object') {
+                        copy.push(deepCopyObject(elem))
+                    } else {
+                        copy.push(elem)
+                    }
+                    }
+                })
+                return copy;
+            }
+
+            var my_board = new Board(64);
+            my_board.board = [
+                [2, 2, 4, 0],
+                [2, 2, 4, 4],
+                [2, 2, 2, 4],
+                [2, 2, 2, 4],
+            ];
+            my_board.owner = [
+                [0, 0, 1, -1],
+                [1, 1, 0, 1],
+                [0, 1, ]
+            ]
 
             // ------------------------------------------------------------------
 
