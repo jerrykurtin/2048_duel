@@ -4,22 +4,13 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="styles.css">
     <title>2048 Duel</title>
-    <style>
-        * {
-        padding: 0;
-        margin: 10;
-        }
-        canvas {
-        background: #eee;
-        display: block;
-        margin: 0 auto;
-        }
-    </style>
     </head>
     <body>
         <h1 id="title_field">2048 Duel!</h1>
         <canvas id="myCanvas" width="615" height="775" padding="20px"></canvas>
-        <p>How to play: normal 2048, but duel</p>
+        <p class="game-intro">How to play: use the arrow keys to move all pieces in one of the 4 directions. When the same number move into each other, the
+            pieces merge and double. If you merge one of your pieces with one of your opponents, you steal the piece. Take turns with your opponent, and try to be the first one to reach 64 or fill up the board with the 
+            highest score. Have fun :)</p>
         <!-- <p id="debug1"></p>
         <p id="debug2"></p> -->
         <!-- <button onclick="updateBoard()">Get Board</button> -->
@@ -38,6 +29,8 @@
             // fonts
             block_font = "75px Standard";
             block_font2 = "75px Palatino";
+            block_font3 = "75px Helvetica Neue";
+            
 
             score_font = "30px Palatino";
             turn_font = "50px Palatino";
@@ -62,6 +55,7 @@
             var leftPressed = false;
             var upPressed = false;
             var downPressed = false;
+            var resetPressed = false;
 
             // board information
             board_info = null;
@@ -85,25 +79,29 @@
                     e.preventDefault();
                 }   
 
-                if(e.key == "Right" || e.key == "ArrowRight") {
+                if(e.key == "Right" || e.key == "ArrowRight" || e.key == "d" || e.key == "KeyD") {
                     rightPressed = true;
                     move_type = "right";
                 }
-                else if(e.key == "Left" || e.key == "ArrowLeft") {
+                else if(e.key == "Left" || e.key == "ArrowLeft" || e.key == "a" || e.key == "KeyA") {
                     leftPressed = true;
                     move_type = "left";
                 }
-                else if (e.key == "Up" || e.key == "ArrowUp"){
+                else if (e.key == "Up" || e.key == "ArrowUp" || e.key == "w" || e.key == "KeyW"){
                     upPressed = true;
                     move_type = "up";
                 }
-                else if (e.key == "Down" || e.key == "ArrowDown"){
+                else if (e.key == "Down" || e.key == "ArrowDown" || e.key == "s" || e.key == "KeyS"){
                     downPressed = true;
                     move_type = "down";
                 }
 
+                else if (e.key == "r" || e.key == "KeyR"){
+                    resetPressed = true;
+                }
+
                 // set keypress active variable
-                if (rightPressed || leftPressed || upPressed || downPressed){
+                if (rightPressed || leftPressed || upPressed || downPressed || resetPressed){
                     if (!keypress_active){
                         keypress_active = true;
                         update_needed = true;
@@ -112,20 +110,23 @@
             }
 
             function keyUpHandler(e) {
-                if(e.key == "Right" || e.key == "ArrowRight") {
+                if(e.key == "Right" || e.key == "ArrowRight" || e.key == "d" || e.key == "KeyD") {
                     rightPressed = false;
                 }
-                else if(e.key == "Left" || e.key == "ArrowLeft") {
+                else if(e.key == "Left" || e.key == "ArrowLeft" || e.key == "a" || e.key == "KeyA") {
                     leftPressed = false;
                 }
-                else if (e.key == "Up" || e.key == "ArrowUp"){
+                else if (e.key == "Up" || e.key == "ArrowUp" || e.key == "w" || e.key == "KeyW"){
                     upPressed = false;
                 }
-                else if (e.key == "Down" || e.key == "ArrowDown"){
+                else if (e.key == "Down" || e.key == "ArrowDown" || e.key == "s" || e.key == "KeyS"){
                     downPressed = false;
                 }
+                else if (e.key == "r" || e.key == "KeyR"){
+                    resetPressed = false;
+                }
 
-                if (!rightPressed && !leftPressed && !upPressed && !downPressed){
+                if (!rightPressed && !leftPressed && !upPressed && !downPressed && !resetPressed){
                     if (keypress_active){
                         keypress_active = false;
                     }
@@ -174,7 +175,7 @@
                 xhr = getXmlHttpRequestObject();
                 xhr.onreadystatechange = boardCallback;
 
-                // asynchronous requests
+                // synchronous requests
                 xhr.open("GET", "http://localhost:6969/board", true);
 
                 // Send the request over the network
@@ -185,14 +186,24 @@
                 xhr = getXmlHttpRequestObject();
                 xhr.onreadystatechange = boardCallback;
 
-                // asynchronous requests
-                // todo: make synchronous to clean up logic
+                // synchronous request
                 xhr.open("POST", "http://localhost:6969/move", true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 var data = JSON.stringify({"move" : direction});
                 
                 // Send the request over the network
                 xhr.send(data);
+            }
+
+            function resetBoard(){
+                xhr = getXmlHttpRequestObject();
+                xhr.onreadystatechange = boardCallback;
+
+                // synchronous request
+                xhr.open("POST", "http://localhost:6969/reset", true);
+                
+                // Send the request over the network
+                xhr.send(null);
             }
 
             // ------------------------------------------------------------------
@@ -245,10 +256,10 @@
                         ctx.fill();
                         
                         // draw the numbers
-                        ctx.font = block_font2;
+                        ctx.font = block_font3;
                         ctx.textAlign = "center";
                         if (text != "0"){
-                            ctx.fillStyle = "rgba(" + white + ", .9)";
+                            ctx.fillStyle = "rgba(" + white + ", 1)";
                             ctx.fillText(text, size * row + .55 * size, size * col + .675 * size);
                         }
                         
@@ -258,18 +269,18 @@
 
                 // write the scores
                 ctx.beginPath();
-                ctx.rect(.1 * size, 4 * size + .1 * size, 3.9 * size, size);
-                ctx.fillStyle = "rgb(" + grey + ", 0.25)"
-                ctx.fill();
+                // ctx.rect(.1 * size, 4 * size + .1 * size, 3.9 * size, size);
+                // ctx.fillStyle = "rgb(" + white + ", 0.25)"
+                // ctx.fill();
 
                 ctx.font = score_font;
                 ctx.textAlign = "left";
-                ctx.fillStyle = "rgba(" + p1color + ", .8)";
+                ctx.fillStyle = "rgba(" + p1color + ", .5)";
                 text = "Player 1 score: " + board_info["p1score"];
                 ctx.fillText(text, .2 * size, 4 * size + .4 * size);
 
                 ctx.textAlign = "right";
-                ctx.fillStyle = "rgba(" + p2color + ", .8)";
+                ctx.fillStyle = "rgba(" + p2color + ", .5)";
                 text = "Player 2 score: " + board_info["p2score"];
                 ctx.fillText(text, canvas.width - .2 * size, 4 * size + .4 * size);
                 
@@ -279,29 +290,39 @@
 
                 // tie
                 if (board_info["state"] == "LOSS"){
-                    ctx.fillStyle = "rgba(" + grey + ", .8)";
+                    ctx.fillStyle = "rgba(" + grey + ", .5)";
                     text = "It's a tie!";
                 }
                 // win
                 else if (board_info["state"] == "WIN1"){
                     console.log("player 1 won!");
-                    ctx.fillStyle = "rgba(" + p1color + ", .8)";
+                    ctx.fillStyle = "rgba(" + p1color + ", .5)";
                     text = "Player 1 wins!";
                 }
                 else if (board_info["state"] == "WIN2"){
-                    ctx.fillStyle = "rgba(" + p2color + ", .8)";
+                    ctx.fillStyle = "rgba(" + p2color + ", .5)";
                     text = "Player 2 wins!";
                 }
 
                 // normal
                 else{
                     if (board_info["turn"] == 1){
-                        ctx.fillStyle = "rgba(" + p1color + ", .8)";
-                        text = "Player 1's turn";
+                        ctx.fillStyle = "rgba(" + p1color + ", .5)";
+                        if (board_info["state"] == "NO_CHANGE")
+                            text = "No change, move again";
+                        
+                        else
+                            text = "Player 1's turn";
+                        
                     }
                     else{
-                        ctx.fillStyle = "rgba(" + p2color + ", .8)";
-                        text = "Player 2's turn";
+                        ctx.fillStyle = "rgba(" + p2color + ", .5)";
+                        if (board_info["state"] == "NO_CHANGE")
+                            text = "No change, move again";
+                        
+                        else
+                            text = "Player 2's turn";
+                        
                     }
                 }
                 ctx.fillText(text, canvas.width / 2, 4 * size + .9 * size);
@@ -311,14 +332,18 @@
             }
 
             function mainLoop(){
-                if (endgame){
-                    return;
-                }
 
                 // process keypress
                 if (update_needed){
-                    console.log("making move " + move_type);
-                    makeMove(move_type);
+                    if (resetPressed){
+                        console.log("resetting");
+                        resetBoard();
+                        endgame = false;
+                    }
+                    else if (!endgame){
+                        console.log("making move " + move_type);
+                        makeMove(move_type);
+                    }
                     update_needed = false;
                 }
 

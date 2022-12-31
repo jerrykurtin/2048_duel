@@ -34,7 +34,6 @@ class Board:
         self.p2score = 2
 
     def move(self, dir):
-        print("moving ", dir)
         prev_state = [[col for col in row] for row in self.board]
         # call the proper move function
         dir = dir.lower()

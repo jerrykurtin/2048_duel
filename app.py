@@ -15,8 +15,7 @@ def hello():
 
 # returns the current board state
 @app.route("/board", methods=["GET"])
-def setup():
-    print("bst: ", bst)
+def getBoard():
     data = {
         "board" : my_board.board,
         "owner" : my_board.owner,
@@ -31,28 +30,24 @@ def setup():
 @app.route("/move", methods=["POST"])
 def move():
     global bst
-    print("bst:", bst)
     if bst == board.state.CONTINUE or bst == board.state.NO_CHANGE:
         # read the move
         in_data = request.get_json()
         usr_move = in_data["move"]
 
         # make the move
-        print("moving", usr_move)
         bst = my_board.move(usr_move)
 
+    return getBoard()
 
-    data = {
-        "board" : my_board.board,
-        "owner" : my_board.owner,
-        "state" : str(bst)[6:],
-        "p1score" : my_board.p1score,
-        "p2score" : my_board.p2score,
-        "turn" : my_board.player + 1,
-        }
-    return flask.jsonify(data)
+@app.route("/reset", methods=["POST"])
+def reset():
+    global my_board
+    global bst
+    my_board = board.Board(4, 64)
+    bst = board.state.CONTINUE
 
-
+    return getBoard()
 
 if __name__ == "__main__":
     # setup the objects
