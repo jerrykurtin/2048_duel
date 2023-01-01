@@ -70,7 +70,7 @@
                     this.board_size = 4;
                     this.win_condition = win_condition;
                     this.squares_added = 1;
-                    this.board_state = "continue";
+                    this.board_state = "continue";  // "continue", "no_change", "win1", "win2", "loss"
                     this.player = 0;
                     this.first_round = true;
 
@@ -99,9 +99,36 @@
 
                     this.p1score = 2;
                     this.p2score = 2;
+                }
 
-                    console.log("board: " + this.board);
-                    console.log("owner: ", this.owner);
+                move(dir){
+                    prev_state = deepCopy(this.board);
+
+                    if (dir == "up")
+                        this.up();
+                    else if (dir == "down")
+                        this.down();
+                    else if (dir == "left")
+                        this.left();
+                    else if (dir == "right")
+                        this.right();
+                    else{
+                        console.log("ERROR: invalid direction (" + dir + ")");
+                        return;
+                    }
+
+                    // check for no change
+                    if (deepCompare(this.board, prev_state)){
+                        this.state = "no_change";
+                        return;
+                    }
+
+                    // check for win condition and add squares
+                    cands = new Array();
+                    this.p1score = 0;
+                    this.p2score = 0;
+                    // DEBUG continue here
+
                 }
 
                 left(){
@@ -127,9 +154,9 @@
 
                                 // move without merging
                                 else{
-                                    newrow[newidx] = this.board[row][col]
-                                    newowner[newidx] = this.owner[row][col]
-                                    newidx += 1
+                                    newrow[newidx] = this.board[row][col];
+                                    newowner[newidx] = this.owner[row][col];
+                                    newidx += 1;
                                 }
                             }
                         }
@@ -142,7 +169,45 @@
                         // update the owner
                         this.owner[row] = newowner;
                     }
+                }
 
+                up(){
+                    /* make an up movement */
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
+
+                    this.left();
+
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+                }
+
+                right(){
+                    /* make a right movement */
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
+
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
+
+                    this.left();
+
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+                }
+
+                down(){
+                    /* make a downward movement */
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+
+                    this.left();
+
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
                 }
             }
 
@@ -169,6 +234,48 @@
                 return copy;
             }
 
+            function deepCompare(arr1, arr2){
+                /* determines equality between two arrays */
+                if (arr1.length != arr2.length || arr1[0].length != arr2[0].length)
+                    return false;
+
+                for (let r = 0; r < arr1.length; ++r){
+                    for (let c = 0; c < arr1[0].length; ++c){
+                        if (arr1[r][c] != arr2[r][c])
+                            return false;
+                    }
+                }
+
+                return true;
+            }
+
+            function rotateCounter(arr){
+                /* rotate a square array 90 degrees counterclockwise */
+                newarr = deepCopy(arr);
+
+                for (let row = 0; row < arr.length; ++row){
+                    for (let col = 0; col < arr[0].length; ++col){
+                        newarr[newarr.length - col - 1][row] = arr[row][col];
+                    }
+                }
+
+                return newarr;
+            }
+
+            function rotateClock(arr){
+                /* rotate a square array 90 degrees clockwise */
+                newarr = deepCopy(arr);
+
+                for (let row = 0; row < arr.length; ++row){
+                    for (let col = 0; col < arr[0].length; ++col){
+                        newarr[col][arr.length - row - 1] = arr[row][col];
+                    }
+                }
+
+                return newarr
+            }
+
+            // debug
             var my_board = new Board(64);
             my_board.board = [
                 [2, 2, 4, 0],
@@ -179,8 +286,32 @@
             my_board.owner = [
                 [0, 0, 1, -1],
                 [1, 1, 0, 1],
-                [0, 1, ]
+                [0, 1, 1, 1],
+                [1, 0, 1, 1]
+            ];
+            console.log("before move, board: ");
+            for (let r = 0; r < my_board.board.length; ++r)
+                console.log(my_board.board[r]);
+            console.log("before move, owner: ");
+            for (let r = 0; r < my_board.owner.length; ++r)
+                console.log(my_board.owner[r]);
+            console.log("making move");
+
+
+            my_board.right();
+            console.log("after move, board: " +  my_board.board);
+            for (let r = 0; r < my_board.board.length; ++r)
+                console.log(my_board.board[r]);
+            console.log("after move, owner: " + my_board.owner);
+            for (let r = 0; r < my_board.owner.length; ++r)
+                console.log(my_board.owner[r]);
+
+            testarr = [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9]
             ]
+            rotatearr = rotateClock(testarr);
 
             // ------------------------------------------------------------------
 
