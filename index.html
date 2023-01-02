@@ -15,7 +15,7 @@
                 </div>
     
             </div>
-            <div class="game-container">
+            <div class="game-container" id="game-container">
                 <div class="grid-container">
                     <div class="grid-row">
                         <div class="grid-cell"></div>
@@ -57,6 +57,7 @@
         <script>
             // ----------------------- Settings and Setup -----------------------
             var tile_container = document.getElementById("tile-container");
+            var game_container = document.getElementById("game-container");
             var player1_score = document.getElementById("player1-score");
             var player2_score = document.getElementById("player2-score");
             var below_game = document.getElementById("below-game-container");
@@ -485,13 +486,20 @@
                     }
                 }
             }
+        
+            var position = game_container.getBoundingClientRect();
+            console.log("Position: ", position);
+
 
             // mobile device handlers
             function touchstartHandler(e) {
                 initialX = e.touches[0].pageX;
                 initialY = e.touches[0].pageY;
 
-                keypress_active = true;
+                // only allow swipes that start inside the game board
+                // var position = game_container.getBoundingClientRect();
+                if (initialX > position.left && initialX < position.right && initialY > position.top && initialY < position.bottom)
+                    keypress_active = true;
             }
 
             function touchmoveHandler(e) {
