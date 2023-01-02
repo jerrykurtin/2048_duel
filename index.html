@@ -3,27 +3,64 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="styles.css">
-        <script src="external_lib/bodyScrollLock.js"></script>
         <title>2048 Duel</title>
     </head>
     <body>
-        <div class="text-center">
-            <h1 id="title_field">2048 Duel!</h1>
-            <button class="button-23 horiz_centered" id="scrollLock">Scroll Lock: On</button>
-            <canvas id="myCanvas" width="615" height="775" ></canvas>
+        <div class="container">
+            <div class="title-container">
+                <h1 class="title">2048 Duel!</h1>
+                <div class="score-row">
+                    <div class="score player1-text text-left" id="player1-score">Player 1 Score -></div>
+                    <div class="score player2-text text-right" id="player2-score"><- Player 2 Score</div>
+                </div>
+    
+            </div>
+            <div class="game-container">
+                <div class="grid-container">
+                    <div class="grid-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell final-cell"></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell final-cell"></div>
+                    </div>
+                    <div class="grid-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell final-cell"></div>
+                    </div>
+                    <div class="grid-row final-row">
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell final-cell"></div>
+                    </div>
+                </div>
+                <div class="tile-container" id="tile-container"></div>
+            </div>
+            <div class="below-game-container" id="below-game-container"></div>
+            <div class="instructions-container">
+                <p><strong>How to play:</strong> use the arrow keys to move the pieces. When the same number move into each other, the
+                    pieces merge and double.</p>
+                <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. The winner is the first to reach 64 or fill up the board with the 
+                    highest score.</p>
+                <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
+            </div>
         </div>
-            <p><strong>How to play:</strong> use the arrow keys to move the pieces. When the same number move into each other, the
-                pieces merge and double.</p>
-            <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. The winner is the first to reach 64 or fill up the board with the 
-                highest score.</p>
-            <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
         
         <script>
             // ----------------------- Settings and Setup -----------------------
-            var canvas = document.getElementById("myCanvas");
-            var scrollLock = document.getElementById("scrollLock");
-            var ctx = canvas.getContext("2d");
-            
+            var tile_container = document.getElementById("tile-container");
+            var player1_score = document.getElementById("player1-score");
+            var player2_score = document.getElementById("player2-score");
+            var below_game = document.getElementById("below-game-container");
+
             var size = 150;
 
             // fonts
@@ -70,8 +107,7 @@
             // holds details on touch controls
             var initialX = null;
             var initialY = null;
-            var touchThreshold = 100;
-            var scrollLocked = true;
+            var touchThreshold = 30;
 
 
 
@@ -390,21 +426,6 @@
             document.addEventListener("touchmove", touchmoveHandler, false);
             document.addEventListener("touchend", touchendHandler, false);
 
-            scrollLock.addEventListener("click", function () {
-                if (scrollLocked){
-                    // enable scrolling
-                    bodyScrollLock.enableBodyScroll(canvas);
-                    scrollLocked = false;
-                    scrollLock.innerHTML = "Scroll Lock: Off";
-                }
-
-                else {
-                    bodyScrollLock.disableBodyScroll(canvas);
-                    scrollLocked = true;
-                    scrollLock.innerHTML = "Scroll Lock: On";
-                }
-            }, false);
-
             function keyDownHandler(e) {
                 // prevent arrow keys from scrolling
                 if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
@@ -535,14 +556,22 @@
 
             // draw the grid
             function drawBoard(board_info){
-                // grab the updated board
-                // clear the grid
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                /* update the game board */
 
+                // clear old squares and settings
+                while(tile_container.hasChildNodes()){
+                    tile_container.removeChild(tile_container.firstChild);
+                }
+                if (below_game.classList.contains("player1-text")){
+                    below_game.classList.remove("player1-text")
+                }
+                if (below_game.classList.contains("player2-text")){
+                    below_game.classList.remove("player2-text")
+                }
+
+                // iterate through grid
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
-                        ctx.beginPath();
-
                         text = "0";
                         owner = null;
                         player = -1;
@@ -554,102 +583,73 @@
                             
                             // set the owner
                             if (text != 0){
-                                if (my_board.owner[col][row] == 0){
+                                if (my_board.owner[col][row] == 0)
                                     player = 1;
-                                }
-                                else {
+                                else 
                                     player = 2;
-                                }
                             }
                         }
-                        
-                        // draw the rectangle backgrounds
-                        ctx.rect(size * row + .1 * size, size * col + .1 * size, .9 * size, .9 * size);
-                        if (player == 1){
-                            ctx.fillStyle = "rgb(" + p1color + ", 0.5)";
+
+                        // draw new square
+                        if (text != 0){
+                            const newSquare = document.createElement("div");
+                            var loc = "tile-position-" + (row + 1) + "-" + (col + 1);
+                            console.log("adding to location " + loc);
+                            newSquare.classList.add(loc);
+                            tile_container.appendChild(newSquare);
+                            newSquare.classList.add("tile");
+                            console.log("new square created");
+
+                            // set color
+                            if (player == 1)
+                                newSquare.classList.add("player1");
+                            else
+                                newSquare.classList.add("player2");
+
+                            // set the text
+                            newSquare.innerHTML = text;
                         }
-                        else if (player == 2){
-                            ctx.fillStyle = "rgb(" + p2color + ", 0.5)";
-                        }
-                        else{
-                            ctx.fillStyle = "rgb(" + grey + ", 0.25)";
-                        }
-                        ctx.fill();
-                        
-                        // draw the numbers
-                        ctx.font = block_font3;
-                        ctx.textAlign = "center";
-                        if (text != "0"){
-                            ctx.fillStyle = "rgba(" + white + ", 1)";
-                            ctx.fillText(text, size * row + .55 * size, size * col + .675 * size);
-                        }
-                        
-                        ctx.closePath();
                     }
                 }
 
                 // write the scores
-                ctx.beginPath();
-                // ctx.rect(.1 * size, 4 * size + .1 * size, 3.9 * size, size);
-                // ctx.fillStyle = "rgb(" + white + ", 0.25)"
-                // ctx.fill();
-
-                ctx.font = score_font;
-                ctx.textAlign = "left";
-                ctx.fillStyle = "rgba(" + p1color + ", .5)";
-                text = "Player 1 score: " + my_board.p1score;
-                ctx.fillText(text, .2 * size, 4 * size + .4 * size);
-
-                ctx.textAlign = "right";
-                ctx.fillStyle = "rgba(" + p2color + ", .5)";
-                text = "Player 2 score: " + my_board.p2score;
-                ctx.fillText(text, canvas.width - .2 * size, 4 * size + .4 * size);
-                
-                // write the turn
-                ctx.textAlign = "center";
-                ctx.font = turn_font;
-
-                // tie
+                player1_score.innerHTML = "Player 1 score -> " + my_board.p1score;
+                player2_score.innerHTML = my_board.p2score + " <- Player 2 score";
+                // determine game state
                 if (my_board.board_state == "tie"){
-                    ctx.fillStyle = "rgba(" + grey + ", .5)";
                     text = "It's a tie!";
                 }
-                // win
+
                 else if (my_board.board_state == "win1"){
                     console.log("player 1 won!");
-                    ctx.fillStyle = "rgba(" + p1color + ", .5)";
+                    below_game.classList.add("player1-text");
                     text = "Player 1 wins!";
                 }
+
                 else if (my_board.board_state == "win2"){
-                    ctx.fillStyle = "rgba(" + p2color + ", .5)";
+                    below_game.classList.add("player1-text");
                     text = "Player 2 wins!";
                 }
 
                 // normal
                 else{
                     if (my_board.player == 0){
-                        ctx.fillStyle = "rgba(" + p1color + ", .5)";
+                        below_game.classList.add("player1-text");
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
-                        
                         else
                             text = "Player 1's turn";
-                        
                     }
+
                     else{
-                        ctx.fillStyle = "rgba(" + p2color + ", .5)";
+                        below_game.classList.add("player2-text");
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
-                        
                         else
                             text = "Player 2's turn";
-                        
                     }
                 }
-                ctx.fillText(text, canvas.width / 2, 4 * size + .9 * size);
-
-                
-                ctx.closePath();
+                below_game.innerHTML = text;
             }
 
             function mainLoop(){
@@ -672,9 +672,6 @@
                 // document.getElementById("debug1").innerHTML = "up: " + upPressed + ", down: " + downPressed;
                 // document.getElementById("debug2").innerHTML = "left: " + leftPressed + ", right: " + rightPressed;
             }
-
-            // disable scrolling on mobile
-            bodyScrollLock.disableBodyScroll(canvas);
             
             resetBoard();
             setInterval(mainLoop, 10);
