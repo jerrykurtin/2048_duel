@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css">
-    <title>2048 Duel</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css">
+        <script src="lib/bodyScrollLock.js"></script>
+        <title>2048 Duel</title>
     </head>
     <body>
-        <h1 id="title_field">2048 Duel!</h1>
-        <canvas id="myCanvas" width="615" height="775" padding="20px"></canvas>
-        <p class="game-intro">How to play: use the arrow keys to move all pieces in one of the 4 directions. When the same number move into each other, the
-            pieces merge and double. If you merge one of your pieces with one of your opponents, you steal the piece. Take turns with your opponent, and try to be the first one to reach 64 or fill up the board with the 
-            highest score. Have fun :)</p>
-        <!-- <p id="debug1"></p>
-        <p id="debug2"></p> -->
-        <!-- <button onclick="updateBoard()">Get Board</button> -->
-        <!-- <p id="request_status"></p> -->
-        <!-- <textarea id="board_printer" rows="10" cols="40"></textarea> -->
-
+        <div class="text-center">
+            <h1 id="title_field">2048 Duel!</h1>
+            <button class="button-23 horiz_centered" id="scrollLock">Scroll Lock: On</button>
+            <canvas id="myCanvas" width="615" height="775" ></canvas>
+            <p class="game-intro">How to play: use the arrow keys to move all pieces in one of the 4 directions. When the same number move into each other, the
+                pieces merge and double. If you merge one of your pieces with one of your opponents, you steal the piece. Take turns with your opponent, and try to be the first one to reach 64 or fill up the board with the 
+                highest score. Have fun :) ~Jerry</p>
+        </div>
         
         <script>
-            // document.write("hello world")
             // ----------------------- Settings and Setup -----------------------
             var canvas = document.getElementById("myCanvas");
+            var scrollLock = document.getElementById("scrollLock");
             var ctx = canvas.getContext("2d");
             
-            var size = 150
+            var size = 150;
 
             // fonts
             block_font = "75px Standard";
@@ -58,7 +56,7 @@
             var resetPressed = false;
 
             // board information
-            board_info = null;
+            var my_board = null;
             var keypress_active = false;
             var update_needed = false;
             var move_type = null;
@@ -67,11 +65,343 @@
             // holds the http request object
             var xhr = null;
 
+            // holds details on touch controls
+            var initialX = null;
+            var initialY = null;
+            var touchThreshold = 100;
+            var scrollLocked = true;
+
+
+
+            // ------------------------------------------------------------------
+
+            // --------------------------- Game Logic ---------------------------
+            class Board {
+                constructor(win_condition=64) {
+                    // board variables
+                    this.board_size = 4;
+                    this.win_condition = win_condition;
+                    this.squares_added = 1;
+                    this.board_state = "continue";  // "continue", "no_change", "win1", "win2", "tie"
+                    this.player = 0;
+                    this.first_round = true;
+
+                    // create board
+                    this.board = new Array(this.board_size);
+                    for (let r = 0; r < this.board.length; ++r){
+                        this.board[r] = new Array(this.board_size).fill(0);
+                    }
+                    this.owner = new Array(this.board_size);
+                    for (let r = 0; r < this.owner.length; ++r){
+                        this.owner[r] = new Array(this.board_size).fill(-1);
+                    }
+
+                    // initialize the first numbers
+                    var st1 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+                    var st2 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+                    while (st1[0] == st2[0] || st1[1] == st2[1])
+                        st2 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+
+                    this.board[st1[0]][st1[1]] = 2
+                    this.owner[st1[0]][st1[1]] = 0
+
+                    this.board[st2[0]][st2[1]] = 2
+                    this.owner[st2[0]][st2[1]] = 1
+
+
+                    this.p1score = 2;
+                    this.p2score = 2;
+                }
+
+                move(dir){
+                    var prev_state = deepCopy(this.board);
+
+                    // make the move
+                    if (dir == "up")
+                        this.up();
+                    else if (dir == "down")
+                        this.down();
+                    else if (dir == "left")
+                        this.left();
+                    else if (dir == "right")
+                        this.right();
+                    else{
+                        console.log("ERROR: invalid direction (" + dir + ")");
+                        return;
+                    }
+
+                    // check for no change
+                    if (deepCompare(this.board, prev_state)){
+                        this.board_state = "no_change";
+                        return;
+                    }
+                    else{
+                        this.board_state = "continue";
+                    }
+
+                    // check for win condition and add squares
+                    var cands = new Array();
+                    this.p1score = 0;
+                    this.p2score = 0;
+                    for (let row = 0; row < this.board.length; ++row){
+                        for (let col = 0; col < this.board[0].length; ++col){
+
+                            // win!
+                            if (this.board[row][col] == this.win_condition){
+                                if (this.owner[row][col] == 0){
+                                    this.board_state = "win1";
+                                }
+                                else{
+                                    this.board_state = "win2";
+                                }
+                                return;
+                            }
+
+                            // empty square
+                            else if (this.board[row][col] == 0){
+                                cands.push([row, col]);
+                            }
+
+                            // number square, add to score
+                            else {
+                                if (this.owner[row][col] == 0)
+                                    this.p1score += this.board[row][col];
+                                else
+                                    this.p2score += this.board[row][col];
+                            }
+                        }
+                    }
+
+                    // elimination win
+                    if (this.p1score == 0){
+                        this.board_state = "win1";
+                        return;
+                    }
+                    else if (this.p2score == 0){
+                        this.board_state = "win2";
+                        return;
+                    }
+
+                    // select new value(s) to add
+                    var new_squares = new Array();
+                    if (this.first_round && this.squares_added == 1){
+                        new_squares.push(4);
+                        this.first_round = false;
+                    }
+                    else{
+                        var choices = new Array();
+                        for (let twos = 0; twos < 75; ++twos)
+                            choices.push(2);
+                        for (let fours = 0; fours < 24; ++fours)
+                            choices.push(4);
+                        for (let eights = 0; eights < 1; ++eights)
+                            choices.push(8);
+                        
+                        for (let ch = 0; ch < this.squares_added; ++ch)
+                            new_squares.push(choices[randint(0, choices.length - 1)]);
+                    }
+
+                    // add the new value(s) to random location(s)
+                    var locations = new Array();
+                    for (let ch = 0; ch < this.squares_added; ++ch)
+                        locations.push(cands[randint(0, cands.length - 1)]);
+
+                    for (let square = 0; square < new_squares.length; ++square){
+                        this.board[locations[square][0]][locations[square][1]] = new_squares[square];
+                        this.owner[locations[square][0]][locations[square][1]] = this.player;
+
+                        if (this.player == 0)
+                            this.p1score += new_squares[square];
+                        else
+                            this.p2score += new_squares[square];
+                    }
+                    
+                    // switch to the next player
+                    this.player = (this.player + 1) % 2;
+                    
+                    // TODO: change endgame for multiple squares added
+                    // endgame: grid is full
+                    if (cands.length <= this.squares_added){
+                        if (this.p1score > this.p2score)
+                            this.board_state = "win1";
+                        else if (this.p1score < this.p2score)
+                            this.board_state = "win2";
+                        else
+                            this.board_state = "tie";
+                    }
+                    return;
+                }
+                
+                left(){
+                    /* make a left movement */
+                    for (let row = 0; row < this.board.length; ++row){
+                        // store the new row
+                        var newrow = Array(this.board.length).fill(0);
+                        var newowner = Array(this.board.length).fill(-1);
+                        var newidx = 0;
+
+                        for (let col = 0; col < this.board[0].length; ++col){
+                            if (this.board[row][col] != 0){
+
+                                // merge
+                                if (newidx > 0 && this.board[row][col] == newrow[newidx - 1]){
+                                    newrow[newidx - 1] = newrow[newidx - 1] * -2; // negative prevents double merging
+
+                                    // determine ownership of square
+                                    if (newowner[newidx - 1] != this.owner[row][col]){
+                                        newowner[newidx - 1] = this.player;
+                                    }
+                                }
+
+                                // move without merging
+                                else{
+                                    newrow[newidx] = this.board[row][col];
+                                    newowner[newidx] = this.owner[row][col];
+                                    newidx += 1;
+                                }
+                            }
+                        }
+
+                        // update the board
+                        for (let col = 0; col < this.board[0].length; ++col)
+                            newrow[col] = Math.abs(newrow[col]);
+                        this.board[row] = newrow;
+
+                        // update the owner
+                        this.owner[row] = newowner;
+                    }
+                }
+
+                up(){
+                    /* make an up movement */
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
+
+                    this.left();
+
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+                }
+
+                right(){
+                    /* make a right movement */
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
+
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
+
+                    this.left();
+
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+                }
+
+                down(){
+                    /* make a downward movement */
+                    this.board = rotateClock(this.board);
+                    this.owner = rotateClock(this.owner);
+
+                    this.left();
+
+                    this.board = rotateCounter(this.board);
+                    this.owner = rotateCounter(this.owner);
+                }
+            }
+
+            // helper functions ---------------------------
+            function randint(min, max){
+                /* random number between min and max, inclusive */
+                return Math.floor(Math.random() * (max - min + 1) ) + min;
+            }
+
+            const deepCopy = (arr) => {
+                /* deep copy a multi-dimensional array */
+                let copy = [];
+                arr.forEach(elem => {
+                    if(Array.isArray(elem)){
+                    copy.push(deepCopy(elem))
+                    }else{
+                    if (typeof elem === 'object') {
+                        copy.push(deepCopyObject(elem))
+                    } else {
+                        copy.push(elem)
+                    }
+                    }
+                })
+                return copy;
+            }
+
+            function deepCompare(arr1, arr2){
+                /* determines equality between two arrays */
+                if (arr1.length != arr2.length || arr1[0].length != arr2[0].length)
+                    return false;
+
+                for (let r = 0; r < arr1.length; ++r){
+                    for (let c = 0; c < arr1[0].length; ++c){
+                        if (arr1[r][c] != arr2[r][c])
+                            return false;
+                    }
+                }
+
+                return true;
+            }
+
+            function rotateCounter(arr){
+                /* rotate a square array 90 degrees counterclockwise */
+                newarr = deepCopy(arr);
+
+                for (let row = 0; row < arr.length; ++row){
+                    for (let col = 0; col < arr[0].length; ++col){
+                        newarr[newarr.length - col - 1][row] = arr[row][col];
+                    }
+                }
+
+                return newarr;
+            }
+
+            function rotateClock(arr){
+                /* rotate a square array 90 degrees clockwise */
+                newarr = deepCopy(arr);
+
+                for (let row = 0; row < arr.length; ++row){
+                    for (let col = 0; col < arr[0].length; ++col){
+                        newarr[col][arr.length - row - 1] = arr[row][col];
+                    }
+                }
+
+                return newarr
+            }
+
+            // debug
+            var my_board = new Board(64);
+
             // ------------------------------------------------------------------
 
             // --------------------- Listeners and Handlers ---------------------
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
+            document.addEventListener("touchstart", touchstartHandler, false);
+            document.addEventListener("touchmove", touchmoveHandler, false);
+            document.addEventListener("touchend", touchendHandler, false);
+
+            scrollLock.addEventListener("click", function () {
+                if (scrollLocked){
+                    // enable scrolling
+                    bodyScrollLock.enableBodyScroll(canvas);
+                    scrollLocked = false;
+                    scrollLock.innerHTML = "Scroll Lock: Off";
+                }
+
+                else {
+                    bodyScrollLock.disableBodyScroll(canvas);
+                    scrollLocked = true;
+                    scrollLock.innerHTML = "Scroll Lock: On";
+                }
+            }, false);
 
             function keyDownHandler(e) {
                 // prevent arrow keys from scrolling
@@ -132,78 +462,70 @@
                     }
                 }
             }
+
+            // mobile device handlers
+            function touchstartHandler(e) {
+                initialX = e.touches[0].pageX;
+                initialY = e.touches[0].pageY;
+
+                keypress_active = true;
+            }
+
+            function touchmoveHandler(e) {
+                let xdiff = e.touches[0].pageX - initialX;
+                let ydiff = e.touches[0].pageY - initialY;
+
+                if (keypress_active){
+                    // left or right move
+                    if (Math.abs(xdiff) > touchThreshold){
+                        if (xdiff < 0)
+                            move_type = "left";
+                        else
+                            move_type = "right";
+                        update_needed = true;
+                        keypress_active = false;
+                    }
+    
+                    // up or down move
+                    else if (Math.abs(ydiff) > touchThreshold){
+                        if (ydiff < 0)
+                            move_type = "up";
+                        else
+                            move_type = "down";
+                        update_needed = true;
+                        keypress_active = false;
+                    }
+                }
+            }
+
+            function touchendHandler(e) {
+                keypress_active = false;
+            }
+
             // ------------------------------------------------------------------
             
-            // ------------------------ Backend Requests ------------------------
-            // build the http request object
-            getXmlHttpRequestObject = function () {
-                if (!xhr) {
-                    // Create a new XMLHttpRequest object 
-                    xhr = new XMLHttpRequest();
-                }
-                return xhr;
-            };
-
-            // function to control getBoard response behavior
-            function boardCallback() {
-                // Check response is ready or not
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    console.log("User data received!");
-                    
-                    // Update board_info with new text
-                    board_info = JSON.parse(xhr.responseText);
-
-                    // debugging
-                    // dataDiv = document.getElementById('board_printer');
-                    // dataDiv.innerHTML = xhr.responseText;
-                    console.log(xhr.responseText);
-
-                    // check for endgame
-                    if (board_info["state"] != "CONTINUE" && board_info["state"] != "NO_CHANGE"){
-                        console.log("endgame reached");
-                        endgame = true;
-                    }
-
-                    // update the screen
-                    drawBoard(board_info);
-                }
-            }
-
-            // Gets updated board information and updates the screen
-            function updateBoard() {
-                console.log("Getting board...");
-                xhr = getXmlHttpRequestObject();
-                xhr.onreadystatechange = boardCallback;
-
-                // synchronous requests
-                xhr.open("GET", "http://localhost:6969/board", true);
-
-                // Send the request over the network
-                xhr.send(null);
-            }
+            // ------------------------ Game Logic ------------------------
 
             function makeMove(direction){
-                xhr = getXmlHttpRequestObject();
-                xhr.onreadystatechange = boardCallback;
+                console.log("moving in direction " + direction);
+                my_board.move(direction);
+                console.log("board is now ", my_board);
 
-                // synchronous request
-                xhr.open("POST", "http://localhost:6969/move", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                var data = JSON.stringify({"move" : direction});
-                
-                // Send the request over the network
-                xhr.send(data);
+                // check for endgame
+                console.log("board state: ", my_board.board_state);
+                if (my_board.board_state != "continue" && my_board.board_state != "no_change"){
+                    console.log("endgame reached");
+                    endgame = true;
+                }
+
+                drawBoard();
             }
 
             function resetBoard(){
-                xhr = getXmlHttpRequestObject();
-                xhr.onreadystatechange = boardCallback;
+                my_board = new Board(64);
+                console.log("board reset:", my_board);
 
-                // synchronous request
-                xhr.open("POST", "http://localhost:6969/reset", true);
-                
-                // Send the request over the network
-                xhr.send(null);
+                drawBoard();
             }
 
             // ------------------------------------------------------------------
@@ -215,9 +537,6 @@
                 // clear the grid
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                if (!board_info){
-                    console.log("error: no board information received");
-                }
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
                         ctx.beginPath();
@@ -227,13 +546,13 @@
                         player = -1;
 
                         // parse the current number
-                        if (board_info != null){
+                        if (my_board != null){
                             console.log("board information recieved in drawGrid()")
-                            text = board_info["board"][col][row].toString();                            
+                            text = my_board.board[col][row].toString();                            
                             
                             // set the owner
                             if (text != 0){
-                                if (board_info["owner"][col][row] == 0){
+                                if (my_board.owner[col][row] == 0){
                                     player = 1;
                                 }
                                 else {
@@ -276,12 +595,12 @@
                 ctx.font = score_font;
                 ctx.textAlign = "left";
                 ctx.fillStyle = "rgba(" + p1color + ", .5)";
-                text = "Player 1 score: " + board_info["p1score"];
+                text = "Player 1 score: " + my_board.p1score;
                 ctx.fillText(text, .2 * size, 4 * size + .4 * size);
 
                 ctx.textAlign = "right";
                 ctx.fillStyle = "rgba(" + p2color + ", .5)";
-                text = "Player 2 score: " + board_info["p2score"];
+                text = "Player 2 score: " + my_board.p2score;
                 ctx.fillText(text, canvas.width - .2 * size, 4 * size + .4 * size);
                 
                 // write the turn
@@ -289,26 +608,26 @@
                 ctx.font = turn_font;
 
                 // tie
-                if (board_info["state"] == "LOSS"){
+                if (my_board.board_state == "tie"){
                     ctx.fillStyle = "rgba(" + grey + ", .5)";
                     text = "It's a tie!";
                 }
                 // win
-                else if (board_info["state"] == "WIN1"){
+                else if (my_board.board_state == "win1"){
                     console.log("player 1 won!");
                     ctx.fillStyle = "rgba(" + p1color + ", .5)";
                     text = "Player 1 wins!";
                 }
-                else if (board_info["state"] == "WIN2"){
+                else if (my_board.board_state == "win2"){
                     ctx.fillStyle = "rgba(" + p2color + ", .5)";
                     text = "Player 2 wins!";
                 }
 
                 // normal
                 else{
-                    if (board_info["turn"] == 1){
+                    if (my_board.player == 0){
                         ctx.fillStyle = "rgba(" + p1color + ", .5)";
-                        if (board_info["state"] == "NO_CHANGE")
+                        if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         
                         else
@@ -317,7 +636,7 @@
                     }
                     else{
                         ctx.fillStyle = "rgba(" + p2color + ", .5)";
-                        if (board_info["state"] == "NO_CHANGE")
+                        if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         
                         else
@@ -351,8 +670,11 @@
                 // document.getElementById("debug1").innerHTML = "up: " + upPressed + ", down: " + downPressed;
                 // document.getElementById("debug2").innerHTML = "left: " + leftPressed + ", right: " + rightPressed;
             }
+
+            // disable scrolling on mobile
+            bodyScrollLock.disableBodyScroll(canvas);
             
-            updateBoard();
+            resetBoard();
             setInterval(mainLoop, 10);
         </script>
     </body>
