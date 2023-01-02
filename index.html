@@ -3,22 +3,26 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="styles.css">
+        <script src="lib/bodyScrollLock.js"></script>
         <title>2048 Duel</title>
     </head>
     <body>
-        <h1 id="title_field">2048 Duel!</h1>
-        <canvas id="myCanvas" width="615" height="775" padding="20px"></canvas>
-        <p class="game-intro">How to play: use the arrow keys to move all pieces in one of the 4 directions. When the same number move into each other, the
-            pieces merge and double. If you merge one of your pieces with one of your opponents, you steal the piece. Take turns with your opponent, and try to be the first one to reach 64 or fill up the board with the 
-            highest score. Have fun :)</p>
+        <div class="text-center">
+            <h1 id="title_field">2048 Duel!</h1>
+            <button class="button-23 horiz_centered" id="scrollLock">Scroll Lock: On</button>
+            <canvas id="myCanvas" width="615" height="775" ></canvas>
+            <p class="game-intro">How to play: use the arrow keys to move all pieces in one of the 4 directions. When the same number move into each other, the
+                pieces merge and double. If you merge one of your pieces with one of your opponents, you steal the piece. Take turns with your opponent, and try to be the first one to reach 64 or fill up the board with the 
+                highest score. Have fun :) ~Jerry</p>
+        </div>
         
         <script>
-            // document.write("hello world")
             // ----------------------- Settings and Setup -----------------------
             var canvas = document.getElementById("myCanvas");
+            var scrollLock = document.getElementById("scrollLock");
             var ctx = canvas.getContext("2d");
             
-            var size = 150
+            var size = 150;
 
             // fonts
             block_font = "75px Standard";
@@ -60,6 +64,12 @@
 
             // holds the http request object
             var xhr = null;
+
+            // holds details on touch controls
+            var initialX = null;
+            var initialY = null;
+            var touchThreshold = 100;
+            var scrollLocked = true;
 
 
 
@@ -368,35 +378,30 @@
 
             // debug
             var my_board = new Board(64);
-            // console.log("before move, board: ");
-            // for (let r = 0; r < my_board.board.length; ++r)
-            //     console.log(my_board.board[r]);
-            // console.log("before move, owner: ");
-            // for (let r = 0; r < my_board.owner.length; ++r)
-            //     console.log(my_board.owner[r]);
-            // console.log("making move");
-
-
-            // my_board.right();
-            // console.log("after move, board: " +  my_board.board);
-            // for (let r = 0; r < my_board.board.length; ++r)
-            //     console.log(my_board.board[r]);
-            // console.log("after move, owner: " + my_board.owner);
-            // for (let r = 0; r < my_board.owner.length; ++r)
-            //     console.log(my_board.owner[r]);
-
-            // testarr = [
-            //     [1, 2, 3],
-            //     [4, 5, 6],
-            //     [7, 8, 9]
-            // ]
-            // rotatearr = rotateClock(testarr);
 
             // ------------------------------------------------------------------
 
             // --------------------- Listeners and Handlers ---------------------
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
+            document.addEventListener("touchstart", touchstartHandler, false);
+            document.addEventListener("touchmove", touchmoveHandler, false);
+            document.addEventListener("touchend", touchendHandler, false);
+
+            scrollLock.addEventListener("click", function () {
+                if (scrollLocked){
+                    // enable scrolling
+                    bodyScrollLock.enableBodyScroll(canvas);
+                    scrollLocked = false;
+                    scrollLock.innerHTML = "Scroll Lock: Off";
+                }
+
+                else {
+                    bodyScrollLock.disableBodyScroll(canvas);
+                    scrollLocked = true;
+                    scrollLock.innerHTML = "Scroll Lock: On";
+                }
+            }, false);
 
             function keyDownHandler(e) {
                 // prevent arrow keys from scrolling
@@ -457,6 +462,46 @@
                     }
                 }
             }
+
+            // mobile device handlers
+            function touchstartHandler(e) {
+                initialX = e.touches[0].pageX;
+                initialY = e.touches[0].pageY;
+
+                keypress_active = true;
+            }
+
+            function touchmoveHandler(e) {
+                let xdiff = e.touches[0].pageX - initialX;
+                let ydiff = e.touches[0].pageY - initialY;
+
+                if (keypress_active){
+                    // left or right move
+                    if (Math.abs(xdiff) > touchThreshold){
+                        if (xdiff < 0)
+                            move_type = "left";
+                        else
+                            move_type = "right";
+                        update_needed = true;
+                        keypress_active = false;
+                    }
+    
+                    // up or down move
+                    else if (Math.abs(ydiff) > touchThreshold){
+                        if (ydiff < 0)
+                            move_type = "up";
+                        else
+                            move_type = "down";
+                        update_needed = true;
+                        keypress_active = false;
+                    }
+                }
+            }
+
+            function touchendHandler(e) {
+                keypress_active = false;
+            }
+
             // ------------------------------------------------------------------
             
             // ------------------------ Game Logic ------------------------
@@ -625,6 +670,9 @@
                 // document.getElementById("debug1").innerHTML = "up: " + upPressed + ", down: " + downPressed;
                 // document.getElementById("debug2").innerHTML = "left: " + leftPressed + ", right: " + rightPressed;
             }
+
+            // disable scrolling on mobile
+            bodyScrollLock.disableBodyScroll(canvas);
             
             resetBoard();
             setInterval(mainLoop, 10);

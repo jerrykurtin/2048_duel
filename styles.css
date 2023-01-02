@@ -2,8 +2,19 @@
 
 * {
     box-sizing:border-box;
-    padding: 0;
-    margin: 10;
+    /* padding: 0; */
+    /* margin: 10; */
+}
+
+html, body {
+    margin: auto auto;
+    float: none !important;
+    max-width: 750px;
+    background: #faf8ef;
+    color: #776e65;
+    font-family: 'Arimo', sans-serif;
+    font-size: 18px;
+    position: relative;
 }
 
 canvas {
@@ -12,35 +23,69 @@ canvas {
     margin: auto auto;
 }
 
-html, body {
-    margin: 0 auto !important;
-    float: none !important;
-    max-width: 750px;
-    background: #faf8ef;
-    color: #776e65;
-    font-family: 'Arimo', sans-serif;
-    font-size: 18px;
-}
-
 h1 { 
     font-size: 80px; 
     font-weight: bold; 
     letter-spacing: -1px; 
     line-height: 1; 
-    text-align: center; 
 }
 
 .game-intro {
-    /* position: absolute;
-    top: 1200px;
-    right: 400px;
-    left: 400px; */
-    text-align:center;
     display: block;
-    margin-top: 30px;
     line-height: 1.65;
 }
 
+.button-23 {
+  background-color: #FFFFFF;
+  border: 1px solid #776e65;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #776e65;
+  cursor: pointer;
+  display: inline-block;
+  /* font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif; */
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  outline: none;
+  padding: 13px 23px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+.button-23:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow .2s;
+}
+
+.button-23:active {
+  background-color: #F7F7F7;
+  /* border-color: #000000; */
+  transform: scale(.96);
+}
+
+.button-23:disabled {
+  border-color: #DDDDDD;
+  color: #DDDDDD;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* modifiers */
+
+.text-center {
+    text-align: center;
+}
+
+#scrollLock {
+    margin-bottom: 20px;
+}
 /* 
 h2 { 
     color: rgba(33, 51, 67, .9);
