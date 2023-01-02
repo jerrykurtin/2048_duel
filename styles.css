@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 
+/* Page-wide settings */
 * {
     box-sizing:border-box;
     /* padding: 0; */
@@ -23,6 +24,7 @@ canvas {
     margin: auto auto;
 }
 
+/* Subsection settings */
 h1 { 
     font-size: 80px; 
     font-weight: bold; 
@@ -30,9 +32,20 @@ h1 {
     line-height: 1; 
 }
 
-.game-intro {
+p {
     display: block;
     line-height: 1.65;
+}
+
+/* Specific settings */
+a:link {
+    color: #776e65;
+    font-weight: bold;
+}
+
+a:visited {
+    color: #776e65;
+    font-weight: bold;
 }
 
 .button-23 {
@@ -86,24 +99,3 @@ h1 {
 #scrollLock {
     margin-bottom: 20px;
 }
-/* 
-h2 { 
-    color: rgba(33, 51, 67, .9);
-    font-family: 'Open Sans', sans-serif;
-    font-size: 30px;
-    font-weight: 300;
-    line-height: 32px; 
-    margin: 0 0 72px; 
-    text-align: center; 
-}
-
-
-p { 
-    color: rgba(33, 51, 67, .9);
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 20px;
-    line-height: 24px;
-    margin: 0 0 24px;
-    text-align: justify;
-    text-justify: inter-word;
-} */
