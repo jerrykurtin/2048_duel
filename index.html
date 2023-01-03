@@ -44,11 +44,14 @@
                 </div>
                 <div class="tile-container" id="tile-container"></div>
             </div>
-            <div class="below-game-container" id="below-game-container"></div>
+            <div class="belowgame-container" id="below-game-container">
+                <div class="turn" id="turn"></div>
+                <button class="button-basic reset-button" id="reset-button">Reset (r)</button>
+            </div>
             <div class="instructions-container">
-                <p><strong>How to play:</strong> use the arrow keys to move the pieces. When the same number move into each other, the
+                <p><strong>How to play:</strong> use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
                     pieces merge and double.</p>
-                <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. The winner is the first to reach 64 or fill up the board with the 
+                <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. The winner is the first to reach 64 or fill up the board with the 
                     highest score.</p>
                 <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
             </div>
@@ -60,7 +63,8 @@
             var game_container = document.getElementById("game-container");
             var player1_score = document.getElementById("player1-score");
             var player2_score = document.getElementById("player2-score");
-            var below_game = document.getElementById("below-game-container");
+            var turn_message = document.getElementById("turn");
+            var reset_button = document.getElementById("reset-button");
 
             var size = 150;
 
@@ -213,11 +217,11 @@
 
                     // elimination win
                     if (this.p1score == 0){
-                        this.board_state = "win1";
+                        this.board_state = "win2";
                         return;
                     }
                     else if (this.p2score == 0){
-                        this.board_state = "win2";
+                        this.board_state = "win1";
                         return;
                     }
 
@@ -426,6 +430,10 @@
             document.addEventListener("touchstart", touchstartHandler, false);
             document.addEventListener("touchmove", touchmoveHandler, false);
             document.addEventListener("touchend", touchendHandler, false);
+            reset_button.addEventListener("click", function (){
+                resetPressed = true;
+                update_needed = true;
+            }, false);
 
             function keyDownHandler(e) {
                 // prevent arrow keys from scrolling
@@ -570,11 +578,11 @@
                 while(tile_container.hasChildNodes()){
                     tile_container.removeChild(tile_container.firstChild);
                 }
-                if (below_game.classList.contains("player1-text")){
-                    below_game.classList.remove("player1-text")
+                if (turn_message.classList.contains("player1-text")){
+                    turn_message.classList.remove("player1-text")
                 }
-                if (below_game.classList.contains("player2-text")){
-                    below_game.classList.remove("player2-text")
+                if (turn_message.classList.contains("player2-text")){
+                    turn_message.classList.remove("player2-text")
                 }
 
                 // iterate through grid
@@ -621,8 +629,8 @@
                 }
 
                 // write the scores
-                player1_score.innerHTML = "Player 1 score -> " + my_board.p1score;
-                player2_score.innerHTML = my_board.p2score + " <- Player 2 score";
+                player1_score.innerHTML = "Player 1 score -> <strong>" + my_board.p1score + "</strong>";
+                player2_score.innerHTML = "<strong>" + my_board.p2score + "</strong> <- Player 2 score";
                 // determine game state
                 if (my_board.board_state == "tie"){
                     text = "It's a tie!";
@@ -630,19 +638,19 @@
 
                 else if (my_board.board_state == "win1"){
                     console.log("player 1 won!");
-                    below_game.classList.add("player1-text");
+                    turn_message.classList.add("player1-text");
                     text = "Player 1 wins!";
                 }
 
                 else if (my_board.board_state == "win2"){
-                    below_game.classList.add("player1-text");
+                    turn_message.classList.add("player1-text");
                     text = "Player 2 wins!";
                 }
 
                 // normal
                 else{
                     if (my_board.player == 0){
-                        below_game.classList.add("player1-text");
+                        turn_message.classList.add("player1-text");
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         else
@@ -650,14 +658,14 @@
                     }
 
                     else{
-                        below_game.classList.add("player2-text");
+                        turn_message.classList.add("player2-text");
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         else
                             text = "Player 2's turn";
                     }
                 }
-                below_game.innerHTML = text;
+                turn_message.innerHTML = text;
             }
 
             function mainLoop(){
@@ -668,6 +676,7 @@
                         console.log("resetting");
                         resetBoard();
                         endgame = false;
+                        resetPressed = false;
                     }
                     else if (!endgame){
                         console.log("making move " + move_type);

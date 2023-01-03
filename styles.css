@@ -38,6 +38,48 @@ p {
     line-height: 1.5;
 }
 
+
+.button-basic {
+    background-color: #FFFFFF;
+    border: 1px solid #776e65;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #776e65;
+    cursor: pointer;
+    display: inline-block;
+    /* font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif; */
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    outline: none;
+    padding: 13px 23px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+  }
+  
+  .button-basic:focus-visible {
+    box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+    transition: box-shadow .2s;
+  }
+  
+  .button-basic:active {
+    background-color: #F7F7F7;
+    transform: scale(.96);
+  }
+  
+  .button-basic:disabled {
+    border-color: #DDDDDD;
+    color: #DDDDDD;
+    cursor: not-allowed;
+    opacity: 1;
+  }
+
 /* Specific settings */
 a:link {
     color: #776e65;
@@ -81,10 +123,23 @@ a:visited {
 }
 
 /* Below Game Settings */
-.below-game-container{
+.belowgame-container{
     width: 280px;
-    height: 50px;
+    /* height: 50px; */
+    /* margin-bottom: 10px; */
     text-align: center;
+}
+
+.turn {
+    margin-bottom: 5px;
+}
+
+.reset-button {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 20px;
+    outline: none;
+    padding: 5px 12px;
 }
 
 .instructions-container {
@@ -283,48 +338,6 @@ transform: translate(202.5px, 0px);
     transform: translate(202.5px, 202.5px);
 }
 
-
-.button-23 {
-  background-color: #FFFFFF;
-  border: 1px solid #776e65;
-  border-radius: 8px;
-  box-sizing: border-box;
-  color: #776e65;
-  cursor: pointer;
-  display: inline-block;
-  /* font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif; */
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 20px;
-  outline: none;
-  padding: 13px 23px;
-  position: relative;
-  text-align: center;
-  text-decoration: none;
-  touch-action: manipulation;
-  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
-  user-select: none;
-  -webkit-user-select: none;
-  width: auto;
-}
-
-.button-23:focus-visible {
-  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
-  transition: box-shadow .2s;
-}
-
-.button-23:active {
-  background-color: #F7F7F7;
-  /* border-color: #000000; */
-  transform: scale(.96);
-}
-
-.button-23:disabled {
-  border-color: #DDDDDD;
-  color: #DDDDDD;
-  cursor: not-allowed;
-  opacity: 1;
-}
 
 /* modifiers */
 
