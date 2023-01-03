@@ -16,6 +16,7 @@
     
             </div>
             <div class="game-container" id="game-container">
+                <div class="endgame-msg" id="endgame-msg"></div>
                 <div class="grid-container">
                     <div class="grid-row">
                         <div class="grid-cell"></div>
@@ -48,13 +49,11 @@
                 <div class="turn" id="turn"></div>
                 <button class="button-basic reset-button" id="reset-button">Reset (r)</button>
             </div>
-            <div class="instructions-container">
-                <p><strong>How to play:</strong> use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
-                    pieces merge and double.</p>
-                <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. The winner is the first to reach 64 or fill up the board with the 
-                    highest score.</p>
-                <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
-            </div>
+            <p><strong>How to play:</strong> use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
+                pieces merge and double.</p>
+            <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. The winner is the first to reach 64 or fill up the board with the 
+                highest score.</p>
+            <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
         </div>
         
         <script>
@@ -65,6 +64,7 @@
             var player2_score = document.getElementById("player2-score");
             var turn_message = document.getElementById("turn");
             var reset_button = document.getElementById("reset-button");
+            var endgame_msg = document.getElementById("endgame-msg");
 
             var size = 150;
 
@@ -585,6 +585,14 @@
                     turn_message.classList.remove("player2-text")
                 }
 
+                if (endgame_msg.classList.contains("player1-text")){
+                    endgame_msg.classList.remove("player1-text")
+                }
+                if (endgame_msg.classList.contains("player2-text")){
+                    endgame_msg.classList.remove("player2-text")
+                }
+
+
                 // iterate through grid
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
@@ -643,7 +651,7 @@
                 }
 
                 else if (my_board.board_state == "win2"){
-                    turn_message.classList.add("player1-text");
+                    turn_message.classList.add("player2-text");
                     text = "Player 2 wins!";
                 }
 
@@ -666,6 +674,16 @@
                     }
                 }
                 turn_message.innerHTML = text;
+
+                if (endgame){
+                    endgame_msg.innerHTML = text;
+                    if (my_board.board_state == "win1")
+                        endgame_msg.classList.add("player1-text");
+                    else if (my_board.board_state == "win2")
+                        endgame_msg.classList.add("player2-text");
+                    endgame_msg.style.zIndex = 10;
+                    endgame_msg.style.display = "inherit";
+                }
             }
 
             function mainLoop(){
@@ -677,6 +695,7 @@
                         resetBoard();
                         endgame = false;
                         resetPressed = false;
+                        endgame_msg.style.display = "none";
                     }
                     else if (!endgame){
                         console.log("making move " + move_type);
