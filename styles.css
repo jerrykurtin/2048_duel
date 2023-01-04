@@ -33,7 +33,7 @@ p {
 }
 
 
-.button-basic {
+button {
     background-color: #FFFFFF;
     border: 1px solid #776e65;
     border-radius: 8px;
@@ -43,7 +43,7 @@ p {
     display: inline-block;
     /* font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif; */
     font-size: 16px;
-    font-weight: 600;
+    /* font-weight: 600; */
     line-height: 20px;
     outline: none;
     padding: 13px 23px;
@@ -57,17 +57,17 @@ p {
     width: auto;
   }
   
-  /* .button-basic:focus-visible {
+  /* button:focus-visible {
     box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
     transition: box-shadow .2s;
   } */
   
-  .button-basic:active {
+  button:active {
     background-color: #F7F7F7;
     transform: scale(.96);
   }
   
-  .button-basic:disabled {
+  button:disabled {
     border-color: #DDDDDD;
     color: #DDDDDD;
     cursor: not-allowed;
@@ -119,19 +119,21 @@ a:visited {
 .belowgame-container{
     text-align: center;
 }
+.settings-container{
+    margin: auto 0;
+    /* float: left; */
+    /* height: 50px; */
+}
+.gamemode-dropdown {
+    height: 50px;
+    width: 100px;
+}
 
 .turn {
     font-size: 25px;
     margin-bottom: 7px;
 }
 
-.reset-button {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 20px;
-    outline: none;
-    padding: 10px 15px;
-}
 
 /* Game Grid Settings */
 .game-container {
@@ -374,10 +376,69 @@ transform: translate(363px, 0px);
     color: rgb(203, 141, 126);
 }
 
-#scrollLock {
-    margin-bottom: 20px;
+.bolded {
+    font-weight: 600;
+  }
+
+/* Third-party styles */
+/* dropdown: w3schools */
+.dropbtn {
+    border-width: 1px 1px 1px 3px;
+    font-weight: normal;
 }
 
+.dropbtn:active {
+    transform: scale(1);
+}
+
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    /* min-width: 100px; */
+    margin-bottom: 10px;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    width: auto;
+    z-index: 10;
+  }
+
+  /* format the button in dropdown */
+  .dropdown-element {
+    border-width: 0;
+    padding: 7px 5px;
+    border-radius: 0;
+    float: left;
+    left: 8px;
+    text-align: left;
+    height: 60%;
+    width: 80%;
+  }
+
+ .dropdown-element:hover {
+    background-color: #F7F7F7;
+  }
+
+  .dropdown-element:active {
+    border-width: 0px 0px 0px 2px;
+    transform: scale(1);
+  }
+
+  /* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {
+    background-color: #F7F7F7;
+  }
 
 /* Small Screen Settings */
 /* @media screen and (max-width: 520px) {

@@ -3,6 +3,9 @@
 *.py[cod]
 *$py.class
 
+# mac
+.DS_Store
+
 # vscode
 .vscode
 
