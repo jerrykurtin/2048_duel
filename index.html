@@ -5,6 +5,15 @@
         <link rel="stylesheet" href="styles.css">
         <title>2048 Duel</title>
     </head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1J9CBQR5PG"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-1J9CBQR5PG');
+    </script>
     <body>
         <div class="container">
             <div class="title-container">
@@ -66,45 +75,24 @@
             var reset_button = document.getElementById("reset-button");
             var endgame_msg = document.getElementById("endgame-msg");
 
-            var size = 150;
-
-            // fonts
-            block_font = "75px Standard";
-            block_font2 = "75px Palatino";
-            block_font3 = "75px Helvetica Neue";
-            
-
-            score_font = "30px Palatino";
-            turn_font = "50px Palatino";
-
-
-            // colors
-            var green = "121, 130, 101";
-            var salmon = "203, 141, 126";
-            var navy = "33, 51, 67";
-            var yellow = "231,185,28"
-            
-            var black = "67,67,67";
-            var grey = "147,152,157";
-            var white = "250,250,250";
-            var cream = "250,249,243";
-
-            // settings for player 1 and 2 colors
-            var p1color = green;
-            var p2color = salmon;
-
             var rightPressed = false;
             var leftPressed = false;
             var upPressed = false;
             var downPressed = false;
             var resetPressed = false;
+            var keypress_active = false;
+            var update_needed = false;
+            var move_made = false;
 
             // board information
             var my_board = null;
-            var keypress_active = false;
-            var update_needed = false;
             var move_type = null;
             var endgame = false;
+
+            // singleplayer
+            var awaiting_cpu = false;
+            var singleplayer = false;
+            var difficulty = "easy";    // "easy", "medium", "hard"
 
             // holds the http request object
             var xhr = null;
@@ -157,6 +145,10 @@
                 }
 
                 move(dir){
+                    if (this.board_state != "continue" && this.board_state != "no_change"){
+                        console.log("ERROR: cannot move in endgame!");
+                        return;
+                    }
                     var prev_state = deepCopy(this.board);
 
                     // make the move
@@ -361,6 +353,11 @@
                 return Math.floor(Math.random() * (max - min + 1) ) + min;
             }
 
+            function randchoice(arr){
+                let idx = randint(0, arr.length - 1);
+                return arr[idx];
+            }
+
             const deepCopy = (arr) => {
                 /* deep copy a multi-dimensional array */
                 let copy = [];
@@ -419,6 +416,18 @@
                 return newarr
             }
 
+            function selectrand(options, weight) {
+                /* select from array with given weights */
+                var choices = new Array();
+                for (let idx = 0; idx < options.length; ++idx){
+                    for (let count = 0; count < weight[idx]; ++count){
+                        choices.push(options[idx]);
+                    }
+                }
+
+                return randchoice(choices);
+            }
+
             // debug
             var my_board = new Board(64);
 
@@ -436,6 +445,10 @@
             }, false);
 
             function keyDownHandler(e) {
+                if (awaiting_cpu){
+                    return;
+                }
+
                 // prevent arrow keys from scrolling
                 if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
                     e.preventDefault();
@@ -467,6 +480,7 @@
                     if (!keypress_active){
                         keypress_active = true;
                         update_needed = true;
+                        move_made = true;
                     }
                 }
             }
@@ -495,22 +509,22 @@
                 }
             }
         
-            var position = game_container.getBoundingClientRect();
-            console.log("Position: ", position);
-
-
+            
             // mobile device handlers
             function touchstartHandler(e) {
                 initialX = e.touches[0].pageX;
                 initialY = e.touches[0].pageY;
-
+                
                 // only allow swipes that start inside the game board
-                // var position = game_container.getBoundingClientRect();
+                var position = game_container.getBoundingClientRect();
                 if (initialX > position.left && initialX < position.right && initialY > position.top && initialY < position.bottom)
                     keypress_active = true;
             }
 
             function touchmoveHandler(e) {
+                if (awaiting_cpu)
+                    return;
+
                 let xdiff = e.touches[0].pageX - initialX;
                 let ydiff = e.touches[0].pageY - initialY;
 
@@ -521,8 +535,9 @@
                             move_type = "left";
                         else
                             move_type = "right";
-                        update_needed = true;
                         keypress_active = false;
+                        update_needed = true;
+                        move_made = true;
                     }
     
                     // up or down move
@@ -531,8 +546,9 @@
                             move_type = "up";
                         else
                             move_type = "down";
-                        update_needed = true;
                         keypress_active = false;
+                        update_needed = true;
+                        move_made = true;
                     }
                 }
             }
@@ -546,12 +562,10 @@
             // ------------------------ Game Logic ------------------------
 
             function makeMove(direction){
-                console.log("moving in direction " + direction);
+                console.log("makeMove(" + direction + ")");
                 my_board.move(direction);
-                console.log("board is now ", my_board);
 
                 // check for endgame
-                console.log("board state: ", my_board.board_state);
                 if (my_board.board_state != "continue" && my_board.board_state != "no_change"){
                     console.log("endgame reached");
                     endgame = true;
@@ -561,9 +575,8 @@
             }
 
             function resetBoard(){
+                console.log("resetBoard()");
                 my_board = new Board(64);
-                console.log("board reset:", my_board);
-
                 drawBoard();
             }
 
@@ -571,8 +584,14 @@
 
 
             // draw the grid
-            function drawBoard(board_info){
+            function drawBoard(){
                 /* update the game board */
+                console.log("drawBoard()");
+
+                if (!my_board){
+                    console.log("ERROR: board not received in drawBoard");
+                    return;
+                }
 
                 // clear old squares and settings
                 while(tile_container.hasChildNodes()){
@@ -601,28 +620,23 @@
                         player = -1;
 
                         // parse the current number
-                        if (my_board != null){
-                            console.log("board information recieved in drawGrid()")
-                            text = my_board.board[col][row].toString();                            
-                            
-                            // set the owner
-                            if (text != 0){
-                                if (my_board.owner[col][row] == 0)
-                                    player = 1;
-                                else 
-                                    player = 2;
-                            }
+                        text = my_board.board[col][row].toString();                            
+                        
+                        // set the owner
+                        if (text != 0){
+                            if (my_board.owner[col][row] == 0)
+                                player = 1;
+                            else 
+                                player = 2;
                         }
 
                         // draw new square
                         if (text != 0){
                             const newSquare = document.createElement("div");
                             var loc = "tile-position-" + (row + 1) + "-" + (col + 1);
-                            console.log("adding to location " + loc);
                             newSquare.classList.add(loc);
                             tile_container.appendChild(newSquare);
                             newSquare.classList.add("tile");
-                            console.log("new square created");
 
                             // set color
                             if (player == 1)
@@ -688,6 +702,9 @@
 
             function mainLoop(){
 
+                if (awaiting_cpu)
+                    return;
+
                 // process keypress
                 if (update_needed){
                     if (resetPressed){
@@ -697,9 +714,39 @@
                         resetPressed = false;
                         endgame_msg.style.display = "none";
                     }
-                    else if (!endgame){
-                        console.log("making move " + move_type);
+
+                    // move made
+                    else if (!endgame && move_made){
+                        console.log("player is making move " + move_type);
                         makeMove(move_type);
+
+                        // cpu move
+                        if (singleplayer && my_board.board_state == "continue"){
+                            awaiting_cpu = true;
+                            options = ["up", "down", "left", "right"];
+                            // options = my_board.explore_moves();
+
+                            function sleep(ms) {
+                                return new Promise(resolve => setTimeout(resolve, ms));
+                            }
+                            
+                            if (difficulty == "easy")
+                                weight = [4, 3, 2, 1];
+                            else
+                                weight = [1, 1, 1, 1];
+
+                            // cpu delay and move
+                            function cpumove(){
+                                do {
+                                    move = selectrand(options, weight);
+                                    console.log("CPU moving in direction " + move + " with difficulty " + difficulty);
+                                    makeMove(move);
+                                } while (my_board.board_state == "no_change");
+                            }
+                            sleep(1000)
+                                .then(() => cpumove())
+                                .then(() => awaiting_cpu = false);
+                        }
                     }
                     update_needed = false;
                 }
