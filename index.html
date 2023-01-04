@@ -86,8 +86,8 @@
             </div>
             <p><strong>How to play:</strong> use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
                 pieces merge and double.</p>
-            <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. The winner is the first to reach the goal (64) or fill up the board with the 
-                highest score.</p>
+            <p><strong>Multiplayer:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. 
+                The winner is the first to create the goal piece (64) or the one with the highest score when there are no available moves.</p>
             <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
         </div>
         
@@ -271,6 +271,18 @@
                         return;
                     }
 
+                    // endgame: grid is full
+                    if (!this.move_exists() || cands.length < this.squares_added){
+                        if (this.p1score > this.p2score)
+                            this.board_state = "win1";
+                        else if (this.p1score < this.p2score)
+                            this.board_state = "win2";
+                        else
+                            this.board_state = "tie";
+                        return;
+                    }
+
+                    // add squares
                     if (add_squares){
                         // select new value(s) to add
                         var new_squares = new Array();
@@ -309,18 +321,27 @@
                         
                     // switch to the next player
                     this.player = (this.player + 1) % 2;
+                }
+
+                move_exists(){
+                    /* Test if available move exists */
+                    var temp_board = new Board(-1, this);
+                    var prev_state = temp_board.board;
                     
-                    // TODO: change endgame for multiple squares added
-                    // endgame: grid is full
-                    if (cands.length <= this.squares_added){
-                        if (this.p1score > this.p2score)
-                            this.board_state = "win1";
-                        else if (this.p1score < this.p2score)
-                            this.board_state = "win2";
-                        else
-                            this.board_state = "tie";
-                    }
-                    return;
+                    temp_board.up();
+                    if (!deepCompare(prev_state, temp_board.board))
+                        return true;
+                    temp_board.down();
+                    if (!deepCompare(prev_state, temp_board.board))
+                        return true;
+                    temp_board.left();
+                    if (!deepCompare(prev_state, temp_board.board))
+                        return true;
+                    temp_board.right();
+                    if (!deepCompare(prev_state, temp_board.board))
+                        return true;
+
+                    return false;
                 }
                 
                 left(){
@@ -420,7 +441,6 @@
                         return null;
                     }
 
-                    console.log("second diff values are: " + scores);
                     return [Math.min(...scores), Math.max(...scores)];
                 }
 
@@ -442,7 +462,6 @@
                         // don't promote no_change
                         if (temp_board.board_state == "no_change"){
                             dirs[dir][0] = -Number.MAX_VALUE;
-                            console.log("no change detected in dir " + cardinal_moves[dir] + ", set to " + dirs[dir][0]);
                         }
 
                         // promote win, don't promote loss
@@ -466,7 +485,6 @@
                                 var added = min_max[0];
                             else
                                 var added = min_max[1];
-                            console.log("choosing " + added);
                             dirs[dir][0] =  added + move_diff;
                             if (player == 1){
                                 dirs[dir][0] = -1 * dirs[dir][0];
@@ -476,11 +494,9 @@
 
                     // sorts in reverse order
                     dirs.sort(function(a,b){return b[0] - a[0]})
-                    console.log("before pruning, dirs are " + dirs);
                     // remove all -infinity values
                     while (dirs[dirs.length - 1][0] == -Number.MAX_VALUE)
                         dirs.pop();
-                    console.log("after pruning, dirs are " + dirs);
                     return dirs;
                 }
 
@@ -615,6 +631,7 @@
                 p2name = "CPU";
                 p2possessive = "CPU's";
                 document.getElementById("difficulty-dropdown").style.display = "inherit";
+                document.getElementById("difficulty-dropdown").style.visibility = "visible";
                 document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Solo";
             }, false);
             document.getElementById("gamemode-multiplayer").addEventListener("click", function (){
@@ -626,6 +643,7 @@
                 p2name = "Player 2";
                 p2possessive = "Player 2's";
                 document.getElementById("difficulty-dropdown").style.display = "none";
+                document.getElementById("difficulty-dropdown").style.visibility = "hidden";
                 document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Local Multiplayer";
             }, false);
 
@@ -974,11 +992,11 @@
                             if (difficulty == "easy")
                                 weight = [4, 3, 2, 1];
                             else if (difficulty == "medium")
-                                weight = [5, 3, 2, 0];
+                                weight = [5, 3, 1, 1];
                             else if (difficulty == "hard")
-                                weight = [8, 2, 0, 0];
+                                weight = [80, 10, 5, 5];
                             else if (difficulty == "impossible")
-                                weight = [1, 0, 0, 0];
+                                weight = [97, 1, 1, 1];
                             else
                                 weight = [1, 1, 1, 1];
 
