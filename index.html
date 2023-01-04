@@ -120,6 +120,10 @@
             var awaiting_cpu = false;
             var singleplayer = true;
             var difficulty = "easy";    // "easy", "medium", "hard", "impossible"
+            var p1name = "You";
+            var p1possessive = "Your";
+            var p2name = "CPU";
+            var p2possessive = "CPU's";
 
             // holds the http request object
             var xhr = null;
@@ -154,7 +158,7 @@
                         this.owner = deepCopy(copy_board.owner);
                         this.p1score = copy_board.p1score;
                         this.p2score = copy_board.p2score;
-                        this.win_condition = copy_board.win_condtion;
+                        this.win_condition = copy_board.win_condition;
 
                         this.board_state = copy_board.board_state;
                         this.player = copy_board.player;
@@ -240,7 +244,6 @@
                                 else{
                                     this.board_state = "win2";
                                 }
-                                return;
                             }
 
                             // empty square
@@ -259,11 +262,11 @@
                     }
 
                     // elimination win
-                    if (this.p1score == 0){
+                    if (this.p1score == 0 || this.board_state == "win2"){
                         this.board_state = "win2";
                         return;
                     }
-                    else if (this.p2score == 0){
+                    else if (this.p2score == 0 || this.board_state == "win1"){
                         this.board_state = "win1";
                         return;
                     }
@@ -426,7 +429,7 @@
                     var dirs = [[0, cardinal_moves[0]], [0, cardinal_moves[1]], [0, cardinal_moves[2]], [0, cardinal_moves[3]]];
                     var player = this.player;
                     var initial_diff = this.p1score - this.p2score;
-                    console.log("received board:\n" + this.build_grid() + " as player " + player + " and initial diff " + initial_diff);
+                    console.log("received board:\n" + this.build_grid() + " as player " + player);
 
                     // search the moves in every direction
                     for (let dir = 0; dir < 4; ++dir){
@@ -434,7 +437,7 @@
                         temp_board.move(cardinal_moves[dir], false);
                         var move_diff = temp_board.p1score - temp_board.p2score - initial_diff;
 
-                        console.log("exploring move " + cardinal_moves[dir] + ", has board\n" + temp_board.build_grid() + " with diff " + move_diff);
+                        console.log("exploring move " + cardinal_moves[dir] + ", has board\n" + temp_board.build_grid() + "\n, diff " + move_diff + ", and state " + temp_board.board_state + " and win condition " + temp_board.win_condition);
 
                         // don't promote no_change
                         if (temp_board.board_state == "no_change"){
@@ -444,13 +447,13 @@
 
                         // promote win, don't promote loss
                         else if (temp_board.board_state == "win1"){
-                            if (turn == 1)
+                            if (player == 0)
                                 dirs[dir][0] = Number.MAX_VALUE;
                             else
                                 dirs[dir][0] = -Number.MAX_VALUE;
                         }
                         else if (temp_board.board_state == "win2"){
-                            if (turn == 2)
+                            if (player == 1)
                                 dirs[dir][0] = Number.MAX_VALUE;
                             else
                                 dirs[dir][0] = -Number.MAX_VALUE;
@@ -473,7 +476,11 @@
 
                     // sorts in reverse order
                     dirs.sort(function(a,b){return b[0] - a[0]})
-                    // dirs.sort().reverse();
+                    console.log("before pruning, dirs are " + dirs);
+                    // remove all -infinity values
+                    while (dirs[dirs.length - 1][0] == -Number.MAX_VALUE)
+                        dirs.pop();
+                    console.log("after pruning, dirs are " + dirs);
                     return dirs;
                 }
 
@@ -603,12 +610,22 @@
                 resetPressed = true;
                 update_needed = true;
                 singleplayer = true;
+                p1name = "You";
+                p1possessive = "Yours";
+                p2name = "CPU";
+                p2possessive = "CPU's";
+                document.getElementById("difficulty-dropdown").style.display = "inherit";
                 document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Solo";
             }, false);
             document.getElementById("gamemode-multiplayer").addEventListener("click", function (){
                 resetPressed = true;
                 update_needed = true;
                 singleplayer = false;
+                p1name = "Player 1";
+                p1possessive = "Player 1's";
+                p2name = "Player 2";
+                p2possessive = "Player 2's";
+                document.getElementById("difficulty-dropdown").style.display = "none";
                 document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Local Multiplayer";
             }, false);
 
@@ -796,7 +813,6 @@
 
             // ------------------------------------------------------------------
 
-
             // draw the grid
             function drawBoard(){
                 /* update the game board */
@@ -865,22 +881,27 @@
                 }
 
                 // write the scores
-                player1_score.innerHTML = "Player 1 score -> <strong>" + my_board.p1score + "</strong>";
-                player2_score.innerHTML = "<strong>" + my_board.p2score + "</strong> <- Player 2 score";
+                player1_score.innerHTML = p1possessive + " score -> <strong>" + my_board.p1score + "</strong>";
+                player2_score.innerHTML = "<strong>" + my_board.p2score + "</strong> <- " + p2possessive + " score";
                 // determine game state
                 if (my_board.board_state == "tie"){
                     text = "It's a tie!";
                 }
 
                 else if (my_board.board_state == "win1"){
-                    console.log("player 1 won!");
                     turn_message.classList.add("player1-text");
-                    text = "Player 1 wins!";
+                    if (p1name == "You")
+                        text = p1name + " win!";
+                    else
+                        text = p1name + " win!";
                 }
 
                 else if (my_board.board_state == "win2"){
                     turn_message.classList.add("player2-text");
-                    text = "Player 2 wins!";
+                    if (p2name == "CPU")
+                        text = p2name + " wins :(";
+                    else
+                    text = p2name + " wins!";
                 }
 
                 // normal
@@ -890,7 +911,7 @@
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         else
-                            text = "Player 1's turn";
+                            text = p1possessive + " turn";
                     }
 
                     else{
@@ -898,7 +919,7 @@
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         else
-                            text = "Player 2's turn";
+                            text = p2possessive + " turn";
                     }
                 }
                 turn_message.innerHTML = text;
@@ -939,8 +960,11 @@
 
                             // search for the best possible moves, return in sorted order
                             var dirs = my_board.explore_moves();
+                            if (!dirs){
+                                dirs = [[0, "up"],[ 0, "down"],[ 0, "left"],[ 0, "right"]]
+                            }
                             var options = [], costs = [];
-                            for (let idx = 0; idx < 4; ++idx){
+                            for (let idx = 0; idx < dirs.length; ++idx){
                                 options.push(dirs[idx][1]);
                                 costs.push(dirs[idx][0]);
                             }
@@ -959,16 +983,23 @@
 
                             // cpu delay and move
                             function cpumove(){
-                                do {
-                                    move = selectrand(options, weight);
-                                    console.log("CPU moving in direction " + move + " with difficulty " + difficulty);
+                                move = selectrand(options, weight);
+                                console.log("CPU moving in direction " + move + " with difficulty " + difficulty);
+                                makeMove(move);
+                                
+                                // failsafe: try every direction if first fails
+                                for (let idx = 0; idx < 4; ++idx){
+                                    if (my_board.board_state != "no_change")
+                                        break;
+                                    move = options[idx];
+                                    console.log("FAILSAFE: CPU moving in direction " + move + " with difficulty " + difficulty);
                                     makeMove(move);
+                                }
                                 } while (my_board.board_state == "no_change");
                             }
-                            sleep(1000)
+                            sleep(1500)
                                 .then(() => cpumove())
                                 .then(() => awaiting_cpu = false);
-                        }
                     }
                     update_needed = false;
                 }
