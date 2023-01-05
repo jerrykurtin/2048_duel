@@ -238,6 +238,17 @@
                 }
 
                 move(dir, add_squares=true){
+                    // endgame: grid is full
+                    if (!this.move_exists()){
+                        if (this.p1score > this.p2score)
+                            this.board_state = "win1";
+                        else if (this.p1score < this.p2score)
+                            this.board_state = "win2";
+                        else
+                            this.board_state = "tie";
+                        return;
+                    }
+
                     if (this.board_state != "continue" && this.board_state != "no_change"){
                         console.log("ERROR: cannot move in endgame!");
                         return;
@@ -330,12 +341,10 @@
                         }
                         else{
                             var choices = new Array();
-                            for (let twos = 0; twos < 75; ++twos)
+                            for (let twos = 0; twos < 3; ++twos)
                             choices.push(2);
-                            for (let fours = 0; fours < 24; ++fours)
+                            for (let fours = 0; fours < 1; ++fours)
                             choices.push(4);
-                            for (let eights = 0; eights < 1; ++eights)
-                            choices.push(8);
                             
                             for (let ch = 0; ch < this.squares_added; ++ch)
                             new_squares.push(choices[randint(0, choices.length - 1)]);
@@ -1052,6 +1061,9 @@
                             else
                                 newSquare.classList.add(p2color_id);
                             newSquare.classList.add("background")
+
+                            // set specific number settings
+                            newSquare.classList.add("tile-" + text);
 
                             // set the text
                             newSquare.innerHTML = text;

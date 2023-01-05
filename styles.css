@@ -138,6 +138,10 @@ a:visited {
     float: left;
 }
 
+#reset-button {
+    border-radius: 6px;
+}
+
 .board_info-internal {
     font-size: 20px;
 }
@@ -187,6 +191,7 @@ a:visited {
     margin-left: 2.5px;
     margin-right: 2.5px;
     padding: 5px 7px;
+    border-radius: 4px;
 }
 
 /* Game Grid Settings */
@@ -220,7 +225,8 @@ a:visited {
     font-weight: bold;
     z-index: 0;
 
-    background: rgba(238, 238, 238, 0.5);
+    background: rgb(238, 238, 238);
+    opacity: 0.8 !important;
 }
 
 .grid-container {
@@ -398,6 +404,46 @@ transform: translate(363px, 0px);
 }
 
 
+/* tile-specific */
+.tile.tile-2 {
+    opacity: 0.5;
+}
+
+.tile.tile-4 {
+    opacity: 0.6;
+}
+
+.tile.tile-8 {
+    opacity: 0.7;
+}
+
+.tile.tile-16 {
+    opacity: 0.8;
+}
+
+.tile.tile-32 {
+    opacity: 0.9;
+}
+
+.tile.tile-64 {
+    opacity: 1;
+}
+
+.tile.tile-128 {
+    opacity: 1;
+}
+
+.tile.tile-256 {
+    opacity: 1;
+}
+
+.tile.tile-512 {
+    opacity: 1;
+}
+
+
+
+
 /* modifiers */
 
 .text-center {
@@ -414,38 +460,42 @@ transform: translate(363px, 0px);
 
 .player1.background {
     background: rgb(121, 130, 101);
-    opacity: 0.5;
+    /* opacity: 0.5; */
 }
 
 .player1-contrast.background{
     background: rgb(0,110,159);
-    opacity: 0.5;
+    /* opacity: 0.5; */
 }
 
 .player1.text {
-    color: rgb(121, 130, 101)
+    color: rgb(121, 130, 101);
+    opacity: 0.75;
 }
 
 .player1-contrast.text{
     color: rgb(0,110,159);
+    opacity: 0.75;
 }
 
 .player2.background{
     background: rgb(203, 141, 126);
-    opacity: 0.5;
+    /* opacity: 0.5; */
 }
 
 .player2-contrast.background {
     background: rgb(242,79,70);
-    opacity: 0.5;
+    /* opacity: 0.5; */
 }
 
 .player2.text {
     color: rgb(203, 141, 126);
+    opacity: 0.75;
 }
 
 .player2-contrast.text { 
     color:  rgb(242,79,70);
+    opacity: 0.75;
 }
 
 .bolded {
@@ -456,7 +506,7 @@ transform: translate(363px, 0px);
 /* dropdown: w3schools */
 .dropbtn {
     border-width: 1px 1px 1px 3px;
-    border-radius: 4px;
+    /* border-radius: 4px; */
     font-weight: normal;
 }
 
