@@ -480,6 +480,21 @@
                         temp_board.move(cardinal_moves[dir], false);
                         if (temp_board.board_state == "no_change")
                             continue;
+
+                        // promote wins/ don't promote losses
+                        else if (temp_board.board_state == "win1"){
+                            if (temp_board.player == 1)
+                                scores.push(-10000)
+                            else
+                                scores.push(10000)
+                        }
+                        else if (temp_board.board_state == "win2"){
+                            if (temp_board.player == 0)
+                                scores.push(-10000)
+                            else
+                                scores.push(10000)
+                        }
+
                         else 
                             scores.push(temp_board.p1score - temp_board.p2score);
                     }
@@ -487,24 +502,28 @@
                     if (!scores){
                         return null;
                     }
+                    // console.log("all possible move differentials for player2: " + scores);
 
                     return [Math.min(...scores), Math.max(...scores)];
                 }
 
                 explore_moves() {
+
                     /* const function to explore the best moves. Returns the moves in order of their average 2-turn payout */
                     var dirs = [[0, cardinal_moves[0]], [0, cardinal_moves[1]], [0, cardinal_moves[2]], [0, cardinal_moves[3]]];
                     var player = this.player;
-                    var initial_diff = this.p1score - this.p2score;
-                    console.log("received board:\n" + this.build_grid() + " as player " + player);
+                    // var initial_diff = this.p1score - this.p2score;
+                    console.log("received board:\n" + this.build_grid() + " as player " + (player + 1));
+                    // console.log("initial differential (p1score - p2score): " + initial_diff);
 
                     // search the moves in every direction
                     for (let dir = 0; dir < 4; ++dir){
                         var temp_board = new Board(-1, this);
                         temp_board.move(cardinal_moves[dir], false);
-                        var move_diff = temp_board.p1score - temp_board.p2score - initial_diff;
+                        // var move_diff = temp_board.p1score - temp_board.p2score - initial_diff;
+                        // move_diff = 0;
 
-                        console.log("exploring move " + cardinal_moves[dir] + ", has board\n" + temp_board.build_grid() + "\n, diff " + move_diff + ", and state " + temp_board.board_state + " and win condition " + temp_board.win_condition);
+                        console.log("exploring move " + cardinal_moves[dir] + ", has board\n" + temp_board.build_grid());
 
                         // don't promote no_change
                         if (temp_board.board_state == "no_change"){
@@ -525,17 +544,26 @@
                                 dirs[dir][0] = -Number.MAX_VALUE;
                         }
 
-                        // calculate the best next move
+                        // calculate the best next move based on minimum oponnent's score
                         else{
                             let min_max = temp_board.find_move_value();
                             if (player == 0)
                                 var added = min_max[0];
                             else
                                 var added = min_max[1];
-                            dirs[dir][0] =  added + move_diff;
+                            // console.log("choosing opponent move with differential " + added);
+                            dirs[dir][0] =  added;  // + move_diff;
+                            console.log("if the opponent plays optimally, the max score differential they can reach is " + dirs[dir][0]);
                             if (player == 1){
                                 dirs[dir][0] = -1 * dirs[dir][0];
                             }
+                        }
+
+                        if (dirs[dir][0] == Number.MAX_VALUE){
+                            console.log("prioritizing this move!");
+                        }
+                        else if (dirs[dir][0] == -Number.MAX_VALUE){
+                            console.log("avoiding this move at all costs!");
                         }
                     }
 
@@ -1186,6 +1214,23 @@
                             // flag to prevent player from moving during delay
                             awaiting_cpu = true;
 
+                            //DEBUG
+                            // my_board.board = [
+                            //         [0, 0, 0, 0],
+                            //         [0, 0, 0, 0],
+                            //         [0, 0, 0, 0],
+                            //         [2, 2, 0, 4]
+                            // ];
+                            // my_board.owner = [
+                            //     [-1, -1, -1, -1],
+                            //     [-1, -1, -1, -1],
+                            //     [-1, -1, -1, -1],
+                            //     [1, 0, -1, 0]
+                            // ];
+                            // my_board.p1score = 6;
+                            // my_board.p2score = 2;
+                            // my_board.board_state = "continue";
+
                             // search for the best possible moves, return in sorted order
                             var dirs = my_board.explore_moves();
                             if (!dirs){
@@ -1196,10 +1241,10 @@
                                 options.push(dirs[idx][1]);
                                 costs.push(dirs[idx][0]);
                             }
-                            console.log("options: " + options + ", costs: " + costs);
+                            console.log("options: " + options + "\, costs (negative of differential for player 2): " + costs);
                             
                             if (difficulty == "easy")
-                                weight = [4, 3, 2, 1];
+                                weight = [40, 30, 20, 10];
                             else if (difficulty == "medium")
                                 weight = [60, 30, 5, 5];
                             else if (difficulty == "hard")
