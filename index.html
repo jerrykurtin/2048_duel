@@ -19,26 +19,26 @@
             <div class="title-container">
                 <h1 class="title">2048 Duel!</h1>
                 <div class="board_info-container">
-                    <div class="board_info-left player1-text text-left">
-                        <div class="board_info-internal header" >Player 1</div>
-                        <div class="board_info-internal" id="player1-timer">Time - </div>
-                        <div class="board_info-internal" id="player1-score"></div>
+                    <div class="board_info-left player1 text text-left">
+                        <div class="board_info-internal text header" >Player 1</div>
+                        <div class="board_info-internal text" id="player1-timer">Time - </div>
+                        <div class="board_info-internal text" id="player1-score"></div>
                     </div>
                     <div class="board_info-center">
                         <button class="board_info-reset bolded" id="reset-button">Reset (r)</button>
 
                     </div>
-                    <div class="board_info-right player2-text text-right">
-                        <div class="board_info-internal header">Player 2</div>
-                        <div class="board_info-internal" id="player2-timer">  -Time</div>
-                        <div class="board_info-internal" id="player2-score"></div>
+                    <div class="board_info-right player2 text text-right">
+                        <div class="board_info-internal text header">Player 2</div>
+                        <div class="board_info-internal text" id="player2-timer">  -Time</div>
+                        <div class="board_info-internal text" id="player2-score"></div>
                     </div>
                 </div>
     
             </div>
             <div class="game-container" id="game-container">
-                <div class="endgame-msg" id="endgame-msg"></div>
-                <div class="endgame-msg" id="start-msg">
+                <div class="endgame-msg text" id="endgame-msg"></div>
+                <div class="endgame-msg text" id="start-msg">
                     <button id="start-button">Start Timed Game</button>
                 </div>
                 <div class="grid-container">
@@ -71,7 +71,7 @@
             </div>
             <div class="belowgame-container" id="below-game-container">
                 <div class="turn-container">
-                    <div class="turn" id="turn"></div>
+                    <div class="turn text" id="turn"></div>
                 </div>
                 <div class="settings-container">
                     <div class="dropdown">
@@ -106,6 +106,7 @@
                           <button class="dropdown-element" id="timer-speed">Speed</button>
                         </div>
                     </div>
+                    <button class="settings-btn" id="colorblind-button">High-contrast: off</button>
                 </div>
             </div>
             <p><strong>How to play:</strong> use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
@@ -133,6 +134,7 @@
             var resetPressed = false;
             var keypress_active = false;
             var update_needed = false;
+            var reset_colors = false;
             var move_made = false;
 
             // board information
@@ -140,6 +142,9 @@
             var my_board = null;
             var move_type = null;
             var endgame = false;
+            var colorblind = false;
+            var p1color_id = "player1";
+            var p2color_id = "player2";
 
             // singleplayer
             var awaiting_cpu = false;
@@ -655,6 +660,52 @@
                 time_start = Date.now();
             }, false);
 
+            // colorblind button (for matt bullock)
+            document.getElementById("colorblind-button").addEventListener("click", function (){
+                console.log("switching all elements between contrasts");
+                if (colorblind){
+                    colorblind = false;
+                    
+                    // switch all existing colors to normal
+                    let allp1 = document.getElementsByClassName("player1-contrast");
+                    while(allp1.length > 0) {
+                        allp1[0].classList.add("player1");
+                        allp1[0].classList.remove("player1-contrast")
+                    }
+                    let allp2 = document.getElementsByClassName("player2-contrast");
+                    while(allp2.length > 0) {
+                        allp2[0].classList.add("player2");
+                        allp2[0].classList.remove("player2-contrast")
+                    }
+
+                    p1color_id = "player1";
+                    p2color_id = "player2";
+                    document.getElementById("colorblind-button").innerHTML = "High Contrast: Off";
+                }
+
+                else {
+                    colorblind = true;
+                    // switch all existing colors to high-contrast
+                    let allp1 = document.getElementsByClassName("player1");
+                    while(allp1.length > 0){
+                        allp1[0].classList.add("player1-contrast");
+                        allp1[0].classList.remove("player1")
+                    }
+                    let allp2 = document.getElementsByClassName("player2");
+                    while(allp2.length > 0){
+                        allp2[0].classList.add("player2-contrast");
+                        allp2[0].classList.remove("player2")
+                    }
+
+                    p1color_id = "player1-contrast";
+                    p2color_id = "player2-contrast";
+                    document.getElementById("colorblind-button").innerHTML = "High Contrast: On";
+                }
+
+                console.log("finished switching all elements");
+                reset_colors = true;
+            }, false);
+
             // reset button
             reset_button.addEventListener("click", function (){
                 resetPressed = true;
@@ -910,6 +961,8 @@
 
                 // disable time reading
                 if (singleplayer || !time_type){
+                    document.getElementById("start-msg").style.display = "none";
+                    document.getElementById("start-msg").style.zIndex = "1";
                     document.getElementById("player1-timer").style.visibility = "hidden";
                     document.getElementById("player1-timer").style.display = "none";
                     document.getElementById("player2-timer").style.visibility = "hidden";
@@ -952,18 +1005,18 @@
                 while(tile_container.hasChildNodes()){
                     tile_container.removeChild(tile_container.firstChild);
                 }
-                if (turn_message.classList.contains("player1-text")){
-                    turn_message.classList.remove("player1-text")
+                if (turn_message.classList.contains(p1color_id)){
+                    turn_message.classList.remove(p1color_id)
                 }
-                if (turn_message.classList.contains("player2-text")){
-                    turn_message.classList.remove("player2-text")
+                if (turn_message.classList.contains(p2color_id)){
+                    turn_message.classList.remove(p2color_id)
                 }
 
-                if (endgame_msg.classList.contains("player1-text")){
-                    endgame_msg.classList.remove("player1-text")
+                if (endgame_msg.classList.contains(p1color_id)){
+                    endgame_msg.classList.remove(p1color_id)
                 }
-                if (endgame_msg.classList.contains("player2-text")){
-                    endgame_msg.classList.remove("player2-text")
+                if (endgame_msg.classList.contains(p2color_id)){
+                    endgame_msg.classList.remove(p2color_id)
                 }
 
 
@@ -995,9 +1048,10 @@
 
                             // set color
                             if (player == 1)
-                                newSquare.classList.add("player1");
+                                newSquare.classList.add(p1color_id);
                             else
-                                newSquare.classList.add("player2");
+                                newSquare.classList.add(p2color_id);
+                            newSquare.classList.add("background")
 
                             // set the text
                             newSquare.innerHTML = text;
@@ -1014,7 +1068,7 @@
                 }
 
                 else if (my_board.board_state == "win1"){
-                    turn_message.classList.add("player1-text");
+                    turn_message.classList.add(p1color_id);
                     if (p1name == "You")
                         text = p1name + " win!";
                     else
@@ -1022,7 +1076,7 @@
                 }
 
                 else if (my_board.board_state == "win2"){
-                    turn_message.classList.add("player2-text");
+                    turn_message.classList.add(p2color_id);
                     if (p2name == "CPU")
                         text = p2name + " wins :(";
                     else
@@ -1032,7 +1086,7 @@
                 // normal
                 else{
                     if (my_board.player == 0){
-                        turn_message.classList.add("player1-text");
+                        turn_message.classList.add(p1color_id);
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         else
@@ -1040,7 +1094,7 @@
                     }
 
                     else{
-                        turn_message.classList.add("player2-text");
+                        turn_message.classList.add(p2color_id);
                         if (my_board.board_state == "no_change")
                             text = "No change, move again";
                         else
@@ -1052,15 +1106,20 @@
                 if (endgame){
                     endgame_msg.innerHTML = text;
                     if (my_board.board_state == "win1")
-                        endgame_msg.classList.add("player1-text");
+                        endgame_msg.classList.add(p1color_id);
                     else if (my_board.board_state == "win2")
-                        endgame_msg.classList.add("player2-text");
+                        endgame_msg.classList.add(p2color_id);
                     endgame_msg.style.zIndex = 10;
                     endgame_msg.style.display = "inherit";
                 }
             }
 
             function mainLoop(){
+
+                if (reset_colors){
+                    reset_colors = false;
+                    drawBoard();
+                }
 
                 // update time, check for out-of-time
                 if (!endgame && time_type == "chess" && time_start){
