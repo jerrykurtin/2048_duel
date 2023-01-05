@@ -18,14 +18,29 @@
         <div class="container">
             <div class="title-container">
                 <h1 class="title">2048 Duel!</h1>
-                <div class="score-row">
-                    <div class="score player1-text text-left" id="player1-score">Player 1 Score -></div>
-                    <div class="score player2-text text-right" id="player2-score"><- Player 2 Score</div>
+                <div class="board_info-container">
+                    <div class="board_info-left player1-text text-left">
+                        <div class="board_info-internal header" >Player 1</div>
+                        <div class="board_info-internal" id="player1-timer">Time - </div>
+                        <div class="board_info-internal" id="player1-score"></div>
+                    </div>
+                    <div class="board_info-center">
+                        <button class="board_info-reset bolded" id="reset-button">Reset (r)</button>
+
+                    </div>
+                    <div class="board_info-right player2-text text-right">
+                        <div class="board_info-internal header">Player 2</div>
+                        <div class="board_info-internal" id="player2-timer">  -Time</div>
+                        <div class="board_info-internal" id="player2-score"></div>
+                    </div>
                 </div>
     
             </div>
             <div class="game-container" id="game-container">
                 <div class="endgame-msg" id="endgame-msg"></div>
+                <div class="endgame-msg" id="start-msg">
+                    <button id="start-button">Start Timed Game</button>
+                </div>
                 <div class="grid-container">
                     <div class="grid-row">
                         <div class="grid-cell"></div>
@@ -55,9 +70,10 @@
                 <div class="tile-container" id="tile-container"></div>
             </div>
             <div class="belowgame-container" id="below-game-container">
-                <div class="turn" id="turn"></div>
+                <div class="turn-container">
+                    <div class="turn" id="turn"></div>
+                </div>
                 <div class="settings-container">
-                    <button class="bolded" id="reset-button">Reset (r)</button>
                     <div class="dropdown">
                         <button class="dropbtn" id="gamemode-dropdown">Gamemode: Solo</button>
                         <div class="dropdown-content">
@@ -82,6 +98,14 @@
                           <button class="dropdown-element" id="difficulty-impossible">Impossible</button>
                         </div>
                     </div>
+                    <div class="dropdown">
+                        <button class="dropbtn" id="timer-dropdown">Timer: None</button>
+                        <div class="dropdown-content">
+                          <button class="dropdown-element" id="timer-none">None</button>
+                          <button class="dropdown-element" id="timer-chess">Chess</button>
+                          <button class="dropdown-element" id="timer-speed">Speed</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <p><strong>How to play:</strong> use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
@@ -100,6 +124,7 @@
             var turn_message = document.getElementById("turn");
             var reset_button = document.getElementById("reset-button");
             var endgame_msg = document.getElementById("endgame-msg");
+            var start_msg = document.getElementById("start-msg");
 
             var rightPressed = false;
             var leftPressed = false;
@@ -124,6 +149,14 @@
             var p1possessive = "Your";
             var p2name = "CPU";
             var p2possessive = "CPU's";
+
+            // timed
+            var time_type = null;    // null, "chess", "speed"
+            var time_start = null;
+            var time_paused = false;
+            var chess_limit = 90 * 1000;
+            var time_p1 = chess_limit;
+            var time_p2 = chess_limit;
 
             // holds the http request object
             var xhr = null;
@@ -615,11 +648,24 @@
             document.addEventListener("touchmove", touchmoveHandler, false);
             document.addEventListener("touchend", touchendHandler, false);
 
+            // start game button
+            document.getElementById("start-button").addEventListener("click", function (){
+                start_msg.style.zIndex = 1;
+                start_msg.style.display = "none";
+                time_start = Date.now();
+            }, false);
+
             // reset button
             reset_button.addEventListener("click", function (){
                 resetPressed = true;
                 update_needed = true;
             }, false);
+
+            // originally, set gamemode to singleplayer
+            document.getElementById("difficulty-dropdown").style.display = "inherit";
+            document.getElementById("difficulty-dropdown").style.visibility = "visible";
+            document.getElementById("timer-dropdown").style.display = "none";
+            document.getElementById("timer-dropdown").style.visibility = "hidden";
 
             // set gamemode
             document.getElementById("gamemode-singleplayer").addEventListener("click", function (){
@@ -630,9 +676,13 @@
                 p1possessive = "Your";
                 p2name = "CPU";
                 p2possessive = "CPU's";
+                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Solo";
+
+                // turn on / off settings that do / don't apply
                 document.getElementById("difficulty-dropdown").style.display = "inherit";
                 document.getElementById("difficulty-dropdown").style.visibility = "visible";
-                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Solo";
+                document.getElementById("timer-dropdown").style.display = "none";
+                document.getElementById("timer-dropdown").style.visibility = "hidden";
             }, false);
             document.getElementById("gamemode-multiplayer").addEventListener("click", function (){
                 resetPressed = true;
@@ -642,9 +692,13 @@
                 p1possessive = "Player 1's";
                 p2name = "Player 2";
                 p2possessive = "Player 2's";
+                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Local Multiplayer";
+
+                // turn on / off settings that do / don't apply
                 document.getElementById("difficulty-dropdown").style.display = "none";
                 document.getElementById("difficulty-dropdown").style.visibility = "hidden";
-                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Local Multiplayer";
+                document.getElementById("timer-dropdown").style.display = "inherit";
+                document.getElementById("timer-dropdown").style.visibility = "visible";
             }, false);
 
             // set the target
@@ -693,6 +747,27 @@
                 difficulty = "impossible";
                 document.getElementById("difficulty-dropdown").innerHTML = "Difficulty: Impossible";
             }, false);
+
+            // set the timer
+            document.getElementById("timer-none").addEventListener("click", function (){
+                resetPressed = true;
+                update_needed = true;
+                time_type = null;
+                document.getElementById("timer-dropdown").innerHTML = "Timer: None";
+            }, false);
+            document.getElementById("timer-chess").addEventListener("click", function (){
+                resetPressed = true;
+                update_needed = true;
+                time_type = "chess";
+                document.getElementById("timer-dropdown").innerHTML = "Timer: Chess";
+            }, false);
+            document.getElementById("timer-speed").addEventListener("click", function (){
+                resetPressed = true;
+                update_needed = true;
+                time_type = "speed";
+                document.getElementById("timer-dropdown").innerHTML = "Timer: Speed";
+            }, false);
+
 
             function keyDownHandler(e) {
 
@@ -827,6 +902,37 @@
             function resetBoard(){
                 console.log("resetBoard()");
                 my_board = new Board(goal);
+
+                endgame = false;
+                resetPressed = false;
+                awaiting_cpu = false;
+                endgame_msg.style.display = "none";
+
+                // disable time reading
+                if (singleplayer || !time_type){
+                    document.getElementById("player1-timer").style.visibility = "hidden";
+                    document.getElementById("player1-timer").style.display = "none";
+                    document.getElementById("player2-timer").style.visibility = "hidden";
+                    document.getElementById("player2-timer").style.display = "none";
+                }
+
+                // reset time reading
+                else{
+                    document.getElementById("player1-timer").style.visibility = "visible";
+                    document.getElementById("player1-timer").style.display = "inherit";
+                    document.getElementById("player2-timer").style.visibility = "visible";
+                    document.getElementById("player2-timer").style.display = "inherit";
+
+                    if (time_type == "chess"){
+                        time_start = null;
+                        time_p1 = chess_limit;
+                        time_p2 = chess_limit;
+                        document.getElementById("player1-timer").innerHTML = "Time - <strong>" + Math.round((time_p1) / 1000) + "</strong";
+                        document.getElementById("player2-timer").innerHTML = "<strong> " + Math.round((time_p2) / 1000) + "</strong> - Time";
+                        start_msg.style.zIndex = 10;
+                        start_msg.style.display = "inherit";
+                    }
+                }
                 drawBoard();
             }
 
@@ -900,8 +1006,8 @@
                 }
 
                 // write the scores
-                player1_score.innerHTML = p1possessive + " score -> <strong>" + my_board.p1score + "</strong>";
-                player2_score.innerHTML = "<strong>" + my_board.p2score + "</strong> <- " + p2possessive + " score";
+                player1_score.innerHTML = "Score - <strong>" + my_board.p1score + "</strong>";
+                player2_score.innerHTML = "<strong>" + my_board.p2score + "</strong> - Score";
                 // determine game state
                 if (my_board.board_state == "tie"){
                     text = "It's a tie!";
@@ -912,7 +1018,7 @@
                     if (p1name == "You")
                         text = p1name + " win!";
                     else
-                        text = p1name + " win!";
+                        text = p1name + " wins!";
                 }
 
                 else if (my_board.board_state == "win2"){
@@ -956,21 +1062,53 @@
 
             function mainLoop(){
 
+                // update time, check for out-of-time
+                if (!endgame && time_type == "chess" && time_start){
+                    if (my_board.player == 0){
+                        let curr_time = (time_p1 - (Date.now() - time_start)) / 1000;
+                        if (curr_time < 0){
+                            my_board.board_state = "win2";
+                            endgame = true;
+                        }
+                        document.getElementById("player1-timer").innerHTML = "Time - <strong>" + Math.round((time_p1 - (Date.now() - time_start)) / 1000) + "</strong>";
+                    }
+                    else {
+                        let curr_time = (time_p1 - (Date.now() - time_start)) / 1000;
+                        if (curr_time < 0){
+                            my_board.board_state = "win1";
+                            endgame = true;
+                        }
+                        document.getElementById("player2-timer").innerHTML = "<strong>" + Math.round((time_p2 - (Date.now() - time_start)) / 1000) + "</strong> - Time" ;
+                    }
+
+                    if (endgame){
+                        drawBoard();
+                    }
+                }
+
                 // process keypress
                 if (update_needed){
                     if (resetPressed){
-                        console.log("resetting");
+                        // console.log("resetting");
                         resetBoard();
-                        endgame = false;
-                        resetPressed = false;
-                        awaiting_cpu = false;
-                        endgame_msg.style.display = "none";
                     }
 
                     // move made
-                    else if (!endgame && move_made && !awaiting_cpu){
+                    else if (!endgame && move_made && !awaiting_cpu && (!time_type || time_start)){
                         console.log("player is making move " + move_type);
                         makeMove(move_type);
+
+                        // switch time counter
+                        if (!singleplayer && my_board.board_state == "continue"){
+                            // note: switched bc player hasn't been updated yet
+                            if (my_board.player == 1){
+                                time_p1 -= (Date.now() - time_start);
+                            }
+                            else {
+                                time_p2 -= (Date.now() - time_start);  
+                            }
+                            time_start = Date.now();
+                        }
 
                         // cpu move
                         if (singleplayer && my_board.board_state == "continue"){
