@@ -103,7 +103,7 @@
                         <div class="dropdown-content">
                           <button class="dropdown-element" id="timer-none">None</button>
                           <button class="dropdown-element" id="timer-chess">Chess</button>
-                          <button class="dropdown-element" id="timer-speed">Speed</button>
+                          <!-- <button class="dropdown-element" id="timer-speed">Speed</button> -->
                         </div>
                     </div>
                     <button class="settings-btn" id="colorblind-button">High-contrast: off</button>
@@ -320,8 +320,8 @@
                         return;
                     }
 
-                    // endgame: grid is full
-                    if (!this.move_exists() || cands.length < this.squares_added){
+                    // endgame: grid can't add any values
+                    if (cands.length < this.squares_added){
                         if (this.p1score > this.p2score)
                             this.board_state = "win1";
                         else if (this.p1score < this.p2score)
@@ -364,6 +364,17 @@
                             else
                             this.p2score += new_squares[square];
                         }
+                    }
+
+                    // endgame: after adding squares, no move exists
+                    if (!this.move_exists()){
+                        if (this.p1score > this.p2score)
+                            this.board_state = "win1";
+                        else if (this.p1score < this.p2score)
+                            this.board_state = "win2";
+                        else
+                            this.board_state = "tie";
+                        return;
                     }
                         
                     // switch to the next player
@@ -677,6 +688,17 @@
                 return randchoice(choices);
             }
 
+            function print_grid(grid){
+                ans = "";
+                for (let row = 0; row < grid.length; ++row){
+                    for (let col = 0; col < grid[0].length; ++col){
+                        ans += grid[row][col] + "\t";
+                    }
+                    ans += "\n";
+                }
+                return ans;
+            }
+
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
@@ -849,12 +871,12 @@
                 time_type = "chess";
                 document.getElementById("timer-dropdown").innerHTML = "Timer: Chess";
             }, false);
-            document.getElementById("timer-speed").addEventListener("click", function (){
-                resetPressed = true;
-                update_needed = true;
-                time_type = "speed";
-                document.getElementById("timer-dropdown").innerHTML = "Timer: Speed";
-            }, false);
+            // document.getElementById("timer-speed").addEventListener("click", function (){
+            //     resetPressed = true;
+            //     update_needed = true;
+            //     time_type = "speed";
+            //     document.getElementById("timer-dropdown").innerHTML = "Timer: Speed";
+            // }, false);
 
 
             function keyDownHandler(e) {
@@ -1023,6 +1045,24 @@
                         start_msg.style.display = "inherit";
                     }
                 }
+
+                //DEBUG
+                my_board.board = [
+                        [2,4,2,0],
+                        [4,2,4,4],
+                        [2,4,2,8],
+                        [4,2,8,16]
+                ];
+                my_board.owner = [
+                    [0, 0, 0, -1],
+                    [0, 0, 0, 0],
+                    [0, 0, 0, 0],
+                    [1, 0, 0, 0]
+                ];
+                // my_board.p1score = 6;
+                // my_board.p2score = 2;
+                my_board.board_state = "continue";
+
                 drawBoard();
             }
 
@@ -1213,23 +1253,6 @@
                         if (singleplayer && my_board.board_state == "continue"){
                             // flag to prevent player from moving during delay
                             awaiting_cpu = true;
-
-                            //DEBUG
-                            // my_board.board = [
-                            //         [0, 0, 0, 0],
-                            //         [0, 0, 0, 0],
-                            //         [0, 0, 0, 0],
-                            //         [2, 2, 0, 4]
-                            // ];
-                            // my_board.owner = [
-                            //     [-1, -1, -1, -1],
-                            //     [-1, -1, -1, -1],
-                            //     [-1, -1, -1, -1],
-                            //     [1, 0, -1, 0]
-                            // ];
-                            // my_board.p1score = 6;
-                            // my_board.p2score = 2;
-                            // my_board.board_state = "continue";
 
                             // search for the best possible moves, return in sorted order
                             var dirs = my_board.explore_moves();
