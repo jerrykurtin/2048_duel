@@ -3,8 +3,6 @@
 /* Page-wide settings */
 * {
     box-sizing:border-box;
-    /* padding: 0; */
-    /* margin: 10; */
 }
 
 html, body {
@@ -19,17 +17,33 @@ html, body {
 }
 
 /* Subsection settings */
-/* h1 { 
-    font-size: 45px; 
-    font-weight: bold; 
-    letter-spacing: -1px; 
-    line-height: 1; 
-} */
+h1 { 
+    font-size: 75px; 
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    margin-left: 0em;
+    margin-right: 0em;
+}
 
 p {
-    /* font-size: 10px; */
+    margin-bottom: 0;
     display: block;
     line-height: 1.5;
+}
+
+ul {
+    margin-top: 0;
+}
+
+li {
+    /* line-height: 1.5; */
+    margin-bottom: .3em;
 }
 
 
@@ -99,8 +113,6 @@ a:visited {
 .title {
     text-align: center;
     margin-bottom: 10px;
-    font-size: 75px; 
-    font-weight: bold; 
 }
 
 /* Board info settings */
@@ -134,12 +146,20 @@ a:visited {
     display: grid;
     justify-content: center;
     align-items: center;
+    text-align: center;
     width: 35%;
     float: left;
 }
 
 #reset-button {
+    padding: 8px 9px;
     border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+#settings-link {
+    margin: 0;
+    font-size: 16px;
 }
 
 .board_info-internal {
@@ -174,20 +194,17 @@ a:visited {
 }
 
 /* Below Game Settings */
-.belowgame-container{
-    text-align: center;
-}
 .settings-container{
     width: 100%;
     display: flex;
     justify-content: center;
-    font-size: 10px;
+    margin-bottom: 1.5em;
 }
 
 .settings-container button {
     position: relative;
     display: inline-block;
-    font-size: 14px;
+    font-size: 17px;
     margin-left: 2.5px;
     margin-right: 2.5px;
     padding: 5px 7px;
@@ -576,7 +593,7 @@ transform: translate(363px, 0px);
   .dropdown-element {
     border-width: 0;
     padding: 7px 5px;
-    border-radius: 0;
+    border-radius: 0px !important;
     float: left;
     left: 1%;
     text-align: left;
