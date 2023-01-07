@@ -157,6 +157,7 @@
             var colorblind = false;
             var p1color_id = "player1";
             var p2color_id = "player2";
+            var draw_time = Date.now();
 
             // singleplayer
             var awaiting_cpu = false;
@@ -250,6 +251,8 @@
                 }
 
                 move(dir, add_squares=true){
+                    /* Moves in the direction specified, returning the array of actions for each block */
+                    
                     // endgame: grid is full
                     if (!this.move_exists()){
                         if (this.p1score > this.p2score)
@@ -258,33 +261,34 @@
                             this.board_state = "win2";
                         else
                             this.board_state = "tie";
-                        return;
+                        return null;
                     }
 
                     if (this.board_state != "continue" && this.board_state != "no_change"){
                         console.log("ERROR: cannot move in endgame!");
-                        return;
+                        return null;
                     }
                     var prev_state = deepCopy(this.board);
 
                     // make the move
+                    var actions = null;
                     if (dir == "up")
-                        this.up();
+                        actions = this.up();
                     else if (dir == "down")
-                        this.down();
+                        actions = this.down();
                     else if (dir == "left")
-                        this.left();
+                        actions = this.left();
                     else if (dir == "right")
-                        this.right();
+                        actions = this.right();
                     else{
                         console.log("ERROR: invalid direction (" + dir + ")");
-                        return;
+                        return null;
                     }
 
                     // check for no change
                     if (deepCompare(this.board, prev_state)){
                         this.board_state = "no_change";
-                        return;
+                        return null;
                     }
                     else{
                         this.board_state = "continue";
@@ -325,11 +329,11 @@
                     // elimination win
                     if (this.p1score == 0 || this.board_state == "win2"){
                         this.board_state = "win2";
-                        return;
+                        return actions;
                     }
                     else if (this.p2score == 0 || this.board_state == "win1"){
                         this.board_state = "win1";
-                        return;
+                        return actions;
                     }
 
                     // endgame: grid can't add any values
@@ -340,7 +344,7 @@
                             this.board_state = "win2";
                         else
                             this.board_state = "tie";
-                        return;
+                        return actions;
                     }
 
                     // add squares
@@ -370,11 +374,12 @@
                         for (let square = 0; square < new_squares.length; ++square){
                             this.board[locations[square][0]][locations[square][1]] = new_squares[square];
                             this.owner[locations[square][0]][locations[square][1]] = this.player;
-                            
+                            if (actions) actions[2][locations[square][0]][locations[square][1]] = true;
+
                             if (this.player == 0)
-                            this.p1score += new_squares[square];
+                                this.p1score += new_squares[square];
                             else
-                            this.p2score += new_squares[square];
+                                this.p2score += new_squares[square];
                         }
                     }
 
@@ -386,11 +391,13 @@
                             this.board_state = "win2";
                         else
                             this.board_state = "tie";
-                        return;
+                        return actions;
                     }
                         
                     // switch to the next player
                     this.player = (this.player + 1) % 2;
+
+                    return actions;
                 }
 
                 move_exists(){
@@ -416,10 +423,22 @@
                 
                 left(){
                     /* make a left movement */
+
+                    // store the movement information
+                    var actions = [];
+                    var deleted = [];
+                    var created = [];
+
                     for (let row = 0; row < this.board.length; ++row){
                         // store the new row
                         var newrow = Array(this.board.length).fill(0);
                         var newowner = Array(this.board.length).fill(-1);
+                        // stores [action, [end_row, end_col]] -> null, "move", "delete", "create"
+                        var actionrow = Array(this.board.length).fill([null, null, null]);
+                        var deleterow = Array(this.board.length).fill(false);
+                        var createrow = Array(this.board.length).fill(false);
+                        // stores start_col for each position with a piece
+                        var actionrow_source = Array(this.board.length).fill(null);
                         var newidx = 0;
 
                         for (let col = 0; col < this.board[0].length; ++col){
@@ -433,6 +452,14 @@
                                     if (newowner[newidx - 1] != this.owner[row][col]){
                                         newowner[newidx - 1] = this.player;
                                     }
+
+                                    // update destination for delete and move
+                                    actionrow[col] = ["move", row, newidx - 1];
+
+                                    // update actions for 2 deleted and 1 created square
+                                    // deleterow[actionrow_source[newidx - 1]] = true;
+                                    deleterow[newidx - 1] = true;
+                                    createrow[newidx - 1] = true;
                                 }
 
                                 // move without merging
@@ -440,6 +467,10 @@
                                     newrow[newidx] = this.board[row][col];
                                     newowner[newidx] = this.owner[row][col];
                                     newidx += 1;
+
+                                    // update actionrow
+                                    actionrow[col] = ["move", row, newidx - 1];
+                                    actionrow_source[newidx - 1] = col;
                                 }
                             }
                         }
@@ -449,9 +480,15 @@
                             newrow[col] = Math.abs(newrow[col]);
                         this.board[row] = newrow;
 
+                        actions.push(actionrow);
+                        deleted.push(deleterow);
+                        created.push(createrow);
+
                         // update the owner
                         this.owner[row] = newowner;
+
                     }
+                    return [actions, deleted, created];
                 }
 
                 up(){
@@ -459,10 +496,14 @@
                     this.board = rotateCounter(this.board);
                     this.owner = rotateCounter(this.owner);
 
-                    this.left();
+                    var actions = this.left();
 
+                    
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
+                    actions = rotateActionsClock(actions);
+
+                    return actions;
                 }
 
                 right(){
@@ -473,13 +514,17 @@
                     this.board = rotateCounter(this.board);
                     this.owner = rotateCounter(this.owner);
 
-                    this.left();
+                    var actions = this.left();
 
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
 
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
+
+                    actions = rotateActionsClock(actions);
+                    actions = rotateActionsClock(actions);
+                    return actions;
                 }
 
                 down(){
@@ -487,10 +532,12 @@
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
 
-                    this.left();
+                    var actions = this.left();
 
                     this.board = rotateCounter(this.board);
                     this.owner = rotateCounter(this.owner);
+                    actions = rotateActionsCounter(actions);
+                    return actions;
                 }
 
                 find_move_value(){
@@ -630,20 +677,22 @@
                 return arr[idx];
             }
 
-            const deepCopy = (arr) => {
-                /* deep copy a multi-dimensional array */
-                let copy = [];
-                arr.forEach(elem => {
-                    if(Array.isArray(elem)){
-                    copy.push(deepCopy(elem))
-                    }else{
-                    if (typeof elem === 'object') {
-                        copy.push(deepCopyObject(elem))
-                    } else {
-                        copy.push(elem)
+            const deepCopy = (items) => items.map(item => Array.isArray(item) ? deepCopy(item) : item);
+
+
+            function deepCopy3d(arr){
+                var copy = [];
+                for (let row = 0; row < arr.length; ++row){
+                    var temprow = [];
+                    for (let col = 0; col < arr[0].length; ++col){
+                        var tempcol = [];
+                        for (let thrd = 0; thrd < arr[0][0].length; ++thrd){
+                            tempcol.push(arr[row][col][thrd]);
+                        }
+                        temprow.push(tempcol);
                     }
-                    }
-                })
+                    copy.push(temprow);
+                }
                 return copy;
             }
 
@@ -675,6 +724,30 @@
                 return newarr;
             }
 
+            function rotateCoordsCounter(coords, length=4){
+                return [length - coords[1] - 1, coords[0]];
+            }
+
+            function rotateActionsCounter(actions){
+                // actions = [actions, deleted, created]
+
+                // rotate the coordinates in actions[0]
+                for (let row = 0; row < actions[0].length; ++row){
+                    for (let col = 0; col < actions[0][0].length; ++col){
+                        let coords = [actions[0][row][col][1], actions[0][row][col][2]]
+                        coords = rotateCoordsCounter(coords);
+                        actions[0][row][col][1] = coords[0];
+                        actions[0][row][col][2] = coords[1];
+                    }
+                }
+
+                for (let action = 0; action < actions.length; ++action){
+                    actions[action] = rotateCounter(actions[action]);
+                }
+                
+                return actions;
+            }
+
             function rotateClock(arr){
                 /* rotate a square array 90 degrees clockwise */
                 newarr = deepCopy(arr);
@@ -686,6 +759,30 @@
                 }
 
                 return newarr
+            }
+
+            function rotateCoordsClock(coords, length=4){
+                return [coords[1], length - [coords[0]] - 1];
+            }
+
+            function rotateActionsClock(actions){
+                // actions = [actions, deleted, created]
+
+                // rotate the coordinates in actions[0]
+                for (let row = 0; row < actions[0].length; ++row){
+                    for (let col = 0; col < actions[0][0].length; ++col){
+                        let coords = [actions[0][row][col][1], actions[0][row][col][2]]
+                        coords = rotateCoordsClock(coords);
+                        actions[0][row][col][1] = coords[0];
+                        actions[0][row][col][2] = coords[1];
+                    }
+                }
+
+                for (let action = 0; action < actions.length; ++action){
+                    actions[action] = rotateClock(actions[action]);
+                }
+                
+                return actions;
             }
 
             function selectrand(options, weight) {
@@ -726,8 +823,7 @@
 
             // start game button
             document.getElementById("start-button").addEventListener("click", function (){
-                start_msg.style.zIndex = 1;
-                start_msg.style.display = "none";
+                start_msg.classList.add("hidden");
                 time_start = Date.now();
             }, false);
 
@@ -898,7 +994,7 @@
                     e.preventDefault();
                 }   
 
-                if (!awaiting_cpu){
+                if (!awaiting_cpu && Date.now()){
                     if(e.key == "Right" || e.key == "ArrowRight" || e.key == "d" || e.key == "KeyD") {
                         rightPressed = true;
                         move_type = "right";
@@ -1010,7 +1106,9 @@
 
             function makeMove(direction){
                 console.log("makeMove(" + direction + ")");
-                my_board.move(direction);
+                console.log("before making move, board is\n" + print_grid(my_board.board));
+
+                var actions = my_board.move(direction);
 
                 // check for endgame
                 if (my_board.board_state != "continue" && my_board.board_state != "no_change"){
@@ -1018,7 +1116,7 @@
                     endgame = true;
                 }
 
-                drawBoard();
+                drawBoard(actions);
             }
 
             function resetBoard(){
@@ -1028,12 +1126,16 @@
                 endgame = false;
                 resetPressed = false;
                 awaiting_cpu = false;
-                endgame_msg.style.display = "none";
+                endgame_msg.classList.add("hidden");
+
+                // remove any existing squares
+                while(tile_container.hasChildNodes()){
+                    tile_container.removeChild(tile_container.firstChild);
+                }
 
                 // disable time reading
                 if (singleplayer || !time_type){
-                    document.getElementById("start-msg").style.display = "none";
-                    document.getElementById("start-msg").style.zIndex = "1";
+                    start_msg.classList.add("hidden");
                     document.getElementById("player1-timer").style.visibility = "hidden";
                     document.getElementById("player1-timer").style.display = "none";
                     document.getElementById("player2-timer").style.visibility = "hidden";
@@ -1053,8 +1155,8 @@
                         time_p2 = chess_limit;
                         document.getElementById("player1-timer").innerHTML = "Time - <strong>" + Math.round((time_p1) / 1000) + "</strong";
                         document.getElementById("player2-timer").innerHTML = "<strong> " + Math.round((time_p2) / 1000) + "</strong> - Time";
-                        start_msg.style.zIndex = 10;
-                        start_msg.style.display = "inherit";
+                        if (start_msg.classList.contains("hidden"))
+                            start_msg.classList.remove("hidden");
                     }
                 }
 
@@ -1062,6 +1164,25 @@
                 document.getElementById("player1-header").innerHTML = p1name;
                 document.getElementById("player2-header").innerHTML = p2name;
 
+                // DEBUG
+                // my_board.board = [
+                //     [2, 2, 0, 0],
+                //     [2, 0, 0, 2],
+                //     [2, 4, 2, 0],
+                //     [0, 0, 2, 2]
+                // ]
+
+                // my_board.owner = [
+                //     [1, 1, -1, -1],
+                //     [1, -1, -1, 1],
+                //     [1, 1, 1, -1],
+                //     [-1, -1, 0, 0]
+                // ]
+
+                // console.log("before move, board is\n" + print_grid(my_board.board));
+                // var actions = my_board.move("left");
+                // console.log("after left move, board is\n" +  print_grid(my_board.board));
+                // console.log("actions: ", actions);
 
                 drawBoard();
             }
@@ -1069,19 +1190,25 @@
             // ------------------------------------------------------------------
 
             // draw the grid
-            function drawBoard(){
+            function drawBoard(actions=null){
                 /* update the game board */
+
+                draw_time = Date.now();
+
+                if (my_board.board_state == "no_change"){
+                    console.log("skipping drawBoard()");
+                    return;
+                }
                 console.log("drawBoard()");
+                console.log("board:\n" + print_grid(my_board.board));
+                console.log("actions:", actions);
 
                 if (!my_board){
                     console.log("ERROR: board not received in drawBoard");
                     return;
                 }
 
-                // clear old squares and settings
-                while(tile_container.hasChildNodes()){
-                    tile_container.removeChild(tile_container.firstChild);
-                }
+                // clear old settings
                 if (turn_message.classList.contains(p1color_id)){
                     turn_message.classList.remove(p1color_id)
                 }
@@ -1096,33 +1223,93 @@
                     endgame_msg.classList.remove(p2color_id)
                 }
 
+                // moved squares
 
-                // iterate through grid
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
+                        if (actions && actions[0][row][col][0] == "move"){
+                            var oldPos = "position-" + (row + 1) + "-" + (col + 1);
+                            var newPos = "position-" + (actions[0][row][col][1] + 1) + "-" + (actions[0][row][col][2] + 1);
+
+                            // select object with position that hasn't been moved yet
+                            var movedSquare = document.querySelectorAll("." + oldPos + ":not(.moved)");
+
+                            if (movedSquare.length > 1)
+                                console.log("ERROR: selecting > 1 square in move from position " + oldPos + " to " + newPos);
+                            if (movedSquare.length == 0)
+                                console.log("ERROR: cannot find a square to move from " + oldPos + " to " + newPos);
+                            else{
+                                movedSquare = movedSquare[0];
+                                console.log("moving square " + movedSquare.firstChild.innerHTML + " from " + oldPos + " to " + newPos);
+                                movedSquare.classList.remove(oldPos);
+                                if (movedSquare.classList.contains("tile-new"))
+                                    movedSquare.classList.remove("tile-new");
+                                movedSquare.classList.add(newPos);
+                                // make sure we don't double move
+                                movedSquare.classList.add("moved");
+                            }
+                        }
+                    }
+                }
+
+                // remove moved tag
+                const movedSquares = document.getElementsByClassName("moved");
+                while (movedSquares.length > 0)
+                    movedSquares[0].classList.remove("moved");
+
+                // delete and build new squares
+                for (var row = 0; row < 4; ++row){
+                    for (var col = 0; col < 4; ++col){
+
                         text = "0";
                         owner = null;
                         player = -1;
-
                         // parse the current number
-                        text = my_board.board[col][row].toString();                            
+                        text = my_board.board[row][col].toString();                            
                         
                         // set the owner
                         if (text != 0){
-                            if (my_board.owner[col][row] == 0)
+                            if (my_board.owner[row][col] == 0)
                                 player = 1;
                             else 
                                 player = 2;
                         }
 
-                        // draw new square
-                        if (text != 0){
-                            const newSquare = document.createElement("div");
-                            var loc = "tile-position-" + (row + 1) + "-" + (col + 1);
-                            newSquare.classList.add(loc);
-                            tile_container.appendChild(newSquare);
-                            newSquare.classList.add("tile");
+                        // delete squares
+                        if (actions && actions[1][row][col] == true){
+                            const elements = document.getElementsByClassName("position-"+ (row + 1) + "-" + (col + 1));
+                            const rem_elements = document.getElementsByClassName("deleted");
+                            console.log("trying to remove " + elements.length + " squares at " + (row + 1) + ", " + (col + 1));
 
+                            var transitionEndHandler = function () {
+                                while (rem_elements.length > 0){
+                                    console.log("removing a square");
+                                    // rem_elements[0].remove();
+                                    rem_elements[0].parentNode.removeChild(rem_elements[0]);
+                                }
+                            }
+                            // create a listener for each potential element, but skip all new elements
+                            for (let elem = elements.length - 1; elem > -1; --elem){
+                                elements[elem].classList.add("deleted");
+                                elements[elem].addEventListener("transitionend", transitionEndHandler, true);
+                                elements[elem].addEventListener("webkitTransitionEnd", transitionEndHandler, true);
+                            }
+                        }
+                        
+                        // brand-new square
+                        if (!actions && text != 0 || actions && actions[2][row][col]){
+                            console.log("new square at " + (row + 1) + ", " + (col + 1) + " is " + text);
+                            const newSquareWrapper = document.createElement("div");
+                            newSquareWrapper.classList.add("tile");
+                            newSquareWrapper.classList.add("tile-new");
+                            tile_container.appendChild(newSquareWrapper);
+                            var loc = "position-" + (row + 1) + "-" + (col + 1);
+                            newSquareWrapper.classList.add(loc);
+
+
+                            const newSquare = document.createElement("div");
+                            newSquare.classList.add("tile-inner");
+                            newSquareWrapper.appendChild(newSquare);
                             // set color
                             if (player == 1)
                                 newSquare.classList.add(p1color_id);
@@ -1189,12 +1376,81 @@
                         endgame_msg.classList.add(p1color_id);
                     else if (my_board.board_state == "win2")
                         endgame_msg.classList.add(p2color_id);
-                    endgame_msg.style.zIndex = 10;
-                    endgame_msg.style.display = "inherit";
+                    if (endgame_msg.classList.contains("hidden"))
+                        endgame_msg.classList.remove("hidden");
+                }
+            }
+
+            function verifyBoard(){
+                /* ensures that the board is up-to-date */
+                console.log("verifyBoard()");
+
+                for (let row = 0; row < my_board.board.length; ++row){
+                    for (let col = 0; col < my_board.board[0].length; ++col){
+
+                        var position = "position-" + (row + 1) + "-" + (col + 1);
+                        var text = my_board.board[row][col];
+                        var player = my_board.owner[row][col] + 1;
+                        var existing = document.querySelectorAll("." + position);
+
+                        if (existing.length > 1){
+                            console.log("multiple elements at position " + position);
+                            // > 1 element
+                            while (existing.length > 0){
+                                // existing[0].remove();
+                                existing[0].parentNode.removeChild(existing[0]);
+                            }
+                        }                        
+
+                        if (existing.length == 0 && text != 0 || existing.length != 0 && text != existing[0].firstChild.innerHTML){
+                            // add a new element
+
+                            if (existing.length != 0){
+                                console.log("out-of-place element at position " + position);
+                                console.log("element is " + existing[0].firstChild.innerHTML + ", but should be " + text);
+                                // existing[0].remove();
+                                existing[0].parentNode.removeChild(existing[0]);
+                            }
+                            else{
+                                console.log("missing element at position " + position);
+                                console.log("element doesn't exist, but should be " + text);
+                            }
+
+                            if (text != 0){
+                                const newSquareWrapper = document.createElement("div");
+                                newSquareWrapper.classList.add("tile");
+                                tile_container.appendChild(newSquareWrapper);
+                                newSquareWrapper.classList.add(position);
+    
+                                const newSquare = document.createElement("div");
+                                newSquare.classList.add("tile-inner");
+                                newSquareWrapper.appendChild(newSquare);
+                                // set color
+                                if (player == 1)
+                                    newSquare.classList.add(p1color_id);
+                                else
+                                    newSquare.classList.add(p2color_id);
+                                newSquare.classList.add("background")
+    
+                                // set specific number settings
+                                newSquare.classList.add("tile-" + text);
+    
+                                // set the text
+                                newSquare.innerHTML = text;
+                            }
+
+                        }
+                    }
                 }
             }
 
             function mainLoop(){
+
+                // ensure that the board is up-to-date
+                if (draw_time && Date.now() - draw_time > 100){
+                    verifyBoard();
+                    draw_time = null;
+                }
 
                 if (reset_colors){
                     reset_colors = false;
@@ -1278,6 +1534,7 @@
                                 weight = [1, 1, 1, 1];
 
                             // cpu delay and move
+                            // TODO: remove while (not doing anything), and move cpumove out of function : cpumove(options, weight)
                             function cpumove(){
                                 move = selectrand(options, weight);
                                 console.log("CPU moving in direction " + move + " with difficulty " + difficulty);
@@ -1292,10 +1549,11 @@
                                     makeMove(move);
                                 }
                                 } while (my_board.board_state == "no_change");
+
+                                sleep(1500)
+                                    .then(() => cpumove())
+                                    .then(() => awaiting_cpu = false);
                             }
-                            sleep(1500)
-                                .then(() => cpumove())
-                                .then(() => awaiting_cpu = false);
                     }
                     update_needed = false;
                 }
