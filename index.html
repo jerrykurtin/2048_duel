@@ -157,6 +157,7 @@
             var colorblind = false;
             var p1color_id = "player1";
             var p2color_id = "player2";
+            var draw_time = Date.now();
 
             // singleplayer
             var awaiting_cpu = false;
@@ -994,7 +995,7 @@
                     e.preventDefault();
                 }   
 
-                if (!awaiting_cpu){
+                if (!awaiting_cpu && Date.now()){
                     if(e.key == "Right" || e.key == "ArrowRight" || e.key == "d" || e.key == "KeyD") {
                         rightPressed = true;
                         move_type = "right";
@@ -1194,6 +1195,8 @@
             function drawBoard(actions=null){
                 /* update the game board */
 
+                draw_time = Date.now();
+
                 if (my_board.board_state == "no_change"){
                     console.log("skipping drawBoard()");
                     return;
@@ -1235,7 +1238,7 @@
 
                             if (movedSquare.length > 1)
                                 console.log("ERROR: selecting > 1 square in move from position " + oldPos + " to " + newPos);
-                            if (!movedSquare)
+                            if (movedSquare.length == 0)
                                 console.log("ERROR: cannot find a square to move from " + oldPos + " to " + newPos);
                             else{
                                 movedSquare = movedSquare[0];
@@ -1379,7 +1382,74 @@
                 }
             }
 
+            function verifyBoard(){
+                /* ensures that the board is up-to-date */
+                console.log("verifyBoard()");
+
+                for (let row = 0; row < my_board.board.length; ++row){
+                    for (let col = 0; col < my_board.board[0].length; ++col){
+
+                        var position = "position-" + (row + 1) + "-" + (col + 1);
+                        var text = my_board.board[row][col];
+                        var player = my_board.owner[row][col] + 1;
+                        var existing = document.querySelectorAll("." + position);
+
+                        if (existing.length > 1){
+                            console.log("multiple elements at position " + position);
+                            // > 1 element
+                            while (existing.length > 0){
+                                existing[0].parentNode.removeChild(existing[0]);
+                            }
+                        }                        
+
+                        if (existing.length == 0 && text != 0 || existing.length != 0 && text != existing[0].firstChild.innerHTML){
+                            // add a new element
+
+                            if (existing.length != 0){
+                                console.log("out-of-place element at position " + position);
+                                console.log("element is " + existing[0].firstChild.innerHTML + ", but should be " + text);
+                                existing[0].parentNode.removeChild(existing[0]);
+                            }
+                            else{
+                                console.log("missing element at position " + position);
+                                console.log("element doesn't exist, but should be " + text);
+                            }
+
+                            if (text != 0){
+                                const newSquareWrapper = document.createElement("div");
+                                newSquareWrapper.classList.add("tile");
+                                tile_container.appendChild(newSquareWrapper);
+                                newSquareWrapper.classList.add(position);
+    
+                                const newSquare = document.createElement("div");
+                                newSquare.classList.add("tile-inner");
+                                newSquareWrapper.appendChild(newSquare);
+                                // set color
+                                if (player == 1)
+                                    newSquare.classList.add(p1color_id);
+                                else
+                                    newSquare.classList.add(p2color_id);
+                                newSquare.classList.add("background")
+    
+                                // set specific number settings
+                                newSquare.classList.add("tile-" + text);
+    
+                                // set the text
+                                newSquare.innerHTML = text;
+                            }
+
+                        }
+                    }
+                }
+            }
+
             function mainLoop(){
+
+                // ensure that the board is up-to-date
+                if (draw_time && Date.now() - draw_time > 100){
+                    verifyBoard();
+                    draw_time = null;
+                }
 
                 if (reset_colors){
                     reset_colors = false;
