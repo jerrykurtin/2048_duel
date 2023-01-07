@@ -373,7 +373,7 @@
                         for (let square = 0; square < new_squares.length; ++square){
                             this.board[locations[square][0]][locations[square][1]] = new_squares[square];
                             this.owner[locations[square][0]][locations[square][1]] = this.player;
-                            if (actions) actions[0][locations[square][0]][locations[square][1]] =["create"];
+                            if (actions) actions[2][locations[square][0]][locations[square][1]] = true;
 
                             if (this.player == 0)
                                 this.p1score += new_squares[square];
@@ -426,6 +426,8 @@
                     // store the movement information
                     var actions = [];
                     var deleted = [];
+                    var created = [];
+                    var deleted_and_moved = []
 
                     for (let row = 0; row < this.board.length; ++row){
                         // store the new row
@@ -434,6 +436,8 @@
                         // stores [action, [end_row, end_col]] -> null, "move", "delete", "create"
                         var actionrow = Array(this.board.length).fill([null, [row, 0]]);
                         var deleterow = Array(this.board.length).fill(false);
+                        var delete_and_move_row = Array(this.board.length).fill([false, [0,0]]);
+                        var createrow = Array(this.board.length).fill(false);
                         // stores start_col for each position with a piece
                         var actionrow_source = Array(this.board.length).fill(null);
                         var newidx = 0;
@@ -450,10 +454,14 @@
                                         newowner[newidx - 1] = this.player;
                                     }
 
+                                    // update destination for delete and move
+                                    delete_and_move_row[col] = [true, [row, newidx - 1]]
+                                    actionrow[col] = ["move", [row, newidx - 1]];
+
                                     // update actions for 2 deleted and 1 created square
-                                    deleterow[actionrow_source[newidx - 1]] = true;
-                                    deleterow[col] = true;
-                                    actionrow[newidx - 1] = ["create"];
+                                    // deleterow[actionrow_source[newidx - 1]] = true;
+                                    deleterow[newidx - 1] = true;
+                                    createrow[newidx - 1] = true;
                                 }
 
                                 // move without merging
@@ -476,13 +484,13 @@
 
                         actions.push(actionrow);
                         deleted.push(deleterow);
+                        created.push(createrow);
 
                         // update the owner
                         this.owner[row] = newowner;
 
                     }
-                    // console.log("inside left, returning actions: ", actions);
-                    return [actions, deleted];
+                    return [actions, deleted, created, deleted_and_moved];
                 }
 
                 up(){
@@ -1157,15 +1165,32 @@
                     endgame_msg.classList.remove(p2color_id)
                 }
 
+                // moved squares
 
-                // update grid with new values
+                for (var row = 0; row < 4; ++row){
+                    for (var col = 0; col < 4; ++col){
+                        if (actions && actions[0][row][col][0] == "move"){
+                            console.log("moving square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1][0] + 1) + ", " + (actions[0][row][col][1][1] + 1));
+                            var movedSquare = document.getElementsByClassName("position-" + (row + 1) + "-" + (col + 1))[0];
+                            
+                            if (movedSquare){
+                                movedSquare.classList.remove("position-" + (row + 1) + "-" + (col + 1));
+                                if (movedSquare.classList.contains("tile-new"))
+                                    movedSquare.classList.remove("tile-new");
+                                movedSquare.classList.add("position-" + (actions[0][row][col][1][0] + 1) + "-" + (actions[0][row][col][1][1] + 1));
+                            }
+                            else console.log("ERROR: cannot move square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1][0] + 1) + ", " + (actions[0][row][col][1][1] + 1));
+                        }
+                    }
+                }
+
+                // delete and build new squares
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
 
                         text = "0";
                         owner = null;
                         player = -1;
-
                         // parse the current number
                         text = my_board.board[row][col].toString();                            
                         
@@ -1177,14 +1202,37 @@
                                 player = 2;
                         }
 
+                        // delete squares
+                        if (actions && actions[1][row][col] == true){
+                            const elements = document.getElementsByClassName("position-"+ (row + 1) + "-" + (col + 1));
+                            console.log("trying to remove " + elements.length + " squares at " + (row + 1) + ", " + (col + 1));
+
+                            var transitionEndHandler = function () {
+                                var i = 0;
+                                while (i < elements.length) {     
+                                    if (!elements[i].classList.contains("tile-new")){
+                                        console.log("removing all squares at " + (row + 1) + ", " + (col + 1));
+                                        elements[i].parentNode.removeChild(elements[0]);
+                                    }  
+                                    else{
+                                        console.log("skipping new square");
+                                        i++;
+                                    }
+                                }
+                            }
+                            // create a listener for each potential element, but skip all new elements
+                            for (let elem = elements.length - 1; elem > -1; --elem){
+                                elements[elem].addEventListener("transitionend", transitionEndHandler, true);
+
+                            }
+                        }
                         
                         // brand-new square
-                        if (!actions && text != 0 || actions && actions[0][row][col][0] == "create"){
+                        if (!actions && text != 0 || actions && actions[2][row][col]){
                             console.log("new square at " + (row + 1) + ", " + (col + 1));
                             const newSquareWrapper = document.createElement("div");
                             newSquareWrapper.classList.add("tile");
                             newSquareWrapper.classList.add("tile-new");
-                            // newSquareWrapper.classList.add("move");
                             tile_container.appendChild(newSquareWrapper);
                             var loc = "position-" + (row + 1) + "-" + (col + 1);
                             newSquareWrapper.classList.add(loc);
@@ -1205,28 +1253,6 @@
 
                             // set the text
                             newSquare.innerHTML = text;
-                        }
-
-                        // moved square
-                        if (actions && actions[0][row][col][0] == "move"){
-                            console.log("moving square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1][0] + 1) + ", " + (actions[0][row][col][1][1] + 1));
-                            var movedSquare = document.getElementsByClassName("position-" + (row + 1) + "-" + (col + 1))[0];
-                            movedSquare.classList.remove("position-" + (row + 1) + "-" + (col + 1));
-                            if (movedSquare.classList.contains("tile-new"))
-                                movedSquare.classList.remove("tile-new");
-
-                            if (!movedSquare.classList.contains("move"))
-                                movedSquare.classList.add("move");
-                            movedSquare.classList.add("position-" + (actions[0][row][col][1][0] + 1) + "-" + (actions[0][row][col][1][1] + 1));
-                        }
-
-                        // delete squares
-                        if (actions && actions[1][row][col] == true){
-                            console.log("removing square at " + (row + 1) + ", " + (col + 1));
-                            // const elements = document.getElementsByClassName("position-"+ (row + 1) + "-" + (col + 1));
-                            // while(elements.length > 0){
-                            //     elements[0].parentNode.removeChild(elements[0]);
-                            // }
                         }
                     }
                 }
