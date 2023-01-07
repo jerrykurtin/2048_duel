@@ -284,6 +284,8 @@
                         return null;
                     }
 
+                    console.log("after making specific move, actions is ", actions);
+
                     // check for no change
                     if (deepCompare(this.board, prev_state)){
                         this.board_state = "no_change";
@@ -427,16 +429,14 @@
                     var actions = [];
                     var deleted = [];
                     var created = [];
-                    var deleted_and_moved = []
 
                     for (let row = 0; row < this.board.length; ++row){
                         // store the new row
                         var newrow = Array(this.board.length).fill(0);
                         var newowner = Array(this.board.length).fill(-1);
                         // stores [action, [end_row, end_col]] -> null, "move", "delete", "create"
-                        var actionrow = Array(this.board.length).fill([null, [row, 0]]);
+                        var actionrow = Array(this.board.length).fill([null, null, null]);
                         var deleterow = Array(this.board.length).fill(false);
-                        var delete_and_move_row = Array(this.board.length).fill([false, [0,0]]);
                         var createrow = Array(this.board.length).fill(false);
                         // stores start_col for each position with a piece
                         var actionrow_source = Array(this.board.length).fill(null);
@@ -455,8 +455,7 @@
                                     }
 
                                     // update destination for delete and move
-                                    delete_and_move_row[col] = [true, [row, newidx - 1]]
-                                    actionrow[col] = ["move", [row, newidx - 1]];
+                                    actionrow[col] = ["move", row, newidx - 1];
 
                                     // update actions for 2 deleted and 1 created square
                                     // deleterow[actionrow_source[newidx - 1]] = true;
@@ -471,7 +470,7 @@
                                     newidx += 1;
 
                                     // update actionrow
-                                    actionrow[col] = ["move", [row, newidx - 1]];
+                                    actionrow[col] = ["move", row, newidx - 1];
                                     actionrow_source[newidx - 1] = col;
                                 }
                             }
@@ -490,7 +489,7 @@
                         this.owner[row] = newowner;
 
                     }
-                    return [actions, deleted, created, deleted_and_moved];
+                    return [actions, deleted, created];
                 }
 
                 up(){
@@ -498,10 +497,14 @@
                     this.board = rotateCounter(this.board);
                     this.owner = rotateCounter(this.owner);
 
-                    this.left();
+                    var actions = this.left();
 
+                    
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
+                    actions = rotateActionsClock(actions);
+
+                    return actions;
                 }
 
                 right(){
@@ -512,13 +515,17 @@
                     this.board = rotateCounter(this.board);
                     this.owner = rotateCounter(this.owner);
 
-                    this.left();
+                    var actions = this.left();
 
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
 
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
+
+                    actions = rotateActionsClock(actions);
+                    actions = rotateActionsClock(actions);
+                    return actions;
                 }
 
                 down(){
@@ -526,10 +533,12 @@
                     this.board = rotateClock(this.board);
                     this.owner = rotateClock(this.owner);
 
-                    this.left();
+                    var actions = this.left();
 
                     this.board = rotateCounter(this.board);
                     this.owner = rotateCounter(this.owner);
+                    actions = rotateActionsCounter(actions);
+                    return actions;
                 }
 
                 find_move_value(){
@@ -669,20 +678,22 @@
                 return arr[idx];
             }
 
-            const deepCopy = (arr) => {
-                /* deep copy a multi-dimensional array */
-                let copy = [];
-                arr.forEach(elem => {
-                    if(Array.isArray(elem)){
-                    copy.push(deepCopy(elem))
-                    }else{
-                    if (typeof elem === 'object') {
-                        copy.push(deepCopyObject(elem))
-                    } else {
-                        copy.push(elem)
+            const deepCopy = (items) => items.map(item => Array.isArray(item) ? deepCopy(item) : item);
+
+
+            function deepCopy3d(arr){
+                var copy = [];
+                for (let row = 0; row < arr.length; ++row){
+                    var temprow = [];
+                    for (let col = 0; col < arr[0].length; ++col){
+                        var tempcol = [];
+                        for (let thrd = 0; thrd < arr[0][0].length; ++thrd){
+                            tempcol.push(arr[row][col][thrd]);
+                        }
+                        temprow.push(tempcol);
                     }
-                    }
-                })
+                    copy.push(temprow);
+                }
                 return copy;
             }
 
@@ -714,6 +725,30 @@
                 return newarr;
             }
 
+            function rotateCoordsCounter(coords, length=4){
+                return [length - coords[1] - 1, coords[0]];
+            }
+
+            function rotateActionsCounter(actions){
+                // actions = [actions, deleted, created]
+
+                // rotate the coordinates in actions[0]
+                for (let row = 0; row < actions[0].length; ++row){
+                    for (let col = 0; col < actions[0][0].length; ++col){
+                        let coords = [actions[0][row][col][1], actions[0][row][col][2]]
+                        coords = rotateCoordsCounter(coords);
+                        actions[0][row][col][1] = coords[0];
+                        actions[0][row][col][2] = coords[1];
+                    }
+                }
+
+                for (let action = 0; action < actions.length; ++action){
+                    actions[action] = rotateCounter(actions[action]);
+                }
+                
+                return actions;
+            }
+
             function rotateClock(arr){
                 /* rotate a square array 90 degrees clockwise */
                 newarr = deepCopy(arr);
@@ -725,6 +760,30 @@
                 }
 
                 return newarr
+            }
+
+            function rotateCoordsClock(coords, length=4){
+                return [coords[1], length - [coords[0]] - 1];
+            }
+
+            function rotateActionsClock(actions){
+                // actions = [actions, deleted, created]
+
+                // rotate the coordinates in actions[0]
+                for (let row = 0; row < actions[0].length; ++row){
+                    for (let col = 0; col < actions[0][0].length; ++col){
+                        let coords = [actions[0][row][col][1], actions[0][row][col][2]]
+                        coords = rotateCoordsClock(coords);
+                        actions[0][row][col][1] = coords[0];
+                        actions[0][row][col][2] = coords[1];
+                    }
+                }
+
+                for (let action = 0; action < actions.length; ++action){
+                    actions[action] = rotateClock(actions[action]);
+                }
+                
+                return actions;
             }
 
             function selectrand(options, weight) {
@@ -1170,16 +1229,16 @@
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
                         if (actions && actions[0][row][col][0] == "move"){
-                            console.log("moving square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1][0] + 1) + ", " + (actions[0][row][col][1][1] + 1));
+                            console.log("moving square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1] + 1) + ", " + (actions[0][row][col][2] + 1));
                             var movedSquare = document.getElementsByClassName("position-" + (row + 1) + "-" + (col + 1))[0];
                             
                             if (movedSquare){
                                 movedSquare.classList.remove("position-" + (row + 1) + "-" + (col + 1));
                                 if (movedSquare.classList.contains("tile-new"))
                                     movedSquare.classList.remove("tile-new");
-                                movedSquare.classList.add("position-" + (actions[0][row][col][1][0] + 1) + "-" + (actions[0][row][col][1][1] + 1));
+                                movedSquare.classList.add("position-" + (actions[0][row][col][1] + 1) + "-" + (actions[0][row][col][2] + 1));
                             }
-                            else console.log("ERROR: cannot move square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1][0] + 1) + ", " + (actions[0][row][col][1][1] + 1));
+                            else console.log("ERROR: cannot move square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1] + 1) + ", " + (actions[0][row][col][2] + 1));
                         }
                     }
                 }
@@ -1210,7 +1269,7 @@
                             var transitionEndHandler = function () {
                                 var i = 0;
                                 while (i < elements.length) {     
-                                    if (!elements[i].classList.contains("tile-new")){
+                                    if (elements[i].classList.contains("deleted")){
                                         console.log("removing all squares at " + (row + 1) + ", " + (col + 1));
                                         elements[i].parentNode.removeChild(elements[0]);
                                     }  
@@ -1222,8 +1281,9 @@
                             }
                             // create a listener for each potential element, but skip all new elements
                             for (let elem = elements.length - 1; elem > -1; --elem){
+                                elements[elem].classList.add("deleted");
                                 elements[elem].addEventListener("transitionend", transitionEndHandler, true);
-
+                                elements[elem].addEventListener("webkitTransitionEnd", transitionEndHandler, true);
                             }
                         }
                         
