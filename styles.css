@@ -230,7 +230,11 @@ a:visited {
 }
 
 .endgame-msg {
-    display: none;
+    display: inherit;
+    visibility: visible;
+    z-index: 10;
+
+
     position: absolute;
     top: 0;
     right: 0;
@@ -240,10 +244,22 @@ a:visited {
     text-align: center;
     font-size: 35px;
     font-weight: bold;
-    z-index: 0;
 
     background: rgb(238, 238, 238);
     opacity: 0.8 !important;
+
+    -webkit-animation: appear 200ms ease 100ms;
+    -moz-animation: appear 200ms ease 100ms;
+    animation: appear 200ms ease 100ms;
+    -webkit-animation-fill-mode: backwards;
+    -moz-animation-fill-mode: backwards;
+    animation-fill-mode: backwards;
+}
+
+.endgame-msg.hidden {
+    z-index: 0;
+    display: none;
+    visibility: "hidden";
 }
 
 .grid-container {
@@ -472,6 +488,7 @@ transform: translate(363px, 0px);
       transform: scale(1);
     }
   }
+  
 
 .tile-new .tile-inner{
     -webkit-animation: appear 200ms ease 100ms;

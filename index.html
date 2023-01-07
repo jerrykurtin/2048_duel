@@ -823,8 +823,7 @@
 
             // start game button
             document.getElementById("start-button").addEventListener("click", function (){
-                start_msg.style.zIndex = 1;
-                start_msg.style.display = "none";
+                start_msg.classList.add("hidden");
                 time_start = Date.now();
             }, false);
 
@@ -1127,7 +1126,7 @@
                 endgame = false;
                 resetPressed = false;
                 awaiting_cpu = false;
-                endgame_msg.style.display = "none";
+                endgame_msg.classList.add("hidden");
 
                 // remove any existing squares
                 while(tile_container.hasChildNodes()){
@@ -1136,8 +1135,7 @@
 
                 // disable time reading
                 if (singleplayer || !time_type){
-                    document.getElementById("start-msg").style.display = "none";
-                    document.getElementById("start-msg").style.zIndex = "1";
+                    start_msg.classList.add("hidden");
                     document.getElementById("player1-timer").style.visibility = "hidden";
                     document.getElementById("player1-timer").style.display = "none";
                     document.getElementById("player2-timer").style.visibility = "hidden";
@@ -1157,8 +1155,8 @@
                         time_p2 = chess_limit;
                         document.getElementById("player1-timer").innerHTML = "Time - <strong>" + Math.round((time_p1) / 1000) + "</strong";
                         document.getElementById("player2-timer").innerHTML = "<strong> " + Math.round((time_p2) / 1000) + "</strong> - Time";
-                        start_msg.style.zIndex = 10;
-                        start_msg.style.display = "inherit";
+                        if (start_msg.classList.contains("hidden"))
+                            start_msg.classList.remove("hidden");
                     }
                 }
 
@@ -1286,6 +1284,7 @@
                             var transitionEndHandler = function () {
                                 while (rem_elements.length > 0){
                                     console.log("removing a square");
+                                    // rem_elements[0].remove();
                                     rem_elements[0].parentNode.removeChild(rem_elements[0]);
                                 }
                             }
@@ -1377,8 +1376,8 @@
                         endgame_msg.classList.add(p1color_id);
                     else if (my_board.board_state == "win2")
                         endgame_msg.classList.add(p2color_id);
-                    endgame_msg.style.zIndex = 10;
-                    endgame_msg.style.display = "inherit";
+                    if (endgame_msg.classList.contains("hidden"))
+                        endgame_msg.classList.remove("hidden");
                 }
             }
 
@@ -1398,6 +1397,7 @@
                             console.log("multiple elements at position " + position);
                             // > 1 element
                             while (existing.length > 0){
+                                // existing[0].remove();
                                 existing[0].parentNode.removeChild(existing[0]);
                             }
                         }                        
@@ -1408,6 +1408,7 @@
                             if (existing.length != 0){
                                 console.log("out-of-place element at position " + position);
                                 console.log("element is " + existing[0].firstChild.innerHTML + ", but should be " + text);
+                                // existing[0].remove();
                                 existing[0].parentNode.removeChild(existing[0]);
                             }
                             else{
