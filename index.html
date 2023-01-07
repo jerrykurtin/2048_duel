@@ -1277,26 +1277,13 @@
                         // delete squares
                         if (actions && actions[1][row][col] == true){
                             const elements = document.getElementsByClassName("position-"+ (row + 1) + "-" + (col + 1));
+                            const rem_elements = document.getElementsByClassName("deleted");
                             console.log("trying to remove " + elements.length + " squares at " + (row + 1) + ", " + (col + 1));
 
                             var transitionEndHandler = function () {
-                                // const choppingBlock = document.querySelectorAll(".tile.deleted");
-                                // while (choppingBlock.length > 0){
-                                //     if (choppingBlock[0]){
-                                //         console.log("removing a square");
-                                //         choppingBlock[0].parentNode.removeChild(choppingBlock[0]);
-                                //     }
-                                // }
-                                var i = 0;
-                                while (i < elements.length) {     
-                                    if (elements[i].classList.contains("deleted")){
-                                        console.log("removing a square");
-                                        elements[i].parentNode.removeChild(elements[0]);
-                                    }  
-                                    else{
-                                        console.log("skipping new square");
-                                        i++;
-                                    }
+                                while (rem_elements.length > 0){
+                                    console.log("removing a square");
+                                    rem_elements[0].parentNode.removeChild(rem_elements[0]);
                                 }
                             }
                             // create a listener for each potential element, but skip all new elements
