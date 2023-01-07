@@ -284,8 +284,6 @@
                         return null;
                     }
 
-                    console.log("after making specific move, actions is ", actions);
-
                     // check for no change
                     if (deepCompare(this.board, prev_state)){
                         this.board_state = "no_change";
@@ -1229,19 +1227,34 @@
                 for (var row = 0; row < 4; ++row){
                     for (var col = 0; col < 4; ++col){
                         if (actions && actions[0][row][col][0] == "move"){
-                            console.log("moving square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1] + 1) + ", " + (actions[0][row][col][2] + 1));
-                            var movedSquare = document.getElementsByClassName("position-" + (row + 1) + "-" + (col + 1))[0];
-                            
-                            if (movedSquare){
-                                movedSquare.classList.remove("position-" + (row + 1) + "-" + (col + 1));
+                            var oldPos = "position-" + (row + 1) + "-" + (col + 1);
+                            var newPos = "position-" + (actions[0][row][col][1] + 1) + "-" + (actions[0][row][col][2] + 1);
+
+                            // select object with position that hasn't been moved yet
+                            var movedSquare = document.querySelectorAll("." + oldPos + ":not(.moved)");
+
+                            if (movedSquare.length > 1)
+                                console.log("ERROR: selecting > 1 square in move from position " + oldPos + " to " + newPos);
+                            if (!movedSquare)
+                                console.log("ERROR: cannot find a square to move from " + oldPos + " to " + newPos);
+                            else{
+                                movedSquare = movedSquare[0];
+                                console.log("moving square " + movedSquare.firstChild.innerHTML + " from " + oldPos + " to " + newPos);
+                                movedSquare.classList.remove(oldPos);
                                 if (movedSquare.classList.contains("tile-new"))
                                     movedSquare.classList.remove("tile-new");
-                                movedSquare.classList.add("position-" + (actions[0][row][col][1] + 1) + "-" + (actions[0][row][col][2] + 1));
+                                movedSquare.classList.add(newPos);
+                                // make sure we don't double move
+                                movedSquare.classList.add("moved");
                             }
-                            else console.log("ERROR: cannot move square from " + (row + 1) + ", " + (col + 1) + " to " + (actions[0][row][col][1] + 1) + ", " + (actions[0][row][col][2] + 1));
                         }
                     }
                 }
+
+                // remove moved tag
+                const movedSquares = document.getElementsByClassName("moved");
+                while (movedSquares.length > 0)
+                    movedSquares[0].classList.remove("moved");
 
                 // delete and build new squares
                 for (var row = 0; row < 4; ++row){
@@ -1267,10 +1280,17 @@
                             console.log("trying to remove " + elements.length + " squares at " + (row + 1) + ", " + (col + 1));
 
                             var transitionEndHandler = function () {
+                                // const choppingBlock = document.querySelectorAll(".tile.deleted");
+                                // while (choppingBlock.length > 0){
+                                //     if (choppingBlock[0]){
+                                //         console.log("removing a square");
+                                //         choppingBlock[0].parentNode.removeChild(choppingBlock[0]);
+                                //     }
+                                // }
                                 var i = 0;
                                 while (i < elements.length) {     
                                     if (elements[i].classList.contains("deleted")){
-                                        console.log("removing all squares at " + (row + 1) + ", " + (col + 1));
+                                        console.log("removing a square");
                                         elements[i].parentNode.removeChild(elements[0]);
                                     }  
                                     else{
@@ -1289,7 +1309,7 @@
                         
                         // brand-new square
                         if (!actions && text != 0 || actions && actions[2][row][col]){
-                            console.log("new square at " + (row + 1) + ", " + (col + 1));
+                            console.log("new square at " + (row + 1) + ", " + (col + 1) + " is " + text);
                             const newSquareWrapper = document.createElement("div");
                             newSquareWrapper.classList.add("tile");
                             newSquareWrapper.classList.add("tile-new");
@@ -1471,10 +1491,11 @@
                                     makeMove(move);
                                 }
                                 } while (my_board.board_state == "no_change");
+
+                                sleep(1500)
+                                    .then(() => cpumove())
+                                    .then(() => awaiting_cpu = false);
                             }
-                            sleep(1500)
-                                .then(() => cpumove())
-                                .then(() => awaiting_cpu = false);
                     }
                     update_needed = false;
                 }
