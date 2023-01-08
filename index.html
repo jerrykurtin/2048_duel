@@ -1341,9 +1341,11 @@
                 draw_time = Date.now();
 
                 if (my_board.board_state == "no_change"){
+                    turn_message.innerHTML = "No change, move again";
                     console.log("skipping drawBoard()");
                     return;
                 }
+
                 console.log("drawBoard()");
                 console.log("board:\n" + print_grid(my_board.board));
                 console.log("actions:", actions);
@@ -1499,18 +1501,12 @@
                 else{
                     if (my_board.player == 0){
                         turn_message.classList.add(p1color_id);
-                        if (my_board.board_state == "no_change")
-                            text = "No change, move again";
-                        else
-                            text = p1possessive + " turn";
+                        text = p1possessive + " turn";
                     }
 
                     else{
                         turn_message.classList.add(p2color_id);
-                        if (my_board.board_state == "no_change")
-                            text = "No change, move again";
-                        else
-                            text = p2possessive + " turn";
+                        text = p2possessive + " turn";
                     }
                 }
                 turn_message.innerHTML = text;
@@ -1543,7 +1539,13 @@
                             // > 1 element
                             while (existing.length > 0){
                                 // existing[0].remove();
+                                // try{
                                 existing[0].parentNode.removeChild(existing[0]);
+                                // }
+                                // catch (err){
+                                //     console.log("removing node failed, node no longer exists");
+                                //     break;
+                                // }
                             }
                         }                        
 
