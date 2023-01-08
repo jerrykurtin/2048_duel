@@ -76,39 +76,60 @@
                 </div>
                 <h2 id="settings-header">Settings</h2>
                 <div class="settings-container">
-                    <div class="dropdown">
-                        <button class="dropbtn" id="gamemode-dropdown">Gamemode: Solo</button>
-                        <div class="dropdown-content">
-                          <button class="dropdown-element" id="gamemode-singleplayer">Solo</button>
-                          <button class="dropdown-element" id="gamemode-multiplayer">Local Multiplayer</button>
+                    <div class="settings-inner">
+                        <div class="dropdown">
+                            <button class="dropbtn" id="gamemode-dropdown">Gamemode: Solo</button>
+                            <div class="dropdown-content">
+                              <button class="dropdown-element" id="gamemode-singleplayer">Solo</button>
+                              <button class="dropdown-element" id="gamemode-multiplayer">Local Multiplayer</button>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn" id="difficulty-dropdown">Difficulty: Easy</button>
+                            <div class="dropdown-content">
+                              <button class="dropdown-element" id="difficulty-easy">Easy</button>
+                              <button class="dropdown-element" id="difficulty-medium">Medium</button>
+                              <button class="dropdown-element" id="difficulty-hard">Hard</button>
+                              <button class="dropdown-element" id="difficulty-impossible">Impossible</button>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn" id="timer-dropdown">Timer: None</button>
+                            <div class="dropdown-content">
+                              <button class="dropdown-element" id="timer-none">None</button>
+                              <button class="dropdown-element" id="timer-chess">Chess</button>
+                              <!-- <button class="dropdown-element" id="timer-speed">Speed</button> -->
+                            </div>
                         </div>
                     </div>
-                    <div class="dropdown">
-                        <button class="dropbtn" id="goal-dropdown">Goal: 64</button>
-                        <div class="dropdown-content">
-                          <button class="dropdown-element" id="goal-32">32</button>
-                          <button class="dropdown-element" id="goal-64">64</button>
-                          <button class="dropdown-element" id="goal-128">128</button>
+                    <div class="settings-inner">
+                        <div class="dropdown">
+                            <button class="dropbtn" id="goal-dropdown">Goal: 64</button>
+                            <div class="dropdown-content">
+                              <button class="dropdown-element" id="goal-32">32</button>
+                              <button class="dropdown-element" id="goal-64">64</button>
+                              <button class="dropdown-element" id="goal-128">128</button>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn text player1" id="p1color-dropdown">Player 1: unknown</button>
+                            <div class="dropdown-content">
+                              <button class="dropdown-element" id="p1color-green">Green</button>
+                              <button class="dropdown-element" id="p1color-blue">Blue</button>
+                              <button class="dropdown-element" id="p1color-salmon">Salmon</button>
+                              <button class="dropdown-element" id="p1color-purple">Purple</button>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn text player2" id="p2color-dropdown">Player 2: unknown</button>
+                            <div class="dropdown-content">
+                              <button class="dropdown-element" id="p2color-green">Green</button>
+                              <button class="dropdown-element" id="p2color-blue">Blue</button>
+                              <button class="dropdown-element" id="p2color-salmon">Salmon</button>
+                              <button class="dropdown-element" id="p2color-purple">Purple</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="dropdown">
-                        <button class="dropbtn" id="difficulty-dropdown">Difficulty: Easy</button>
-                        <div class="dropdown-content">
-                          <button class="dropdown-element" id="difficulty-easy">Easy</button>
-                          <button class="dropdown-element" id="difficulty-medium">Medium</button>
-                          <button class="dropdown-element" id="difficulty-hard">Hard</button>
-                          <button class="dropdown-element" id="difficulty-impossible">Impossible</button>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <button class="dropbtn" id="timer-dropdown">Timer: None</button>
-                        <div class="dropdown-content">
-                          <button class="dropdown-element" id="timer-none">None</button>
-                          <button class="dropdown-element" id="timer-chess">Chess</button>
-                          <!-- <button class="dropdown-element" id="timer-speed">Speed</button> -->
-                        </div>
-                    </div>
-                    <button class="settings-btn" id="colorblind-button">High-contrast: off</button>
                 </div>
             </div>
             <h2>How to play</h2>
@@ -117,7 +138,6 @@
             <p><strong>Duel:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. 
                 The winner is the first to create the goal piece (64) or the one with the highest score when there are no available moves.
             </p>
-            <p>Note: Color plays a big role in this game. If the 2 grid colors look similar, press the High Contrast button in Settings.</p>
             <p><strong>Gamemodes:</strong>
                 <ul>
                     <li><strong>Solo: </strong>Play against the computer. Try out the impossible difficulty for a challenge!</a></li>
@@ -146,7 +166,6 @@
             var resetPressed = false;
             var keypress_active = false;
             var update_needed = false;
-            var reset_colors = false;
             var move_made = false;
 
             // board information
@@ -827,51 +846,110 @@
                 time_start = Date.now();
             }, false);
 
-            // colorblind button (for matt bullock)
-            document.getElementById("colorblind-button").addEventListener("click", function (){
-                console.log("switching all elements between contrasts");
-                if (colorblind){
-                    colorblind = false;
-                    
-                    // switch all existing colors to normal
-                    let allp1 = document.getElementsByClassName("player1-contrast");
-                    while(allp1.length > 0) {
-                        allp1[0].classList.add("player1");
-                        allp1[0].classList.remove("player1-contrast")
-                    }
-                    let allp2 = document.getElementsByClassName("player2-contrast");
-                    while(allp2.length > 0) {
-                        allp2[0].classList.add("player2");
-                        allp2[0].classList.remove("player2-contrast")
-                    }
-
-                    p1color_id = "player1";
-                    p2color_id = "player2";
-                    document.getElementById("colorblind-button").innerHTML = "High Contrast: Off";
+            function setColor(color, player){
+                // no change: equal to either player 1 or player 2 color
+                if (color == p1color_id || color == p2color_id){
+                    console.log("setColor() can't change color to one already in use");
+                    document.getElementById("p1color-dropdown").innerHTML = p1name + ": " + p1color_id;
+                    document.getElementById("p2color-dropdown").innerHTML = p2name + ": " + p2color_id;
+                    return;
                 }
 
-                else {
-                    colorblind = true;
-                    // switch all existing colors to high-contrast
-                    let allp1 = document.getElementsByClassName("player1");
-                    while(allp1.length > 0){
-                        allp1[0].classList.add("player1-contrast");
-                        allp1[0].classList.remove("player1")
-                    }
-                    let allp2 = document.getElementsByClassName("player2");
-                    while(allp2.length > 0){
-                        allp2[0].classList.add("player2-contrast");
-                        allp2[0].classList.remove("player2")
-                    }
-
-                    p1color_id = "player1-contrast";
-                    p2color_id = "player2-contrast";
-                    document.getElementById("colorblind-button").innerHTML = "High Contrast: On";
+                // update stettings
+                if (player == 1){
+                    var prev_color = p1color_id;
+                    p1color_id = color;
+                    document.getElementById("p1color-dropdown").innerHTML = p1name + ": " + color;
+                }
+                else{
+                    var prev_color = p2color_id;
+                    p2color_id = color;
+                    document.getElementById("p2color-dropdown").innerHTML = p2name + ": " + color;
                 }
 
-                console.log("finished switching all elements");
-                reset_colors = true;
+                console.log("setting player " + player + " color to " + color);
+
+                // switch all existing colors
+                let allcolor = document.getElementsByClassName(prev_color);
+                while(allcolor.length > 0) {
+                    allcolor[0].classList.add(color)
+                    allcolor[0].classList.remove(prev_color);
+                }
+            }
+
+            // color settings: p1
+            document.getElementById("p1color-green").addEventListener("click", function (){
+                setColor("green", 1);
+            }, false)
+            document.getElementById("p1color-blue").addEventListener("click", function (){
+                setColor("blue", 1);
             }, false);
+            document.getElementById("p1color-salmon").addEventListener("click", function (){
+                setColor("salmon", 1);
+            }, false);
+            document.getElementById("p1color-purple").addEventListener("click", function (){
+                setColor("purple", 1);
+            }, false);
+
+            // color settins: p2
+            document.getElementById("p2color-green").addEventListener("click", function (){
+                setColor("green", 2);
+            }, false)
+            document.getElementById("p2color-blue").addEventListener("click", function (){
+                setColor("blue", 2);
+            }, false);
+            document.getElementById("p2color-salmon").addEventListener("click", function (){
+                setColor("salmon", 2);
+            }, false);
+            document.getElementById("p2color-purple").addEventListener("click", function (){
+                setColor("purple", 2);
+            }, false);
+
+            // colorblind button (for matt bullock)
+            // document.getElementById("colorblind-button").addEventListener("click", function (){
+            //     console.log("switching all elements between contrasts");
+            //     if (colorblind){
+            //         colorblind = false;
+                    
+            //         // switch all existing colors to normal
+            //         let allp1 = document.getElementsByClassName("player1-contrast");
+            //         while(allp1.length > 0) {
+            //             allp1[0].classList.add("player1");
+            //             allp1[0].classList.remove("player1-contrast")
+            //         }
+            //         let allp2 = document.getElementsByClassName("player2-contrast");
+            //         while(allp2.length > 0) {
+            //             allp2[0].classList.add("player2");
+            //             allp2[0].classList.remove("player2-contrast")
+            //         }
+
+            //         // p1color_id = "player1";
+            //         // p2color_id = "player2";
+            //         document.getElementById("colorblind-button").innerHTML = "High Contrast: Off";
+            //     }
+
+            //     else {
+            //         colorblind = true;
+            //         // switch all existing colors to high-contrast
+            //         let allp1 = document.getElementsByClassName("player1");
+            //         while(allp1.length > 0){
+            //             allp1[0].classList.add("player1-contrast");
+            //             allp1[0].classList.remove("player1")
+            //         }
+            //         let allp2 = document.getElementsByClassName("player2");
+            //         while(allp2.length > 0){
+            //             allp2[0].classList.add("player2-contrast");
+            //             allp2[0].classList.remove("player2")
+            //         }
+
+            //         // p1color_id = "player1-contrast";
+            //         // p2color_id = "player2-contrast";
+            //         document.getElementById("colorblind-button").innerHTML = "High Contrast: On";
+            //     }
+
+            //     console.log("finished switching all elements");
+            //     reset_colors = true;
+            // }, false);
 
             // reset button
             reset_button.addEventListener("click", function (){
@@ -1164,6 +1242,10 @@
                 document.getElementById("player1-header").innerHTML = p1name;
                 document.getElementById("player2-header").innerHTML = p2name;
 
+                // make sure that the colors are correct
+                setColor(p1color_id, 1);
+                setColor(p2color_id, 2);
+
                 // DEBUG
                 // my_board.board = [
                 //     [2, 2, 0, 0],
@@ -1452,11 +1534,6 @@
                     draw_time = null;
                 }
 
-                if (reset_colors){
-                    reset_colors = false;
-                    drawBoard();
-                }
-
                 // update time, check for out-of-time
                 if (!endgame && time_type == "chess" && time_start){
                     if (my_board.player == 0){
@@ -1560,6 +1637,9 @@
             }
             
             resetBoard();
+            // set initial colors:
+            setColor("blue", 1);
+            setColor("salmon", 2);
             setInterval(mainLoop, 10);
         </script>
     </body>
