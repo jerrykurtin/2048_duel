@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 
-/* hello hello */
 /* Page-wide settings */
 * {
     box-sizing:border-box;
@@ -127,19 +126,19 @@ a:visited {
     border-radius: 6px;
     background-color:rgb(238, 238, 238);
     padding: 10px;
-    width: 25%;
+    width: 27%;
     float: left;
     margin-left: 5%;
-    margin-right: 2.5%;
+    margin-right: 1.5%;
 }
 
 .board_info-right {
     border-radius: 6px;
     background-color:rgb(238, 238, 238);
     padding: 10px;
-    width: 25%;
+    width: 27%;
     float: left;
-    margin-left: 2.5%;
+    margin-left: 1.5%;
     margin-right: 5%;
 }
 
@@ -148,7 +147,7 @@ a:visited {
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 35%;
+    width: 33%;
     float: left;
 }
 
