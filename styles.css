@@ -238,6 +238,10 @@ a:visited {
 }
 
 @media screen and (min-width: 520px) {
+    .board_info-container {
+        width: 500px;
+    }
+
     .board_info-left {
         border-radius: 6px;
         padding: 10px;
