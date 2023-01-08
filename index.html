@@ -857,6 +857,7 @@
             // start game button
             document.getElementById("start-button").addEventListener("click", function (){
                 startPressed = true;
+                update_needed = true;
             }, false);
 
             function setColor(color, player){
@@ -1614,6 +1615,7 @@
                     else if (startPressed){
                         start_msg.classList.add("hidden");
                         time_start = Date.now();
+                        startPressed = false;
                     }
 
                     // move made
