@@ -4,10 +4,11 @@
 
 /* Page-wide settings */
 * {
-    box-sizing:border-box;
+    box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: auto auto;
     float: none !important;
     max-width: 532px;
@@ -19,8 +20,8 @@ html, body {
 }
 
 /* General settings */
-h1 { 
-    font-size: 13.5vw; 
+h1 {
+    font-size: 13.5vw;
     font-weight: bold;
 }
 
@@ -28,7 +29,7 @@ h2 {
     font-size: 5.04vw;
     font-weight: bold;
     margin-top: 2.52vw;
-    margin-bottom: 2.52vw;
+    /* margin-bottom: 2.52vw; */
 }
 
 p {
@@ -63,22 +64,22 @@ button {
     text-align: center;
     text-decoration: none;
     touch-action: manipulation;
-    transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+    transition: box-shadow .2s, -ms-transform .1s, -webkit-transform .1s, transform .1s;
     user-select: none;
     -webkit-user-select: none;
     width: auto;
 }
-  
-  /* button:focus-visible {
+
+/* button:focus-visible {
     box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
     transition: box-shadow .2s;
   } */
-  
+
 button:active {
     background-color: #F7F7F7;
     transform: scale(.96);
 }
-  
+
 button:disabled {
     border-color: #DDDDDD;
     color: #DDDDDD;
@@ -97,12 +98,14 @@ a:visited {
 }
 
 @media screen and (min-width: 520px) {
-    html, body {
+
+    html,
+    body {
         font-size: 18px;
     }
 
-    h1 { 
-        font-size: 75px; 
+    h1 {
+        font-size: 75px;
     }
 
     h2 {
@@ -154,15 +157,15 @@ a:visited {
 /* Board info settings */
 .board_info-container {
     overflow-x: auto;
-    display: flex;  
-    align-items: center; 
+    display: flex;
+    align-items: center;
 }
 
 .board_info-left {
     border-radius: 1.08vw;
-    background-color:rgb(238, 238, 238);
+    background-color: rgb(238, 238, 238);
     padding: 1.8vw;
-    width: 35%;
+    width: 33%;
     float: left;
     margin-left: 0;
     margin-right: 1.5%;
@@ -170,9 +173,9 @@ a:visited {
 
 .board_info-right {
     border-radius: 1.08vw;
-    background-color:rgb(238, 238, 238);
+    background-color: rgb(238, 238, 238);
     padding: 1.8vw;
-    width: 35%;
+    width: 33%;
     float: left;
     margin-left: 1.5%;
     margin-right: 0;
@@ -183,7 +186,7 @@ a:visited {
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 27%;
+    width: 31%;
     float: left;
 }
 
@@ -213,15 +216,17 @@ a:visited {
     justify-content: center;
     /* align-items: center; */
 }
+
 .turn {
     border-radius: 1.08vw;
-    background-color:rgb(238, 238, 238);
+    background-color: rgb(238, 238, 238);
     padding: 0.45vw 1.8vw;
     text-align: center;
 }
 
 /* Below Game Settings */
-.settings-container{
+.settings-container {
+    margin-top: 2.7vw;
     margin-bottom: 2.7vw;
 }
 
@@ -234,7 +239,8 @@ a:visited {
 .settings-container button {
     position: relative;
     display: inline-block;
-    margin-right: 1.8vw;
+    margin-left: .9vw;
+    margin-right: .9vw;
 }
 
 @media screen and (min-width: 520px) {
@@ -246,14 +252,16 @@ a:visited {
         border-radius: 6px;
         padding: 10px;
     }
+
     .board_info-right {
         border-radius: 6px;
         padding: 10px;
     }
-    
+
     #reset-button {
         margin-bottom: 5px;
     }
+
     #settings-link {
         font-size: 16px;
     }
@@ -261,28 +269,33 @@ a:visited {
     .board_info-internal {
         font-size: 20px;
     }
+
     .header {
         margin-bottom: 2.5px;
     }
-    
+
     .turn-container {
         font-size: 25px;
         margin-bottom: 15px;
     }
+
     .turn {
         border-radius: 6px;
         padding: 2.5px 10px;
     }
 
-    .settings-container{
+    .settings-container {
+        margin-top: 15px;
         margin-bottom: 15px;
     }
+
     .settings-inner {
         margin-bottom: 10px;
     }
 
     .settings-container button {
-        margin-right: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 }
 
@@ -343,7 +356,7 @@ a:visited {
 }
 
 @media screen and (min-width: 520px) {
-    .endgame-msg{
+    .endgame-msg {
         font-size: 35px;
         line-height: 500px;
     }
@@ -391,8 +404,8 @@ button.hidden {
 }
 
 .tile-container {
-position: absolute;
-z-index: 2;
+    position: absolute;
+    z-index: 2;
 }
 
 .tile {
@@ -416,7 +429,7 @@ z-index: 2;
     text-align: center;
     font-weight: bold;
     font-size: 10.8vw;
-    color:rgba(255, 255, 255, 1);
+    color: rgba(255, 255, 255, 1);
 }
 
 .tile-inner {
@@ -539,6 +552,7 @@ z-index: 2;
     -ms-transform: translate(43.56vw, 21.78vw);
     transform: translate(43.56vw, 21.78vw);
 }
+
 .tile.position-3-3 {
     -webkit-transform: translate(43.56vw, 43.56vw);
     -moz-transform: translate(43.56vw, 43.56vw);
@@ -554,10 +568,10 @@ z-index: 2;
 }
 
 .tile.position-1-4 {
--webkit-transform: translate(65.34vw, 0px);
--moz-transform: translate(65.34vw, 0px);
--ms-transform: translate(65.34vw, 0px);
-transform: translate(65.34vw, 0px);
+    -webkit-transform: translate(65.34vw, 0px);
+    -moz-transform: translate(65.34vw, 0px);
+    -ms-transform: translate(65.34vw, 0px);
+    transform: translate(65.34vw, 0px);
 }
 
 
@@ -567,6 +581,7 @@ transform: translate(65.34vw, 0px);
     -ms-transform: translate(65.34vw, 21.78vw);
     transform: translate(65.34vw, 21.78vw);
 }
+
 .tile.position-3-4 {
     -webkit-transform: translate(65.34vw, 43.56vw);
     -moz-transform: translate(65.34vw, 43.56vw);
@@ -651,6 +666,7 @@ transform: translate(65.34vw, 0px);
         -ms-transform: translate(242px, 121px);
         transform: translate(242px, 121px);
     }
+
     .tile.position-3-3 {
         -webkit-transform: translate(242px, 242px);
         -moz-transform: translate(242px, 242px);
@@ -666,10 +682,10 @@ transform: translate(65.34vw, 0px);
     }
 
     .tile.position-1-4 {
-    -webkit-transform: translate(363px, 0px);
-    -moz-transform: translate(363px, 0px);
-    -ms-transform: translate(363px, 0px);
-    transform: translate(363px, 0px);
+        -webkit-transform: translate(363px, 0px);
+        -moz-transform: translate(363px, 0px);
+        -ms-transform: translate(363px, 0px);
+        transform: translate(363px, 0px);
     }
 
 
@@ -679,6 +695,7 @@ transform: translate(65.34vw, 0px);
         -ms-transform: translate(363px, 121px);
         transform: translate(363px, 121px);
     }
+
     .tile.position-3-4 {
         -webkit-transform: translate(363px, 242px);
         -moz-transform: translate(363px, 242px);
@@ -696,64 +713,67 @@ transform: translate(65.34vw, 0px);
 
 @-webkit-keyframes appear {
     0% {
-      /* opacity: 0; */
-      -webkit-transform: scale(0);
-      -moz-transform: scale(0);
-      -ms-transform: scale(0);
-      transform: scale(0);
+        /* opacity: 0; */
+        -webkit-transform: scale(0);
+        -moz-transform: scale(0);
+        -ms-transform: scale(0);
+        transform: scale(0);
     }
-    100% {
-      /* opacity: 1; */
-      -webkit-transform: scale(1);
-      -moz-transform: scale(1);
-      -ms-transform: scale(1);
-      transform: scale(1);
-    }
-  }
-  
-  @-moz-keyframes appear {
-    0% {
-      /* opacity: 0; */
-      -webkit-transform: scale(0);
-      -moz-transform: scale(0);
-      -ms-transform: scale(0);
-      transform: scale(0);
-    }
-    100% {
-      /* opacity: 1; */
-      -webkit-transform: scale(1);
-      -moz-transform: scale(1);
-      -ms-transform: scale(1);
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes appear {
-    0% {
-      /* opacity: 0; */
-      -webkit-transform: scale(0);
-      -moz-transform: scale(0);
-      -ms-transform: scale(0);
-      transform: scale(0);
-    }
-    100% {
-      /* opacity: 1; */
-      -webkit-transform: scale(1);
-      -moz-transform: scale(1);
-      -ms-transform: scale(1);
-      transform: scale(1);
-    }
-  }
-  
 
-.tile-new .tile-inner{
+    100% {
+        /* opacity: 1; */
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@-moz-keyframes appear {
+    0% {
+        /* opacity: 0; */
+        -webkit-transform: scale(0);
+        -moz-transform: scale(0);
+        -ms-transform: scale(0);
+        transform: scale(0);
+    }
+
+    100% {
+        /* opacity: 1; */
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes appear {
+    0% {
+        /* opacity: 0; */
+        -webkit-transform: scale(0);
+        -moz-transform: scale(0);
+        -ms-transform: scale(0);
+        transform: scale(0);
+    }
+
+    100% {
+        /* opacity: 1; */
+        -webkit-transform: scale(1);
+        -moz-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+
+.tile-new .tile-inner {
     -webkit-animation: appear 200ms ease 100ms;
     -moz-animation: appear 200ms ease 100ms;
     animation: appear 200ms ease 100ms;
     -webkit-animation-fill-mode: backwards;
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
-  }
+}
 
 
 
@@ -771,10 +791,10 @@ transform: translate(65.34vw, 0px);
 body {
     --p1color: var(--bluecolor);
     --p2color: var(--salmoncolor);
-    --greencolor: 127,160,60;
-    --bluecolor: 0,110,159;
-    --salmoncolor: 242,79,70;
-    --purplecolor: 133,102,179;
+    --greencolor: 127, 160, 60;
+    --bluecolor: 0, 110, 159;
+    --salmoncolor: 242, 79, 70;
+    --purplecolor: 133, 102, 179;
 }
 
 .tile-inner.tile-2 {
@@ -796,21 +816,27 @@ body {
 .tile-inner.tile-32 {
     opacity: 0.9;
 }
+
 .tile-inner.tile-32.player1 {
     box-shadow: var(--shadow-size) rgba(var(--p1color), 0.4);
 }
+
 .tile-inner.tile-32.player2 {
     box-shadow: var(--shadow-size) rgba(var(--p2color), 0.4);
 }
+
 .tile-inner.tile-32.green {
     box-shadow: var(--shadow-size) rgba(var(--greencolor), 0.4);
 }
+
 .tile-inner.tile-32.blue {
     box-shadow: var(--shadow-size) rgba(var(--bluecolor), 0.4);
 }
+
 .tile-inner.tile-32.salmon {
     box-shadow: var(--shadow-size) rgba(var(--salmoncolor), 0.4);
 }
+
 .tile-inner.tile-32.purple {
     box-shadow: var(--shadow-size) rgba(var(--purplecolor), 0.4);
 }
@@ -830,18 +856,23 @@ body {
 .tile-inner.tile-64 {
     opacity: 1;
 }
+
 .tile-inner.tile-64.player1 {
     box-shadow: var(--shadow-size) rgba(var(--p1color), 0.6);
 }
+
 .tile-inner.tile-64.green {
     box-shadow: var(--shadow-size) rgba(var(--greencolor), 0.6);
 }
+
 .tile-inner.tile-64.blue {
     box-shadow: var(--shadow-size) rgba(var(--bluecolor), 0.6);
 }
+
 .tile-inner.tile-64.salmon {
     box-shadow: var(--shadow-size) rgba(var(--salmoncolor), 0.6);
 }
+
 .tile-inner.tile-64.purple {
     box-shadow: var(--shadow-size) rgba(var(--purplecolor), 0.6);
 }
@@ -862,18 +893,23 @@ body {
 .tile-inner.tile-128 {
     opacity: 1;
 }
+
 .tile-inner.tile-128.player1 {
     box-shadow: var(--shadow-size) rgba(var(--p1color), 0.8);
 }
+
 .tile-inner.tile-128.green {
     box-shadow: var(--shadow-size) rgba(var(--greencolor), 0.8);
 }
+
 .tile-inner.tile-128.blue {
     box-shadow: var(--shadow-size) rgba(var(--bluecolor), 0.8);
 }
+
 .tile-inner.tile-128.salmon {
     box-shadow: var(--shadow-size) rgba(var(--salmoncolor), 0.8);
 }
+
 .tile-inner.tile-128.purple {
     box-shadow: var(--shadow-size) rgba(var(--purplecolor), 0.8);
 }
@@ -907,20 +943,24 @@ body {
 .player1.background {
     background: rgb(var(--p1color));
 }
+
 .green.background {
     background: rgb(var(--greencolor));
 }
+
 .blue.background {
     background: rgb(var(--bluecolor));
 }
+
 .salmon.background {
     background: rgb(var(--salmoncolor));
 }
+
 .purple.background {
     background: rgb(var(--purplecolor));
 }
 
-.player1-contrast.background{
+.player1-contrast.background {
     background: rgb(var(--bluecolor));
 }
 
@@ -928,29 +968,33 @@ body {
     color: rgb(var(--p1color));
     opacity: 0.75;
 }
+
 .green.text {
     color: rgb(var(--greencolor));
     opacity: 0.75;
 }
+
 .blue.text {
     color: rgb(var(--bluecolor));
     opacity: 0.75;
 }
+
 .salmon.text {
     color: rgb(var(--salmoncolor));
     opacity: 0.75;
 }
+
 .purple.text {
     color: rgb(var(--purplecolor));
     opacity: 0.75;
 }
 
-.player1-contrast.text{
+.player1-contrast.text {
     color: rgb(var(--bluecolor));
     opacity: 0.75;
 }
 
-.player2.background{
+.player2.background {
     background: rgb(var(--p2color));
     /* opacity: 0.5; */
 }
@@ -965,14 +1009,14 @@ body {
     opacity: 0.75;
 }
 
-.player2-contrast.text { 
-    color:  rgb(var(--salmoncolor));
+.player2-contrast.text {
+    color: rgb(var(--salmoncolor));
     opacity: 0.75;
 }
 
 .bolded {
     font-weight: 600;
-  }
+}
 
 /* Third-party styles */
 /* dropdown: w3schools */
@@ -986,27 +1030,27 @@ body {
     transform: scale(1);
 }
 
-  
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
     position: relative;
     display: inline-block;
     /* min-width: 100px; */
     /* margin-bottom: 10px; */
     margin-left: 2.5px;
     margin-right: 2.5px;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
     display: none;
     position: absolute;
     width: auto;
     z-index: 10;
-  }
+}
 
-  /* format the button in dropdown */
-  .dropdown-element {
+/* format the button in dropdown */
+.dropdown-element {
     border-width: 0;
     padding: 7px 5px;
     border-radius: 0px !important;
@@ -1016,24 +1060,24 @@ body {
     text-align: left;
     height: 60%;
     width: 80%;
-  }
+}
 
- .dropdown-element:hover {
+.dropdown-element:hover {
     background-color: #F7F7F7;
-  }
+}
 
-  .dropdown-element:active {
+.dropdown-element:active {
     border-width: 0px 0px 0px 2px;
     transform: scale(1);
-  }
+}
 
-  /* Show the dropdown menu on hover */
+/* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
-  }
+}
 
-  
-  /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
     background-color: #F7F7F7;
-  }
+}

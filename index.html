@@ -20,7 +20,7 @@
     <body>
         <div class="container">
             <div class="title-container">
-                <h1 class="title">2048 Duel!</h1>
+                <h1 class="title" id="title">2048 Duel!</h1>
                 <div class="board_info-container">
                     <div class="board_info-left player1 text text-left">
                         <div class="board_info-internal text header" id="player1-header">Player 1</div>
@@ -84,7 +84,16 @@
                             <button class="dropbtn" id="gamemode-dropdown">Gamemode: Solo</button>
                             <div class="dropdown-content">
                                 <button class="dropdown-element" id="gamemode-singleplayer">Solo</button>
-                                <button class="dropdown-element" id="gamemode-multiplayer">Local multiplayer</button>
+                                <button class="dropdown-element" id="gamemode-multiplayer">Multiplayer</button>
+                                <button class="dropdown-element" id="gamemode-chess">Chess</button>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn" id="goal-dropdown">Goal: 64</button>
+                            <div class="dropdown-content">
+                                <button class="dropdown-element" id="goal-32">32</button>
+                                <button class="dropdown-element" id="goal-64">64</button>
+                                <button class="dropdown-element" id="goal-128">128</button>
                             </div>
                         </div>
                         <div class="dropdown">
@@ -94,14 +103,6 @@
                                 <button class="dropdown-element" id="difficulty-medium">Medium</button>
                                 <button class="dropdown-element" id="difficulty-hard">Hard</button>
                                 <button class="dropdown-element" id="difficulty-impossible">Impossible</button>
-                            </div>
-                        </div>
-                        <div class="dropdown">
-                            <button class="dropbtn" id="timer-dropdown">Timer: None</button>
-                            <div class="dropdown-content">
-                                <button class="dropdown-element" id="timer-none">None</button>
-                                <button class="dropdown-element" id="timer-chess">Chess</button>
-                                <!-- <button class="dropdown-element" id="timer-speed">Speed</button> -->
                             </div>
                         </div>
                         <div class="dropdown">
@@ -116,14 +117,6 @@
                         </div>
                     </div>
                     <div class="settings-inner">
-                        <div class="dropdown">
-                            <button class="dropbtn" id="goal-dropdown">Goal: 64</button>
-                            <div class="dropdown-content">
-                                <button class="dropdown-element" id="goal-32">32</button>
-                                <button class="dropdown-element" id="goal-64">64</button>
-                                <button class="dropdown-element" id="goal-128">128</button>
-                            </div>
-                        </div>
                         <div class="dropdown">
                             <button class="dropbtn text player1" id="p1color-dropdown">Player 1: unknown</button>
                             <div class="dropdown-content">
@@ -154,11 +147,13 @@
             <p><strong>Gamemodes:</strong>
                 <ul>
                     <li><strong>Solo: </strong>Play against the computer. Try out the impossible difficulty for a challenge!</a></li>
-                    <li><strong>Local multiplayer: </strong>Play against your friends on the same device!</li>
-                    <li><strong>Chess mode: </strong>Adds a clock that runs down during your turn and doesn't reset. If it reaches 0, your opponent wins! This is only available in multiplayer.</li>
+                    <li><strong>Multiplayer: </strong>Play against your friends on the same device!</li>
+                    <li><strong>Chess: </strong>Multiplayer with an added clock that runs down during your turn and doesn't reset. If it reaches 0, your opponent wins!</li>
                 </ul>
             </p>
-            <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
+            <p>What are you waiting for? <a href="#title">Start playing!</a></p>
+            <h2>Credits:</h2>
+            <p>This game was created by Jerry Kurtin and inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>. Have fun :)</p>
         </div>
         
         <script>
@@ -931,52 +926,6 @@
                 setColor("purple", 2);
             }, false);
 
-            // colorblind button (for matt bullock)
-            // document.getElementById("colorblind-button").addEventListener("click", function (){
-            //     console.log("switching all elements between contrasts");
-            //     if (colorblind){
-            //         colorblind = false;
-                    
-            //         // switch all existing colors to normal
-            //         let allp1 = document.getElementsByClassName("player1-contrast");
-            //         while(allp1.length > 0) {
-            //             allp1[0].classList.add("player1");
-            //             allp1[0].classList.remove("player1-contrast")
-            //         }
-            //         let allp2 = document.getElementsByClassName("player2-contrast");
-            //         while(allp2.length > 0) {
-            //             allp2[0].classList.add("player2");
-            //             allp2[0].classList.remove("player2-contrast")
-            //         }
-
-            //         // p1color_id = "player1";
-            //         // p2color_id = "player2";
-            //         document.getElementById("colorblind-button").innerHTML = "High Contrast: Off";
-            //     }
-
-            //     else {
-            //         colorblind = true;
-            //         // switch all existing colors to high-contrast
-            //         let allp1 = document.getElementsByClassName("player1");
-            //         while(allp1.length > 0){
-            //             allp1[0].classList.add("player1-contrast");
-            //             allp1[0].classList.remove("player1")
-            //         }
-            //         let allp2 = document.getElementsByClassName("player2");
-            //         while(allp2.length > 0){
-            //             allp2[0].classList.add("player2-contrast");
-            //             allp2[0].classList.remove("player2")
-            //         }
-
-            //         // p1color_id = "player1-contrast";
-            //         // p2color_id = "player2-contrast";
-            //         document.getElementById("colorblind-button").innerHTML = "High Contrast: On";
-            //     }
-
-            //     console.log("finished switching all elements");
-            //     reset_colors = true;
-            // }, false);
-
             // reset button
             reset_button.addEventListener("click", function (){
                 resetPressed = true;
@@ -984,7 +933,7 @@
             }, false);
 
             // originally, set gamemode to singleplayer
-            document.getElementById("timer-dropdown").classList.add("hidden");
+            time_type = null;
             document.getElementById("time_limit-dropdown").classList.add("hidden");
 
             // set gamemode
@@ -1001,7 +950,6 @@
                 // turn on / off settings that do / don't apply
                 if (document.getElementById("difficulty-dropdown").classList.contains("hidden"))
                     document.getElementById("difficulty-dropdown").classList.remove("hidden");
-                document.getElementById("timer-dropdown").classList.add("hidden");
                 document.getElementById("time_limit-dropdown").classList.add("hidden");
             }, false);
 
@@ -1009,17 +957,34 @@
                 resetPressed = true;
                 update_needed = true;
                 singleplayer = false;
+                time_type = null;
+
                 p1name = "Player 1";
                 p1possessive = "Player 1's";
                 p2name = "Player 2";
                 p2possessive = "Player 2's";
-                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Local multiplayer";
+                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Multiplayer";
 
                 // turn on / off settings that do / don't apply
                 document.getElementById("difficulty-dropdown").classList.add("hidden");
-                if (document.getElementById("timer-dropdown").classList.contains("hidden"))
-                    document.getElementById("timer-dropdown").classList.remove("hidden");
-                if (time_type && document.getElementById("time_limit-dropdown").classList.contains("hidden"))
+                document.getElementById("time_limit-dropdown").classList.add("hidden");
+            }, false);
+
+            document.getElementById("gamemode-chess").addEventListener("click", function (){
+                resetPressed = true;
+                update_needed = true;
+                singleplayer = false;
+                time_type = "chess";
+
+                p1name = "Player 1";
+                p1possessive = "Player 1's";
+                p2name = "Player 2";
+                p2possessive = "Player 2's";
+                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Chess";
+
+                // turn on / off settings that do / don't apply
+                document.getElementById("difficulty-dropdown").classList.add("hidden");
+                if (document.getElementById("time_limit-dropdown").classList.contains("hidden"))
                     document.getElementById("time_limit-dropdown").classList.remove("hidden");
             }, false);
 
@@ -1068,33 +1033,6 @@
                 difficulty = "impossible";
                 document.getElementById("difficulty-dropdown").innerHTML = "Difficulty: Impossible";
             }, false);
-
-            // set the timer
-            document.getElementById("timer-none").addEventListener("click", function (){
-                resetPressed = true;
-                update_needed = true;
-                time_type = null;
-                document.getElementById("timer-dropdown").innerHTML = "Timer: None";
-
-                document.getElementById("time_limit-dropdown").classList.add("hidden")
-
-            }, false);
-
-            document.getElementById("timer-chess").addEventListener("click", function (){
-                resetPressed = true;
-                update_needed = true;
-                time_type = "chess";
-                document.getElementById("timer-dropdown").innerHTML = "Timer: Chess";
-
-                if (document.getElementById("time_limit-dropdown").classList.contains("hidden"))
-                    document.getElementById("time_limit-dropdown").classList.remove("hidden");
-            }, false);
-            // document.getElementById("timer-speed").addEventListener("click", function (){
-            //     resetPressed = true;
-            //     update_needed = true;
-            //     time_type = "speed";
-            //     document.getElementById("timer-dropdown").innerHTML = "Timer: Speed";
-            // }, false);
 
             // set the time limit
             function setTime(new_time){
