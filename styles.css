@@ -265,6 +265,11 @@ a:visited {
     visibility: "hidden";
 }
 
+button.hidden {
+    display: none;
+    visibility: "hidden";
+}
+
 .grid-container {
     position: absolute;
     width: 470px;

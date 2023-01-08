@@ -40,7 +40,7 @@
             <div class="game-container" id="game-container">
                 <div class="endgame-msg text" id="endgame-msg"></div>
                 <div class="endgame-msg text" id="start-msg">
-                    <button id="start-button">Start Timed Game</button>
+                    <button id="start-button">Start game (g)</button>
                 </div>
                 <div class="grid-container">
                     <div class="grid-row">
@@ -80,25 +80,34 @@
                         <div class="dropdown">
                             <button class="dropbtn" id="gamemode-dropdown">Gamemode: Solo</button>
                             <div class="dropdown-content">
-                              <button class="dropdown-element" id="gamemode-singleplayer">Solo</button>
-                              <button class="dropdown-element" id="gamemode-multiplayer">Local Multiplayer</button>
+                                <button class="dropdown-element" id="gamemode-singleplayer">Solo</button>
+                                <button class="dropdown-element" id="gamemode-multiplayer">Local multiplayer</button>
                             </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropbtn" id="difficulty-dropdown">Difficulty: Easy</button>
                             <div class="dropdown-content">
-                              <button class="dropdown-element" id="difficulty-easy">Easy</button>
-                              <button class="dropdown-element" id="difficulty-medium">Medium</button>
-                              <button class="dropdown-element" id="difficulty-hard">Hard</button>
-                              <button class="dropdown-element" id="difficulty-impossible">Impossible</button>
+                                <button class="dropdown-element" id="difficulty-easy">Easy</button>
+                                <button class="dropdown-element" id="difficulty-medium">Medium</button>
+                                <button class="dropdown-element" id="difficulty-hard">Hard</button>
+                                <button class="dropdown-element" id="difficulty-impossible">Impossible</button>
                             </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropbtn" id="timer-dropdown">Timer: None</button>
                             <div class="dropdown-content">
-                              <button class="dropdown-element" id="timer-none">None</button>
-                              <button class="dropdown-element" id="timer-chess">Chess</button>
-                              <!-- <button class="dropdown-element" id="timer-speed">Speed</button> -->
+                                <button class="dropdown-element" id="timer-none">None</button>
+                                <button class="dropdown-element" id="timer-chess">Chess</button>
+                                <!-- <button class="dropdown-element" id="timer-speed">Speed</button> -->
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn" id="time_limit-dropdown">Time: 90 seconds</button>
+                            <div class="dropdown-content">
+                                <!-- <button class="dropdown-element" id="time_limit-5">5</button> -->
+                                <button class="dropdown-element" id="time_limit-30">30</button>
+                                <button class="dropdown-element" id="time_limit-60">60</button>
+                                <button class="dropdown-element" id="time_limit-90">90</button>
                             </div>
                         </div>
                     </div>
@@ -106,27 +115,27 @@
                         <div class="dropdown">
                             <button class="dropbtn" id="goal-dropdown">Goal: 64</button>
                             <div class="dropdown-content">
-                              <button class="dropdown-element" id="goal-32">32</button>
-                              <button class="dropdown-element" id="goal-64">64</button>
-                              <button class="dropdown-element" id="goal-128">128</button>
+                                <button class="dropdown-element" id="goal-32">32</button>
+                                <button class="dropdown-element" id="goal-64">64</button>
+                                <button class="dropdown-element" id="goal-128">128</button>
                             </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropbtn text player1" id="p1color-dropdown">Player 1: unknown</button>
                             <div class="dropdown-content">
-                              <button class="dropdown-element" id="p1color-green">Green</button>
-                              <button class="dropdown-element" id="p1color-blue">Blue</button>
-                              <button class="dropdown-element" id="p1color-salmon">Salmon</button>
-                              <button class="dropdown-element" id="p1color-purple">Purple</button>
+                                <button class="dropdown-element" id="p1color-green">Green</button>
+                                <button class="dropdown-element" id="p1color-blue">Blue</button>
+                                <button class="dropdown-element" id="p1color-salmon">Salmon</button>
+                                <button class="dropdown-element" id="p1color-purple">Purple</button>
                             </div>
                         </div>
                         <div class="dropdown">
                             <button class="dropbtn text player2" id="p2color-dropdown">Player 2: unknown</button>
                             <div class="dropdown-content">
-                              <button class="dropdown-element" id="p2color-green">Green</button>
-                              <button class="dropdown-element" id="p2color-blue">Blue</button>
-                              <button class="dropdown-element" id="p2color-salmon">Salmon</button>
-                              <button class="dropdown-element" id="p2color-purple">Purple</button>
+                                <button class="dropdown-element" id="p2color-green">Green</button>
+                                <button class="dropdown-element" id="p2color-blue">Blue</button>
+                                <button class="dropdown-element" id="p2color-salmon">Salmon</button>
+                                <button class="dropdown-element" id="p2color-purple">Purple</button>
                             </div>
                         </div>
                     </div>
@@ -135,14 +144,14 @@
             <h2>How to play</h2>
             <p>Use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
                 pieces merge and double.  </p>
-            <p><strong>Duel:</strong> The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. 
-                The winner is the first to create the goal piece (64) or the one with the highest score when there are no available moves.
-            </p>
+            <p>The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. </p>
+            <p id="goal-inst">The winner is the first to create the goal piece (64) or the one with the highest score when there are no available moves.</p>
+                
             <p><strong>Gamemodes:</strong>
                 <ul>
                     <li><strong>Solo: </strong>Play against the computer. Try out the impossible difficulty for a challenge!</a></li>
-                    <li><strong>Local Multiplayer: </strong>Play against your friends on the same device!</li>
-                    <li><strong>Chess Mode: </strong>Adds a clock that runs down during your turn and doesn't reset. If it reaches 0, your opponent wins! This is only available in multiplayer.</li>
+                    <li><strong>Local multiplayer: </strong>Play against your friends on the same device!</li>
+                    <li><strong>Chess mode: </strong>Adds a clock that runs down during your turn and doesn't reset. If it reaches 0, your opponent wins! This is only available in multiplayer.</li>
                 </ul>
             </p>
             <p><strong>Credits:</strong> This game is my fresh take on <a href="https://play2048.co">2048</a>. Have fun :) ~Jerry</p>
@@ -164,6 +173,7 @@
             var upPressed = false;
             var downPressed = false;
             var resetPressed = false;
+            var startPressed = false;
             var keypress_active = false;
             var update_needed = false;
             var move_made = false;
@@ -191,9 +201,9 @@
             var time_type = null;    // null, "chess", "speed"
             var time_start = null;
             var time_paused = false;
-            var chess_limit = 90 * 1000;
-            var time_p1 = chess_limit;
-            var time_p2 = chess_limit;
+            var time_limit = 90 * 1000;
+            var time_p1 = time_limit;
+            var time_p2 = time_limit;
 
             // holds the http request object
             var xhr = null;
@@ -827,6 +837,10 @@
                 return ans;
             }
 
+            function round(number, digits=1){
+                return Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits);
+            }
+
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
@@ -842,8 +856,7 @@
 
             // start game button
             document.getElementById("start-button").addEventListener("click", function (){
-                start_msg.classList.add("hidden");
-                time_start = Date.now();
+                startPressed = true;
             }, false);
 
             function setColor(color, player){
@@ -958,10 +971,8 @@
             }, false);
 
             // originally, set gamemode to singleplayer
-            document.getElementById("difficulty-dropdown").style.display = "inherit";
-            document.getElementById("difficulty-dropdown").style.visibility = "visible";
-            document.getElementById("timer-dropdown").style.display = "none";
-            document.getElementById("timer-dropdown").style.visibility = "hidden";
+            document.getElementById("timer-dropdown").classList.add("hidden");
+            document.getElementById("time_limit-dropdown").classList.add("hidden");
 
             // set gamemode
             document.getElementById("gamemode-singleplayer").addEventListener("click", function (){
@@ -975,11 +986,12 @@
                 document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Solo";
 
                 // turn on / off settings that do / don't apply
-                document.getElementById("difficulty-dropdown").style.display = "inherit";
-                document.getElementById("difficulty-dropdown").style.visibility = "visible";
-                document.getElementById("timer-dropdown").style.display = "none";
-                document.getElementById("timer-dropdown").style.visibility = "hidden";
+                if (document.getElementById("difficulty-dropdown").classList.contains("hidden"))
+                    document.getElementById("difficulty-dropdown").classList.remove("hidden");
+                document.getElementById("timer-dropdown").classList.add("hidden");
+                document.getElementById("time_limit-dropdown").classList.add("hidden");
             }, false);
+
             document.getElementById("gamemode-multiplayer").addEventListener("click", function (){
                 resetPressed = true;
                 update_needed = true;
@@ -988,33 +1000,33 @@
                 p1possessive = "Player 1's";
                 p2name = "Player 2";
                 p2possessive = "Player 2's";
-                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Local Multiplayer";
+                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Local multiplayer";
 
                 // turn on / off settings that do / don't apply
-                document.getElementById("difficulty-dropdown").style.display = "none";
-                document.getElementById("difficulty-dropdown").style.visibility = "hidden";
-                document.getElementById("timer-dropdown").style.display = "inherit";
-                document.getElementById("timer-dropdown").style.visibility = "visible";
+                document.getElementById("difficulty-dropdown").classList.add("hidden");
+                if (document.getElementById("timer-dropdown").classList.contains("hidden"))
+                    document.getElementById("timer-dropdown").classList.remove("hidden");
+                if (time_type && document.getElementById("time_limit-dropdown").classList.contains("hidden"))
+                    document.getElementById("time_limit-dropdown").classList.remove("hidden");
             }, false);
+
+            function setGoal(g){
+                goal = g;
+                resetPressed = true;
+                update_needed = true;
+                document.getElementById("goal-dropdown").innerHTML = "Goal: " + g;
+                document.getElementById("goal-inst").innerHTML = "The winner is the first to create the goal piece (" + g + ") or the one with the highest score when there are no available moves."
+            }
 
             // set the target
             document.getElementById("goal-32").addEventListener("click", function (){
-                resetPressed = true;
-                update_needed = true;
-                goal = 32;
-                document.getElementById("goal-dropdown").innerHTML = "Goal: 32";
+                setGoal(32);
             }, false);
             document.getElementById("goal-64").addEventListener("click", function (){
-                resetPressed = true;
-                update_needed = true;
-                goal = 64;
-                document.getElementById("goal-dropdown").innerHTML = "Goal: 64";
+                setGoal(64);
             }, false);
             document.getElementById("goal-128").addEventListener("click", function (){
-                resetPressed = true;
-                update_needed = true;
-                goal = 128;
-                document.getElementById("goal-dropdown").innerHTML = "Goal: 128";
+                setGoal(128);
             }, false);
 
 
@@ -1050,12 +1062,19 @@
                 update_needed = true;
                 time_type = null;
                 document.getElementById("timer-dropdown").innerHTML = "Timer: None";
+
+                document.getElementById("time_limit-dropdown").classList.add("hidden")
+
             }, false);
+
             document.getElementById("timer-chess").addEventListener("click", function (){
                 resetPressed = true;
                 update_needed = true;
                 time_type = "chess";
                 document.getElementById("timer-dropdown").innerHTML = "Timer: Chess";
+
+                if (document.getElementById("time_limit-dropdown").classList.contains("hidden"))
+                    document.getElementById("time_limit-dropdown").classList.remove("hidden");
             }, false);
             // document.getElementById("timer-speed").addEventListener("click", function (){
             //     resetPressed = true;
@@ -1063,6 +1082,27 @@
             //     time_type = "speed";
             //     document.getElementById("timer-dropdown").innerHTML = "Timer: Speed";
             // }, false);
+
+            // set the time limit
+            function setTime(new_time){
+                resetPressed = true;
+                update_needed = true;
+                time_limit = new_time * 1000;
+                document.getElementById("time_limit-dropdown").innerHTML = "Time: " + new_time + " seconds";
+            }
+
+            // document.getElementById("time_limit-5").addEventListener("click", function (){
+            //     setTime(5);
+            // }, false);
+            document.getElementById("time_limit-30").addEventListener("click", function (){
+                setTime(30);
+            }, false);
+            document.getElementById("time_limit-60").addEventListener("click", function (){
+                setTime(60);
+            }, false);
+            document.getElementById("time_limit-90").addEventListener("click", function (){
+                setTime(90);
+            }, false);
 
 
             function keyDownHandler(e) {
@@ -1095,8 +1135,12 @@
                     resetPressed = true;
                 }
 
+                if (e.key == "g" || e.key == "KeyG"){
+                    startPressed = true;
+                }
+
                 // set keypress active variable
-                if (rightPressed || leftPressed || upPressed || downPressed || resetPressed){
+                if (rightPressed || leftPressed || upPressed || downPressed || resetPressed || startPressed){
                     if (!keypress_active){
                         keypress_active = true;
                         update_needed = true;
@@ -1121,8 +1165,11 @@
                 else if (e.key == "r" || e.key == "KeyR"){
                     resetPressed = false;
                 }
+                else if (e.key == "g" || e.key == "KeyG"){
+                    startPressed = false;
+                }
 
-                if (!rightPressed && !leftPressed && !upPressed && !downPressed && !resetPressed){
+                if (!rightPressed && !leftPressed && !upPressed && !downPressed && !resetPressed && !startPressed){
                     if (keypress_active){
                         keypress_active = false;
                     }
@@ -1229,10 +1276,10 @@
 
                     if (time_type == "chess"){
                         time_start = null;
-                        time_p1 = chess_limit;
-                        time_p2 = chess_limit;
-                        document.getElementById("player1-timer").innerHTML = "Time - <strong>" + Math.round((time_p1) / 1000) + "</strong";
-                        document.getElementById("player2-timer").innerHTML = "<strong> " + Math.round((time_p2) / 1000) + "</strong> - Time";
+                        time_p1 = time_limit;
+                        time_p2 = time_limit;
+                        document.getElementById("player1-timer").innerHTML = "Time - <strong>" + round((time_p1) / 1000) + "</strong";
+                        document.getElementById("player2-timer").innerHTML = "<strong> " + round((time_p2) / 1000) + "</strong> - Time";
                         if (start_msg.classList.contains("hidden"))
                             start_msg.classList.remove("hidden");
                     }
@@ -1537,20 +1584,20 @@
                 // update time, check for out-of-time
                 if (!endgame && time_type == "chess" && time_start){
                     if (my_board.player == 0){
-                        let curr_time = (time_p1 - (Date.now() - time_start)) / 1000;
-                        if (curr_time < 0){
+                        let curr_time = round((time_p1 - (Date.now() - time_start)) / 1000);
+                        if (curr_time <= 0){
                             my_board.board_state = "win2";
                             endgame = true;
                         }
-                        document.getElementById("player1-timer").innerHTML = "Time - <strong>" + Math.round((time_p1 - (Date.now() - time_start)) / 1000) + "</strong>";
+                        document.getElementById("player1-timer").innerHTML = "Time - <strong>" + curr_time + "</strong>";
                     }
                     else {
-                        let curr_time = (time_p1 - (Date.now() - time_start)) / 1000;
-                        if (curr_time < 0){
+                        let curr_time = round((time_p2 - (Date.now() - time_start)) / 1000);
+                        if (curr_time <= 0){
                             my_board.board_state = "win1";
                             endgame = true;
                         }
-                        document.getElementById("player2-timer").innerHTML = "<strong>" + Math.round((time_p2 - (Date.now() - time_start)) / 1000) + "</strong> - Time" ;
+                        document.getElementById("player2-timer").innerHTML = "<strong>" + curr_time + "</strong> - Time" ;
                     }
 
                     if (endgame){
@@ -1563,6 +1610,10 @@
                     if (resetPressed){
                         // console.log("resetting");
                         resetBoard();
+                    }
+                    else if (startPressed){
+                        start_msg.classList.add("hidden");
+                        time_start = Date.now();
                     }
 
                     // move made
