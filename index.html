@@ -4,6 +4,9 @@
         <meta charset="utf-8" />
         <link rel="stylesheet" href="styles.css">
         <title>2048 Duel</title>
+        <meta name="description" content="2048 Duel is a new and exciting way to play 2048. This is a simple, yet fresh and addictive take on this classic game. There are many different game modes to try, such as single player against an ai, multiplayer, timed chess mode, and speed mode. This was created as a winter coding project to teach myself frontend development, and it's absolutely free to play! I hope you enjoy!">
+        <!-- <meta name="viewport" content="width=device-width,target-densitydpi=160dpi,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"> -->
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     </head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1J9CBQR5PG"></script>
@@ -25,8 +28,8 @@
                         <div class="board_info-internal text" id="player1-score"></div>
                     </div>
                     <div class="board_info-center">
-                        <button class="board_info-reset bolded" id="reset-button">Reset (r)</button>
-                        <p id="settings-link"><a href="#settings-header">How to play</a></p>
+                        <button class="bolded" id="reset-button">Reset (r)</button>
+                        <p id="settings-link"><a href="#game-instructions">How to play</a></p>
 
                     </div>
                     <div class="board_info-right player2 text text-right">
@@ -105,7 +108,7 @@
                             <button class="dropbtn" id="time_limit-dropdown">Time: 90 seconds</button>
                             <div class="dropdown-content">
                                 <!-- <button class="dropdown-element" id="time_limit-5">5</button> -->
-                                <button class="dropdown-element" id="time_limit-30">30s</button>
+                                <button class="dropdown-element" id="time_limit-30">30</button>
                                 <button class="dropdown-element" id="time_limit-60">60</button>
                                 <button class="dropdown-element" id="time_limit-90">90</button>
                                 <button class="dropdown-element" id="time_limit-120">120</button>
@@ -142,7 +145,7 @@
                     </div>
                 </div>
             </div>
-            <h2>How to play</h2>
+            <h2 id="game-instructions">How to play</h2>
             <p>Use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
                 pieces merge and double.  </p>
             <p>The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your own pieces or two of your opponent's doesn't change the ownership. </p>
@@ -159,6 +162,14 @@
         </div>
         
         <script>
+            // set dimensions
+            // const resizeOps = () => {
+            //     document.documentElement.style.setProperty("--vw", window.innerWidth * 0.01 + "px");
+            // };
+
+            // resizeOps();
+            // window.addEventListener("resize", resizeOps);
+
             // ----------------------- Settings and Setup -----------------------
             var tile_container = document.getElementById("tile-container");
             var game_container = document.getElementById("game-container");
