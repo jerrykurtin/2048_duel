@@ -195,10 +195,13 @@ a:visited {
 
 /* Below Game Settings */
 .settings-container{
-    width: 100%;
+    margin-bottom: 1.5em;
+}
+
+.settings-inner {
     display: flex;
     justify-content: center;
-    margin-bottom: 1.5em;
+    margin-bottom: .5em;
 }
 
 .settings-container button {
@@ -207,7 +210,7 @@ a:visited {
     font-size: 17px;
     margin-left: 2.5px;
     margin-right: 2.5px;
-    padding: 5px 7px;
+    padding: 9px 20px;
     border-radius: 4px;
 }
 
@@ -520,12 +523,24 @@ transform: translate(363px, 0px);
     opacity: 0.9;
 }
 .tile-inner.tile-32.player1 {
-    box-shadow: 0 0 30px 10px rgba(121, 130, 101, 0.4);
+    box-shadow: 0 0 30px 10px rgba(127,160,60, 0.4);
+}
+.tile-inner.tile-32.player2 {
+    box-shadow: 0 0 30px 10px rgba(242,79,70, 0.4);
+}
+.tile-inner.tile-32.green {
+    box-shadow: 0 0 30px 10px rgba(127, 160, 60, 0.4);
+}
+.tile-inner.tile-32.blue {
+    box-shadow: 0 0 30px 10px rgba(0,110,159, 0.4);
+}
+.tile-inner.tile-32.salmon {
+    box-shadow: 0 0 30px 10px rgba(242,79,70, 0.4);
+}
+.tile-inner.tile-32.purple {
+    box-shadow: 0 0 30px 10px rgba(133,102,179, 0.4);
 }
 
-.tile-inner.tile-32.player2 {
-    box-shadow: 0 0 30px 10px rgba(203, 141, 126, 0.4);
-}
 
 .tile-inner.tile-32.player1-contrast {
     box-shadow: 0 0 30px 10px rgba(0, 110, 159, 0.4);
@@ -535,15 +550,31 @@ transform: translate(363px, 0px);
     box-shadow: 0 0 30px 10px rgba(242,79,70, 0.4);
 }
 
+
+
+
 .tile-inner.tile-64 {
     opacity: 1;
 }
 .tile-inner.tile-64.player1 {
-    box-shadow: 0 0 30px 10px rgba(121, 130, 101, 0.6);
+    box-shadow: 0 0 30px 10px rgba(127,160,60, 0.6);
+}
+.tile-inner.tile-64.green {
+    box-shadow: 0 0 30px 10px rgba(127, 160, 60, 0.6);
+}
+.tile-inner.tile-64.blue {
+    box-shadow: 0 0 30px 10px rgba(0,110,159, 0.6);
+}
+.tile-inner.tile-64.salmon {
+    box-shadow: 0 0 30px 10px rgba(242,79,70, 0.6);
+}
+.tile-inner.tile-64.purple {
+    box-shadow: 0 0 30px 10px rgba(133,102,179, 0.6);
 }
 
+
 .tile-inner.tile-64.player2 {
-    box-shadow: 0 0 30px 10px rgba(203, 141, 126, 0.6);
+    box-shadow: 0 0 30px 10px rgba(242,79,70, 0.6);
 }
 
 .tile-inner.tile-64.player1-contrast {
@@ -558,11 +589,24 @@ transform: translate(363px, 0px);
     opacity: 1;
 }
 .tile-inner.tile-128.player1 {
-    box-shadow: 0 0 30px 10px rgba(121, 130, 101, 0.8);
+    box-shadow: 0 0 30px 10px rgba(127,160,60, 0.8);
+}
+.tile-inner.tile-128.green {
+    box-shadow: 0 0 30px 10px rgba(127, 160, 60, 0.8);
+}
+.tile-inner.tile-128.blue {
+    box-shadow: 0 0 30px 10px rgba(0,110,159, 0.8);
+}
+.tile-inner.tile-128.salmon {
+    box-shadow: 0 0 30px 10px rgba(242,79,70, 0.8);
+}
+.tile-inner.tile-128.purple {
+    box-shadow: 0 0 30px 10px rgba(133,102,179, 0.8);
 }
 
+
 .tile-inner.tile-128.player2 {
-    box-shadow: 0 0 30px 10px rgba(203, 141, 126, 0.8);
+    box-shadow: 0 0 30px 10px rgba(242,79,70, 0.8);
 }
 
 .tile-inner.tile-128.player1-contrast {
@@ -593,17 +637,43 @@ transform: translate(363px, 0px);
 }
 
 .player1.background {
-    background: rgb(121, 130, 101);
-    /* opacity: 0.5; */
+    background: rgb(127,160,60);
+}
+.green.background {
+    background: rgb(127, 160, 60);
+}
+.blue.background {
+    background: rgb(0,110,159);
+}
+.salmon.background {
+    background: rgb(242,79,70);
+}
+.purple.background {
+    background: rgb(133,102,179);
 }
 
 .player1-contrast.background{
     background: rgb(0,110,159);
-    /* opacity: 0.5; */
 }
 
 .player1.text {
-    color: rgb(121, 130, 101);
+    color: rgb(127,160,60);
+    opacity: 0.75;
+}
+.green.text {
+    color: rgb(127, 160, 60);
+    opacity: 0.75;
+}
+.blue.text {
+    color: rgb(0,110,159);
+    opacity: 0.75;
+}
+.salmon.text {
+    color: rgb(242,79,70);
+    opacity: 0.75;
+}
+.purple.text {
+    color: rgb(133,102,179);
     opacity: 0.75;
 }
 
@@ -613,7 +683,7 @@ transform: translate(363px, 0px);
 }
 
 .player2.background{
-    background: rgb(203, 141, 126);
+    background: rgb(242,79,70);
     /* opacity: 0.5; */
 }
 
@@ -623,7 +693,7 @@ transform: translate(363px, 0px);
 }
 
 .player2.text {
-    color: rgb(203, 141, 126);
+    color: rgb(242,79,70);
     opacity: 0.75;
 }
 
