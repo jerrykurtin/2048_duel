@@ -1199,9 +1199,8 @@
                 initialY = e.touches[0].pageY;
                 
                 // only allow swipes that start inside the game board
-                // temp fix: don't check against right border
                 let position = game_container.getBoundingClientRect();
-                if (initialX > position.left && initialY > position.top && initialY < position.bottom)
+                if (initialX > position.left && initialX < position.right && initialY > position.top && initialY < position.bottom)
                     keypress_active = true;
             }
 
