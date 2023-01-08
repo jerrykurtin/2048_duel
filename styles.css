@@ -8,7 +8,7 @@
 html, body {
     margin: auto auto;
     float: none !important;
-    max-width: 750px;
+    max-width: 532px;
     background: #faf8ef;
     color: #776e65;
     font-family: 'Arimo', sans-serif;
@@ -100,10 +100,13 @@ a:visited {
 }
 
 .container {
-    width: 500px;
-    margin: 0 auto;
-    margin-top: 30px;
-    margin-bottom: 90px;
+    /* width: 500px; */
+    width: 94%;
+    margin: 3%;
+    /* margin-top: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 90px; */
 }
 
 /* Title settings */
@@ -127,7 +130,7 @@ a:visited {
     border-radius: 6px;
     background-color:rgb(238, 238, 238);
     padding: 10px;
-    width: 27%;
+    width: 30%;
     float: left;
     margin-left: 5%;
     margin-right: 1.5%;
@@ -137,7 +140,7 @@ a:visited {
     border-radius: 6px;
     background-color:rgb(238, 238, 238);
     padding: 10px;
-    width: 27%;
+    width: 30%;
     float: left;
     margin-left: 1.5%;
     margin-right: 5%;
@@ -148,14 +151,15 @@ a:visited {
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 33%;
+    width: 27%;
     float: left;
 }
 
 #reset-button {
-    padding: 8px 9px;
+    padding: 5% 1%;
     border-radius: 6px;
-    margin-bottom: 5px;
+    margin-bottom: 10%;
+    width: 100%;
 }
 
 #settings-link {
@@ -217,17 +221,16 @@ a:visited {
 
 /* Game Grid Settings */
 .game-container {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 1%;
+    margin-bottom: 1%;
     position: relative;
-    padding: 15px;
+    padding: 2.82vw;
     cursor: default;
     -ms-touch-action: none;
     touch-action: none;
     background: rgb(238, 238, 238);
-    border-radius: 6px;
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    height: 94vw;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
