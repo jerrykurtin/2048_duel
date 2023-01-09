@@ -680,7 +680,7 @@
                     // sorts in reverse order
                     dirs.sort(function(a,b){return b[0] - a[0]})
                     // remove all -infinity values
-                    while (dirs[dirs.length - 1][0] == -Number.MAX_VALUE)
+                    while (dirs.length > 0 && dirs[dirs.length - 1][0] == -Number.MAX_VALUE)
                         dirs.pop();
                     return dirs;
                 }
@@ -1252,17 +1252,17 @@
 
                 // DEBUG
                 // my_board.board = [
-                //     [2, 2, 0, 0],
-                //     [2, 0, 0, 2],
-                //     [2, 4, 2, 0],
-                //     [0, 0, 2, 2]
+                //     [32, 32, 8, 0],
+                //     [2, 4, 2, 2],
+                //     [4, 2, 4, 4],
+                //     [2, 4, 16, 16]
                 // ]
 
                 // my_board.owner = [
-                //     [1, 1, -1, -1],
-                //     [1, -1, -1, 1],
-                //     [1, 1, 1, -1],
-                //     [-1, -1, 0, 0]
+                //     [0, 0, 1, -1],
+                //     [1, 1, 1, 1],
+                //     [1, 1, 1, 1],
+                //     [1, 1, 0, 0]
                 // ]
 
                 // console.log("before move, board is\n" + print_grid(my_board.board));
@@ -1600,7 +1600,7 @@
 
                             // search for the best possible moves, return in sorted order
                             var dirs = my_board.explore_moves();
-                            if (!dirs){
+                            if (!dirs || dirs.length == 0){
                                 dirs = [[0, "up"],[ 0, "down"],[ 0, "left"],[ 0, "right"]]
                             }
                             var options = [], costs = [];
@@ -1613,7 +1613,7 @@
                             if (difficulty == "easy")
                                 weight = [40, 30, 20, 10];
                             else if (difficulty == "medium")
-                                weight = [60, 30, 5, 5];
+                                weight = [50, 30, 15, 5];
                             else if (difficulty == "hard")
                                 weight = [90, 5, 3, 2];
                             else if (difficulty == "impossible")
