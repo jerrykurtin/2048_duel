@@ -1250,20 +1250,7 @@
                 setColor(p1color_id, 1);
                 setColor(p2color_id, 2);
 
-                // DEBUG
-                // my_board.board = [
-                //     [32, 32, 8, 0],
-                //     [2, 4, 2, 2],
-                //     [4, 2, 4, 4],
-                //     [2, 4, 16, 16]
-                // ]
-
-                // my_board.owner = [
-                //     [0, 0, 1, -1],
-                //     [1, 1, 1, 1],
-                //     [1, 1, 1, 1],
-                //     [1, 1, 0, 0]
-                // ]
+                
 
                 // console.log("before move, board is\n" + print_grid(my_board.board));
                 // var actions = my_board.move("left");
@@ -1581,6 +1568,24 @@
                         console.log("player is making move " + move_type);
                         makeMove(move_type);
 
+                        // DEBUG
+                        // console.log("DEBUG: changing the board to debug");
+                        // my_board.board = [
+                        //     [0, 0, 0, 4],
+                        //     [0, 0, 0, 4],
+                        //     [0, 0, 0, 0],
+                        //     [0, 0, 2, 2]
+                        // ]
+
+                        // my_board.owner = [
+                        //     [-1, -1, -1, 0],
+                        //     [-1, -1, -1, 0],
+                        //     [-1, -1, -1, -1],
+                        //     [-1, -1, 0, 1]
+                        // ]
+                        // my_board.player = 1;
+                        // drawBoard();
+
                         // switch time counter
                         if (!singleplayer && my_board.board_state == "continue"){
                             // note: switched bc player hasn't been updated yet
@@ -1638,7 +1643,7 @@
                                 }
                                 } while (my_board.board_state == "no_change");
 
-                                sleep(1750)
+                                sleep(1500)
                                     .then(() => cpumove())
                                     .then(() => awaiting_cpu = false);
                             }
