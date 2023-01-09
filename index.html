@@ -4,8 +4,7 @@
         <meta charset="utf-8" />
         <link rel="stylesheet" href="styles.css">
         <title>2048 Duel</title>
-        <meta name="description" content="2048 Duel is a new and exciting way to play 2048. This is a simple, yet fresh and addictive take on this classic game. There are many different game modes to try, such as single player against an ai, multiplayer, timed chess mode, and speed mode. This was created as a winter coding project to teach myself frontend development, and it's absolutely free to play! I hope you enjoy!">
-        <!-- <meta name="viewport" content="width=device-width,target-densitydpi=160dpi,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"> -->
+        <meta name="description" content="Play against your friends or battle an AI in this exciting new take on classic 2048!">
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     </head>
     <!-- Google tag (gtag.js) -->
@@ -344,9 +343,11 @@
                             if (this.board[row][col] == this.win_condition){
                                 if (this.owner[row][col] == 0){
                                     this.board_state = "win1";
+                                    this.p1score += this.board[row][col];
                                 }
                                 else{
                                     this.board_state = "win2";
+                                    this.p2score += this.board[row][col];
                                 }
                             }
 
