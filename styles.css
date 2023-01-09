@@ -43,6 +43,7 @@ ul {
 }
 
 li {
+    line-height: 1.5;
     margin-bottom: 1.8vw;
 }
 
@@ -136,6 +137,10 @@ a:visited {
 }
 
 /* Peripherals */
+.subtitle {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
 
 .container {
     /* width: 500px; */
