@@ -1027,7 +1027,7 @@ body {
 /* dropdown: w3schools */
 .dropbtn {
     border-width: 1px 1px 1px 3px;
-    /* border-radius: 4px; */
+    border-radius: 0px;
     font-weight: normal;
 }
 
