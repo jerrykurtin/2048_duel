@@ -86,6 +86,7 @@
                                 <button class="dropdown-element" id="gamemode-singleplayer">Solo</button>
                                 <button class="dropdown-element" id="gamemode-multiplayer">Multiplayer</button>
                                 <button class="dropdown-element" id="gamemode-chess">Chess</button>
+                                <button class="dropdown-element" id="gamemode-speed">Speed</button>
                             </div>
                         </div>
                         <div class="dropdown">
@@ -115,6 +116,16 @@
                                 <button class="dropdown-element" id="time_limit-120">120</button>
                             </div>
                         </div>
+                        <div class="dropdown">
+                            <button class="dropbtn" id="time_limit_speed-dropdown">Time: 5 seconds</button>
+                            <div class="dropdown-content">
+                                <!-- <button class="dropdown-element" id="time_limit-5">5</button> -->
+                                <button class="dropdown-element" id="time_limit_speed-1">1</button>
+                                <button class="dropdown-element" id="time_limit_speed-3">3</button>
+                                <button class="dropdown-element" id="time_limit_speed-5">5</button>
+                                <button class="dropdown-element" id="time_limit_speed-10">10</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="settings-inner">
                         <div class="dropdown">
@@ -139,7 +150,7 @@
                 </div>
             </div>
             <h2 id="game-instructions">How to play</h2>
-            <p>Use the arrow keys (swipe for mobile) to move the pieces. When pieces with the same number move into each other, the
+            <p>Use the arrow keys (swipe for mobile) to move the pieces. For desktop multiplayer, player 1 moves with the arrow keys, and player 2 uses WASD. When pieces with the same number move into each other, the
                 pieces merge and double.  </p>
             <p>The two players take turns. On your turn, merge one of your pieces with one of your opponents to steal the piece. Merging two of your pieces (or your opponents') doesn't change the ownership.</p>
             <p id="goal-inst">The winner is the first to create the goal piece (64) or the one with the highest score when there are no available moves.</p>
@@ -149,6 +160,8 @@
                     <li><strong>Solo: </strong>Play against the computer. Try out the impossible difficulty for a challenge!</a></li>
                     <li><strong>Multiplayer: </strong>Play against your friends on the same device!</li>
                     <li><strong>Chess: </strong>Multiplayer with an added clock that runs down during your turn and doesn't reset. If it reaches 0, your opponent wins!</li>
+                    <li><strong>Speed: </strong>Multiplayer with an added clock that resets every turn. If it reaches 0, the computer moves for you.</li>
+
                 </ul>
             </p>
             <p>What are you waiting for? <a href="#title">Start playing!</a></p>
@@ -210,7 +223,7 @@
             var time_type = null;    // null, "chess", "speed"
             var time_start = null;
             var time_paused = false;
-            var time_limit = 90 * 1000;
+            var time_limit = null;
             var time_p1 = time_limit;
             var time_p2 = time_limit;
 
@@ -849,7 +862,7 @@
             }
 
             function round(number, digits=1){
-                return Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits);
+                return (Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)).toFixed(digits);
             }
 
             function sleep(ms) {
@@ -939,12 +952,16 @@
             // originally, set gamemode to singleplayer
             time_type = null;
             document.getElementById("time_limit-dropdown").classList.add("hidden");
+            document.getElementById("time_limit_speed-dropdown").classList.add("hidden");
+
+
 
             // set gamemode
             document.getElementById("gamemode-singleplayer").addEventListener("click", function (){
                 resetPressed = true;
                 update_needed = true;
                 singleplayer = true;
+                time_type = null;
                 p1name = "You";
                 p1possessive = "Your";
                 p2name = "CPU";
@@ -955,6 +972,7 @@
                 if (document.getElementById("difficulty-dropdown").classList.contains("hidden"))
                     document.getElementById("difficulty-dropdown").classList.remove("hidden");
                 document.getElementById("time_limit-dropdown").classList.add("hidden");
+                document.getElementById("time_limit_speed-dropdown").classList.add("hidden");
             }, false);
 
             document.getElementById("gamemode-multiplayer").addEventListener("click", function (){
@@ -972,6 +990,7 @@
                 // turn on / off settings that do / don't apply
                 document.getElementById("difficulty-dropdown").classList.add("hidden");
                 document.getElementById("time_limit-dropdown").classList.add("hidden");
+                document.getElementById("time_limit_speed-dropdown").classList.add("hidden");
             }, false);
 
             document.getElementById("gamemode-chess").addEventListener("click", function (){
@@ -979,6 +998,7 @@
                 update_needed = true;
                 singleplayer = false;
                 time_type = "chess";
+                setTime(90);
 
                 p1name = "Player 1";
                 p1possessive = "Player 1's";
@@ -990,6 +1010,30 @@
                 document.getElementById("difficulty-dropdown").classList.add("hidden");
                 if (document.getElementById("time_limit-dropdown").classList.contains("hidden"))
                     document.getElementById("time_limit-dropdown").classList.remove("hidden");
+                document.getElementById("time_limit_speed-dropdown").classList.add("hidden");
+            }, false);
+
+            document.getElementById("gamemode-speed").addEventListener("click", function (){
+                resetPressed = true;
+                update_needed = true;
+                singleplayer = false;
+                time_type = "speed";
+                setTime(5);
+                console.log("should have set time limit to 5");
+                console.log("time limit: " + time_limit);
+
+                p1name = "Player 1";
+                p1possessive = "Player 1's";
+                p2name = "Player 2";
+                p2possessive = "Player 2's";
+                document.getElementById("gamemode-dropdown").innerHTML = "Gamemode: Speed";
+
+                // turn on / off settings that do / don't apply
+                document.getElementById("difficulty-dropdown").classList.add("hidden");
+                document.getElementById("time_limit-dropdown").classList.add("hidden");
+                if (document.getElementById("time_limit_speed-dropdown").classList.contains("hidden"))
+                    document.getElementById("time_limit_speed-dropdown").classList.remove("hidden");
+
             }, false);
 
             function setGoal(g){
@@ -1062,6 +1106,29 @@
                 setTime(120);
             }, false);
 
+            function setTimeSpeed(new_time){
+                resetPressed = true;
+                update_needed = true;
+                time_limit = new_time * 1000;
+                document.getElementById("time_limit_speed-dropdown").innerHTML = "Time: " + new_time + " seconds";
+            }
+
+            document.getElementById("time_limit_speed-1").addEventListener("click", function (){
+                setTimeSpeed(1);
+                document.getElementById("time_limit_speed-dropdown").innerHTML = "Time: 1 second";
+
+            }, false);
+            document.getElementById("time_limit_speed-3").addEventListener("click", function (){
+                setTimeSpeed(3);
+            }, false);
+            document.getElementById("time_limit_speed-5").addEventListener("click", function (){
+                setTimeSpeed(5);
+            }, false);
+            document.getElementById("time_limit_speed-10").addEventListener("click", function (){
+                setTimeSpeed(10);
+            }, false);
+
+
 
             function keyDownHandler(e) {
 
@@ -1071,21 +1138,65 @@
                 }   
 
                 if (!awaiting_cpu && Date.now()){
-                    if(e.key == "Right" || e.key == "ArrowRight" || e.key == "d" || e.key == "KeyD") {
-                        rightPressed = true;
-                        move_type = "right";
+                    // standard controls
+                    if (singleplayer){
+                        if(e.key == "Right" || e.key == "ArrowRight" || e.key == "d" || e.key == "KeyD") {
+                            rightPressed = true;
+                            move_type = "right";
+                        }
+                        else if(e.key == "Left" || e.key == "ArrowLeft" || e.key == "a" || e.key == "KeyA") {
+                            leftPressed = true;
+                            move_type = "left";
+                        }
+                        else if (e.key == "Up" || e.key == "ArrowUp" || e.key == "w" || e.key == "KeyW"){
+                            upPressed = true;
+                            move_type = "up";
+                        }
+                        else if (e.key == "Down" || e.key == "ArrowDown" || e.key == "s" || e.key == "KeyS"){
+                            downPressed = true;
+                            move_type = "down";
+                        }
                     }
-                    else if(e.key == "Left" || e.key == "ArrowLeft" || e.key == "a" || e.key == "KeyA") {
-                        leftPressed = true;
-                        move_type = "left";
-                    }
-                    else if (e.key == "Up" || e.key == "ArrowUp" || e.key == "w" || e.key == "KeyW"){
-                        upPressed = true;
-                        move_type = "up";
-                    }
-                    else if (e.key == "Down" || e.key == "ArrowDown" || e.key == "s" || e.key == "KeyS"){
-                        downPressed = true;
-                        move_type = "down";
+
+                    // multiplayer controls
+                    else {
+                        if (my_board.player == 0) {
+                            if(e.key == "Right" || e.key == "ArrowRight") {
+                                rightPressed = true;
+                                move_type = "right";
+                            }
+                            else if(e.key == "Left" || e.key == "ArrowLeft") {
+                                leftPressed = true;
+                                move_type = "left";
+                            }
+                            else if (e.key == "Up" || e.key == "ArrowUp"){
+                                upPressed = true;
+                                move_type = "up";
+                            }
+                            else if (e.key == "Down" || e.key == "ArrowDown"){
+                                downPressed = true;
+                                move_type = "down";
+                            }
+                        }
+
+                        else {
+                            if(e.key == "d" || e.key == "KeyD") {
+                                rightPressed = true;
+                                move_type = "right";
+                            }
+                            else if(e.key == "a" || e.key == "KeyA") {
+                                leftPressed = true;
+                                move_type = "left";
+                            }
+                            else if (e.key == "w" || e.key == "KeyW"){
+                                upPressed = true;
+                                move_type = "up";
+                            }
+                            else if (e.key == "s" || e.key == "KeyS"){
+                                downPressed = true;
+                                move_type = "down";
+                            }
+                        }
                     }
                 }
 
@@ -1192,6 +1303,9 @@
 
                 var actions = my_board.move(direction);
 
+                console.log("after making move, board is\n" + print_grid(my_board.board));
+
+
                 // check for endgame
                 if (my_board.board_state != "continue" && my_board.board_state != "no_change"){
                     console.log("endgame reached");
@@ -1231,7 +1345,7 @@
                     document.getElementById("player2-timer").style.visibility = "visible";
                     document.getElementById("player2-timer").style.display = "inherit";
 
-                    if (time_type == "chess"){
+                    if (time_type){
                         time_start = null;
                         time_p1 = time_limit;
                         time_p2 = time_limit;
@@ -1249,13 +1363,6 @@
                 // make sure that the colors are correct
                 setColor(p1color_id, 1);
                 setColor(p2color_id, 2);
-
-                
-
-                // console.log("before move, board is\n" + print_grid(my_board.board));
-                // var actions = my_board.move("left");
-                // console.log("after left move, board is\n" +  print_grid(my_board.board));
-                // console.log("actions: ", actions);
 
                 drawBoard();
             }
@@ -1275,8 +1382,6 @@
                 }
 
                 console.log("drawBoard()");
-                console.log("board:\n" + print_grid(my_board.board));
-                console.log("actions:", actions);
 
                 if (!my_board){
                     console.log("ERROR: board not received in drawBoard");
@@ -1315,7 +1420,7 @@
                                 console.log("ERROR: cannot find a square to move from " + oldPos + " to " + newPos);
                             else{
                                 movedSquare = movedSquare[0];
-                                console.log("moving square " + movedSquare.firstChild.innerHTML + " from " + oldPos + " to " + newPos);
+                                // console.log("moving square " + movedSquare.firstChild.innerHTML + " from " + oldPos + " to " + newPos);
                                 movedSquare.classList.remove(oldPos);
                                 if (movedSquare.classList.contains("tile-new"))
                                     movedSquare.classList.remove("tile-new");
@@ -1354,11 +1459,11 @@
                         if (actions && actions[1][row][col] == true){
                             const elements = document.getElementsByClassName("position-"+ (row + 1) + "-" + (col + 1));
                             const rem_elements = document.getElementsByClassName("deleted");
-                            console.log("trying to remove " + elements.length + " squares at " + (row + 1) + ", " + (col + 1));
+                            // console.log("trying to remove " + elements.length + " squares at " + (row + 1) + ", " + (col + 1));
 
                             var transitionEndHandler = function () {
                                 while (rem_elements.length > 0){
-                                    console.log("removing a square");
+                                    // consoles.log("removing a square");
                                     // rem_elements[0].remove();
                                     rem_elements[0].parentNode.removeChild(rem_elements[0]);
                                 }
@@ -1373,7 +1478,7 @@
                         
                         // brand-new square
                         if (!actions && text != 0 || actions && actions[2][row][col]){
-                            console.log("new square at " + (row + 1) + ", " + (col + 1) + " is " + text);
+                            // console.log("new square at " + (row + 1) + ", " + (col + 1) + " is " + text);
                             const newSquareWrapper = document.createElement("div");
                             newSquareWrapper.classList.add("tile");
                             newSquareWrapper.classList.add("tile-new");
@@ -1521,28 +1626,53 @@
 
             function mainLoop(){
 
-                // ensure that the board is up-to-date
+                // ensure that the board is up-to-date by checking after 100 ms
                 if (draw_time && Date.now() - draw_time > 100){
                     verifyBoard();
                     draw_time = null;
                 }
 
-                // update time, check for out-of-time
-                if (!endgame && time_type == "chess" && time_start){
+                // update time, check the time limit for loss
+                if (!endgame && time_type && time_start){
                     if (my_board.player == 0){
                         let curr_time = round((time_p1 - (Date.now() - time_start)) / 1000);
+
+                        // out of time, outcome differs for different game modes
                         if (curr_time <= 0){
-                            my_board.board_state = "win2";
-                            endgame = true;
+                            if (time_type == "chess"){
+                                my_board.board_state = "win2";
+                                endgame = true;
+                            }
+
+                            else if (time_type == "speed"){
+                                update_needed = true;
+                                move_made = true;
+                                move_type = randchoice(cardinal_moves);
+                                console.log("selecting randomly for player 1");
+                            }
                         }
+
                         document.getElementById("player1-timer").innerHTML = "Time - <strong>" + curr_time + "</strong>";
                     }
+
                     else {
                         let curr_time = round((time_p2 - (Date.now() - time_start)) / 1000);
+                        
+                        // out of time, outcome differs for different game modes
                         if (curr_time <= 0){
-                            my_board.board_state = "win1";
-                            endgame = true;
+                            if (time_type == "chess"){
+                                my_board.board_state = "win1";
+                                endgame = true;
+                            }
+
+                            else if (time_type == "speed"){
+                                update_needed = true;
+                                move_made = true;
+                                move_type = randchoice(cardinal_moves);
+                                console.log("selecting randomly for player 2");
+                            }
                         }
+
                         document.getElementById("player2-timer").innerHTML = "<strong>" + curr_time + "</strong> - Time" ;
                     }
 
@@ -1567,6 +1697,7 @@
                     else if (!endgame && move_made && !awaiting_cpu && (!time_type || time_start)){
                         console.log("player is making move " + move_type);
                         makeMove(move_type);
+                        move_made = false;
 
                         // DEBUG
                         // console.log("DEBUG: changing the board to debug");
@@ -1587,16 +1718,30 @@
                         // drawBoard();
 
                         // switch time counter
-                        if (!singleplayer && my_board.board_state == "continue"){
-                            // note: switched bc player hasn't been updated yet
-                            if (my_board.player == 1){
-                                time_p1 -= (Date.now() - time_start);
+                        if (my_board.board_state == "continue"){
+                            if (time_type == "chess"){
+                                // note: switched bc player hasn't been updated yet
+                                if (my_board.player == 1){
+                                    time_p1 -= (Date.now() - time_start);
+                                }
+                                else {
+                                    time_p2 -= (Date.now() - time_start);  
+                                }
                             }
-                            else {
-                                time_p2 -= (Date.now() - time_start);  
+                            else if (time_type == "speed"){
+                                console.log("resetting timer")
+                                if (my_board.player == 1){
+                                    time_p1 = time_limit;
+                                    document.getElementById("player1-timer").innerHTML = "Time - <strong>" + round(time_p1 / 1000) + "</strong>";
+                                }
+                                else{
+                                    time_p2 = time_limit;
+                                    document.getElementById("player2-timer").innerHTML = "<strong>" + round(time_p2 / 1000) + "</strong> - Time";
+                                }
                             }
                             time_start = Date.now();
                         }
+
 
                         // cpu move
                         if (singleplayer && my_board.board_state == "continue"){
