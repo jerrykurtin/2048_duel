@@ -85,8 +85,8 @@
                             <div class="dropdown-content">
                                 <button class="dropdown-element" id="gamemode-singleplayer">Solo</button>
                                 <button class="dropdown-element" id="gamemode-multiplayer">Multiplayer</button>
-                                <button class="dropdown-element" id="gamemode-chess">Chess</button>
-                                <button class="dropdown-element" id="gamemode-speed">Speed</button>
+                                <button class="dropdown-element" id="gamemode-chess">Mult: Chess</button>
+                                <button class="dropdown-element" id="gamemode-speed">Mult: Speed</button>
                             </div>
                         </div>
                         <div class="dropdown">
@@ -874,9 +874,9 @@
             // --------------------- Listeners and Handlers ---------------------
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
-            document.addEventListener("touchstart", touchstartHandler, false);
-            document.addEventListener("touchmove", touchmoveHandler, false);
-            document.addEventListener("touchend", touchendHandler, false);
+            game_container.addEventListener("touchstart", touchstartHandler, false);
+            game_container.addEventListener("touchmove", touchmoveHandler, false);
+            game_container.addEventListener("touchend", touchendHandler, false);
 
             // start game button
             document.getElementById("start-button").addEventListener("click", function (){
@@ -1250,11 +1250,15 @@
             function touchstartHandler(e) {
                 initialX = e.touches[0].pageX;
                 initialY = e.touches[0].pageY;
+
+
+                // e.preventDefault();
+                keypress_active = true;
                 
                 // only allow swipes that start inside the game board
-                let position = game_container.getBoundingClientRect();
-                if (initialX > position.left && initialX < position.right && initialY > position.top && initialY < position.bottom)
-                    keypress_active = true;
+                // let position = game_container.getBoundingClientRect();
+                // if (initialX > position.left && initialX < position.right && initialY > position.top && initialY < position.bottom)
+                //     keypress_active = true;
             }
 
             function touchmoveHandler(e) {
@@ -1265,6 +1269,7 @@
                 let ydiff = e.touches[0].pageY - initialY;
 
                 if (keypress_active){
+                    e.preventDefault();
                     // left or right move
                     if (Math.abs(xdiff) > touchThreshold){
                         if (xdiff < 0)
@@ -1761,11 +1766,11 @@
                             console.log("options: " + options + "\, costs (negative of differential for player 2): " + costs);
                             
                             if (difficulty == "easy")
-                                weight = [40, 30, 20, 10];
+                                weight = [30, 30, 20, 20];
                             else if (difficulty == "medium")
-                                weight = [50, 30, 15, 5];
+                                weight = [40, 30, 20, 10];
                             else if (difficulty == "hard")
-                                weight = [90, 5, 3, 2];
+                                weight = [60, 30, 7, 3];
                             else if (difficulty == "impossible")
                                 weight = [100, 0, 0, 0];
                             else
