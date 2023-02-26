@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+/* Note: sizing is set for vw with a screen width of 94% (3% margin on each side) */
+/* Page-wide settings */
+* {
+    box-sizing: border-box;
+}
+
+.App {
+    /* width: 500px; */
+    width: 90%;
+    margin: 5%;
+    margin-top: 0;
+}
+
+html,
+body {
+    margin: auto auto;
+    float: none !important;
+    max-width: 532px;
+    background: #faf8ef;
+    color: #776e65;
+    font-family: 'Arimo', sans-serif;
+    font-size: 3.24vw;
+    position: relative;
+
+    --p1color: var(--bluecolor);
+    --p2color: var(--salmoncolor);
+    --greencolor: 127, 160, 60;
+    --bluecolor: 0, 110, 159;
+    --salmoncolor: 242, 79, 70;
+    --purplecolor: 133, 102, 179;
+}
+
+/* General settings */
+h1 {
+    font-size: 13.5vw;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 5.04vw;
+    font-weight: bold;
+    margin-top: 2.52vw;
+    /* margin-bottom: 2.52vw; */
+}
+
+p {
+    margin-bottom: 0;
+    display: block;
+    line-height: 1.5;
+}
+
+ul {
+    margin-top: 0;
+}
+
+li {
+    line-height: 1.5;
+    margin-bottom: 1.8vw;
+}
+
+button {
+    background-color: #FFFFFF;
+    border: 1px solid #776e65;
+    box-sizing: border-box;
+    color: #776e65;
+    cursor: pointer;
+    display: inline-block;
+
+    border-radius: 1.44vw;
+    font-size: 2.88vw;
+    line-height: 3.6vw;
+    padding: 1.26vw 1.8vw;
+
+    outline: none;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: box-shadow .2s, -ms-transform .1s, -webkit-transform .1s, transform .1s;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
+}
+
+/* button:focus-visible {
+    box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+    transition: box-shadow .2s;
+  } */
+
+button:active {
+    background-color: #F7F7F7;
+    transform: scale(.96);
+}
+
+button:disabled {
+    border-color: #DDDDDD;
+    color: #DDDDDD;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+a:link {
+    color: #776e65;
+    font-weight: bold;
+}
+
+a:visited {
+    color: #776e65;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 520px) {
+  html,
+  body {
+      font-size: 18px;
+  }
+
+  h1 {
+      font-size: 75px;
+  }
+
+  h2 {
+      font-size: 28px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+  }
+
+  p {
+      margin-bottom: 0;
+  }
+
+  ul {
+      margin-top: 0;
+  }
+
+  li {
+      margin-bottom: 10px;
+  }
+
+  button {
+      border: 1px solid #776e65;
+      border-radius: 8px;
+      font-size: 16px;
+      line-height: 20px;
+      padding: 7px 10px;
+  }
+}
+
+/* Modifiers */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
