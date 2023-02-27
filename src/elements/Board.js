@@ -1,7 +1,21 @@
-import React from 'react'
+import React, { useState, useRef } from 'react';
 import "./Board.css"
+import { CSSTransition } from 'react-transition-group';
+import Example from "./Example.js";
+
+
 
 function Board({p1color, p2color, board, owner, actions}) {
+    const [showButton, setShowButton] = useState(true);
+
+    function dummyCallback(){
+        console.log("CALLBACK REACHED");
+    }
+
+    function buttonPress(){
+        setShowButton(true);
+        console.log("show button: ", showButton);
+    }
 
     function newTile(row, col, val, color, id){
         return <div key={id} className={"tile tile-new position-" + (row + 1) + "-" + (col + 1)}>
@@ -10,9 +24,22 @@ function Board({p1color, p2color, board, owner, actions}) {
     }
 
     function moveTile(row, col, val, color, id){
-        return <div key={id} className={"tile start-3-2 position-" + (row + 1) + "-" + (col + 1)}>
-                <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
-            </div>;
+        return <Example/>;
+        // return <CSSTransition 
+        //         in={true} key={id} timeout={300} 
+        //         classNames={{
+        //             enter: "position-3-2",
+        //             enterActive: "position-" + (row + 1) + "-" + (col + 1),
+        //         }}
+                
+        //         onEntered={() => dummyCallback()}
+        //         onEntering={() => dummyCallback()}
+        //         onExited={() => dummyCallback()}
+        //     >
+        //     <div key={id} className={"tile"}>
+        //             <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
+        //     </div>
+        // </CSSTransition>;
     }
 
     // NOTE: use keyframes to delete object

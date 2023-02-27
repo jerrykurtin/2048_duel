@@ -4,6 +4,7 @@ import "./GameWrapper.css"
 import BoardInfo from "./BoardInfo.js"
 import Board from "./Board.js"
 import TurnInfo from "./TurnInfo.js"
+import Example from "./Example.js"
 
 function GameBoard({p1color, p2color, p1score, p2score, board, owner, boardState, actions, p1name, p2name, p1possessive, p2possessive, turn}) {
 

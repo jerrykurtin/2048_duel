@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { CSSTransition } from "react-transition-group";
 import './App.css';
 
 import Title from './elements/Title.js'
 import GameWrapper from "./elements/GameWrapper.js"
 import BoardClass from "./elements/BoardClass.js"
+import Example from "./elements/Example.js";
 
 function App() {
+
     // determine colors
     var p1color = "blue";
     var p2color = "salmon";
