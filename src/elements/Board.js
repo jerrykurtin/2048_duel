@@ -1,12 +1,32 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import "./Board.css"
 import { CSSTransition } from 'react-transition-group';
 import Example from "./Example.js";
 
-
+const useMountTransition = (isMounted, unmountDelay) => {
+    const [hasTransitionedIn, setHasTransitionedIn] = useState(false);
+  
+    useEffect(() => {
+      let timeoutId;
+  
+      if (isMounted && !hasTransitionedIn) {
+        setHasTransitionedIn(true);
+      } else if (!isMounted && hasTransitionedIn) {
+        timeoutId = setTimeout(() => setHasTransitionedIn(false), unmountDelay);
+      }
+  
+      return () => {
+        clearTimeout(timeoutId);
+      }
+    }, [unmountDelay, isMounted, hasTransitionedIn]);
+  
+    return hasTransitionedIn;
+  }
 
 function Board({p1color, p2color, board, owner, actions}) {
     const [showButton, setShowButton] = useState(true);
+    const [isMounted, setIsMounted] = useState(true);
+    const hasTransitionedIn = useMountTransition(isMounted, 1000);
 
     function dummyCallback(){
         console.log("CALLBACK REACHED");
@@ -24,22 +44,13 @@ function Board({p1color, p2color, board, owner, actions}) {
     }
 
     function moveTile(row, col, val, color, id){
-        return <Example/>;
-        // return <CSSTransition 
-        //         in={true} key={id} timeout={300} 
-        //         classNames={{
-        //             enter: "position-3-2",
-        //             enterActive: "position-" + (row + 1) + "-" + (col + 1),
-        //         }}
-                
-        //         onEntered={() => dummyCallback()}
-        //         onEntering={() => dummyCallback()}
-        //         onExited={() => dummyCallback()}
-        //     >
-        //     <div key={id} className={"tile"}>
-        //             <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
-        //     </div>
-        // </CSSTransition>;
+        let start = 'position-3-2';
+        let finish = 'position-' + (row + 1) + '-' + (col + 1);
+        return <div key={id}
+                className={`tile tile-new ${hasTransitionedIn && finish} ${isMounted && start}`}
+                >
+                <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
+            </div>;
     }
 
     // NOTE: use keyframes to delete object
@@ -55,7 +66,7 @@ function Board({p1color, p2color, board, owner, actions}) {
                     color = p2color;
 
             if (val != 0){
-                squares.push(newTile(row, col, val, color, row * 10 + col));
+                squares.push(moveTile(row, col, val, color, row * 10 + col));
             }
         }
     }

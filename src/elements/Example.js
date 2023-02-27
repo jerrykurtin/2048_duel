@@ -1,22 +1,33 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {CSSTransition} from 'react-transition-group';
+import useMountTransition from "./useMountTransition";
 import "./Example.css"
 
 function Example() {
-    const [isEnter, setIsEnter] = useState(false);
+    const [isMounted, setIsMounted] = useState(true);
+    const hasTransitionedIn = useMountTransition(isMounted, 1000);
+    var element = <div
+        className={`card ${hasTransitionedIn && 'in'} ${isMounted && 'visible'}`}
+        >
+            Card Content
+    </div>;
     return (
-        <div class="container">
-            <button onClick={() => {
-                setIsEnter((v) => !v);
-            }}>Transition</button>
-            <CSSTransition
-                in={isEnter}
-                timeout={5000}
-                className="myclass"
-            >
-                <p class="my-paragraph">Animate Me!</p>
-            </CSSTransition>
-        </div>
+
+        <div className="container">
+      <button onClick={() => setIsMounted(!isMounted)}>
+        {`${isMounted ? 'Hide' : 'Show'} Element`}
+      </button>
+        {element}
+      {/* <div className="content">
+        {(hasTransitionedIn || isMounted) && (
+          <div
+            className={`card ${hasTransitionedIn && 'in'} ${isMounted && 'visible'}`}
+          >
+            Card Content
+          </div>
+    )}
+      </div> */}
+    </div>
     )
 }
 export default Example

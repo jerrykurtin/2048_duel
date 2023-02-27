@@ -37,7 +37,9 @@ function App() {
     var arrowdownPressed = false;
     var resetPressed = false;
 
-    var moveTriggered = false;
+    const [moveTriggered, setMoveTriggered] = useState(false);
+    var localMoveTriggered = false;
+    // var moveTriggered = false;
     var moveType = "";
 
     useEffect(() => {
@@ -47,40 +49,54 @@ function App() {
 
             if (e.keyCode == 82 && !resetPressed){
                 resetPressed = true;
-                moveTriggered = true;
+                setMoveTriggered(true);
+                localMoveTriggered = true;
+                // moveTriggered = true;
                 moveType = "reset";
                 console.log("reset pressed");
             }
 
             else if (e.keyCode == 37 && !arrowleftPressed){
                 arrowleftPressed = true;
-                moveTriggered = true;
+                setMoveTriggered(true);
+                localMoveTriggered = true;
+                // moveTriggered = true;
                 moveType = "left";
                 console.log("left arrow pressed");
             }
             else if (e.keyCode == 38 && !arrowupPressed){
                 arrowupPressed = true;
-                moveTriggered = true;
+                setMoveTriggered(true);
+                localMoveTriggered = true;
+                // moveTriggered = true;
                 moveType = "up";
                 console.log("up arrow pressed");
             }
             else if (e.keyCode == 39 && !arrowrightPressed){
                 arrowrightPressed = true;
-                moveTriggered = true;
+                setMoveTriggered(true);
+                localMoveTriggered = true;
+                // moveTriggered = true;
                 moveType = "right";
                 console.log("right arrow pressed");
             }
             else if (e.keyCode == 40 && !arrowdownPressed){
                 arrowdownPressed = true;
-                moveTriggered = true;
+                setMoveTriggered(true);
+                localMoveTriggered = true;
+                // moveTriggered = true;
                 moveType = "down";
                 console.log("down arrow pressed");
             }
 
-            if (moveTriggered){
+            console.log("Move triggered in app: ", moveTriggered);
+            if (localMoveTriggered){
                 updateBoard(moveType);
-                moveTriggered = false;
+                setMoveTriggered(false);
+                localMoveTriggered = false;
+                // moveTriggered = false;
             }
+
             // console.log("keydown:", e.keyCode); // code of keydown
         }
 
@@ -111,6 +127,7 @@ function App() {
     }, []);
 
     function updateBoard(move){
+        console.log("UPDATING BOARD");
         if (!activeGame)
             return;
         if (move == "reset"){
@@ -129,9 +146,9 @@ function App() {
                 setActions(tempActions);
                 setTurn(myBoard.player);
             }
-            console.log("Board:\n" + myBoard.build_grid());
-            console.log("actions:\n", actions);
         }
+        console.log("Board:\n" + myBoard.build_grid());
+        console.log("actions:\n", actions);
 
         setP1score(myBoard.p1score);
         setP2score(myBoard.p2score);
@@ -143,7 +160,7 @@ function App() {
         <div className="App">
             <Title/>
             <GameWrapper p1color={p1color} p2color={p2color}
-            board={board} owner={owner}
+            board={board} owner={owner} moveTriggered={moveTriggered}
             p1score={p1score} p2score={p2score}
             boardState={boardState} actions={actions}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
