@@ -1,3 +1,5 @@
+
+
 /* Tile Position Animations */
 .tile.position-1-1 {
     -webkit-transform: translate(0px, 0px);
@@ -47,6 +49,13 @@
     -ms-transform: translate(21.78vw, 43.56vw);
     transform: translate(21.78vw, 43.56vw);
 }
+
+.tile.start-3-2 {
+    top: 21.78vw;
+    left: 43.56vw;
+}
+
+
 
 .tile.position-4-2 {
     -webkit-transform: translate(21.78vw, 65.34vw);
@@ -162,6 +171,11 @@
         transform: translate(121px, 242px);
     }
 
+    .tile.start-3-2 {
+        left: 121px;
+        top: 242px;
+    }
+
     .tile.position-4-2 {
         -webkit-transform: translate(121px, 363px);
         -moz-transform: translate(121px, 363px);
@@ -262,6 +276,26 @@
         -ms-transform: scale(1);
         transform: scale(1);
     }
+}
+
+@keyframes delete-after-move {
+    0% {
+        visibility: visible;
+    }
+    99% {
+        visibility: visible;
+    }
+    100% {
+        visibility: hidden;
+        z-index: 0;
+    }
+}
+
+/* Tile deletion object */
+.deleted {
+    -webkit-animation: delete-after-move 100ms;
+    -moz-animation: delete-after-move 100ms;
+    animation: delete-after-move 100ms;
 }
 
 .tile-new .tile-inner {

@@ -98,9 +98,9 @@ button.hidden {
     float: left;
     position: absolute;
 
-    -webkit-transition: 100ms ease-in-out;
-    -moz-transition: 100ms ease-in-out;
-    transition: 100ms ease-in-out;
+    -webkit-transition: 1000ms ease-in-out;
+    -moz-transition: 1000ms ease-in-out;
+    transition: 1000ms ease-in-out;
     -webkit-transition-property: -webkit-transform;
     -moz-transition-property: -moz-transform;
     transition-property: transform;
