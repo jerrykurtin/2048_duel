@@ -1,41 +1,49 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect} from 'react';
 import "./Board.css"
 import { CSSTransition } from 'react-transition-group';
 import Example from "./Example.js";
 
-const useMountTransition = (isMounted, unmountDelay) => {
+const useMountTransition = (var1, setVar1, reset, setReset, delay) => {
     const [hasTransitionedIn, setHasTransitionedIn] = useState(false);
   
     useEffect(() => {
       let timeoutId;
   
-      if (isMounted && !hasTransitionedIn) {
-        setHasTransitionedIn(true);
-      } else if (!isMounted && hasTransitionedIn) {
-        timeoutId = setTimeout(() => setHasTransitionedIn(false), unmountDelay);
+      
+      if (reset) {
+        setHasTransitionedIn(false);
+        setReset(false);
+        console.log("transition reset!");
+        // timeoutId = setTimeout(() => setHasTransitionedIn(false), delay);
       }
+      else if (var1) {
+        console.log("starting transition...");
+        timeoutId = setTimeout(() => {
+            console.log("Transition finished! setting transitionedIn to true");
+            setHasTransitionedIn(true);
+        }, delay);
+      } 
   
       return () => {
         clearTimeout(timeoutId);
       }
-    }, [unmountDelay, isMounted, hasTransitionedIn]);
+    }, [delay, var1, setVar1, reset, setReset, hasTransitionedIn]);
   
     return hasTransitionedIn;
   }
 
-function Board({p1color, p2color, board, owner, actions}) {
+function Board({p1color, p2color, board, owner, actions, moveTriggered, turn}) {
     const [showButton, setShowButton] = useState(true);
     const [isMounted, setIsMounted] = useState(true);
-    const hasTransitionedIn = useMountTransition(isMounted, 1000);
+    const [var1, setVar1] = useState(true);
+    const [reset, setReset] = useState(false);
+    const hasTransitionedIn = useMountTransition(var1, setVar1, reset, setReset, 1000);
 
-    function dummyCallback(){
-        console.log("CALLBACK REACHED");
-    }
 
-    function buttonPress(){
-        setShowButton(true);
-        console.log("show button: ", showButton);
-    }
+    useEffect( () => {
+        setReset(true);
+        console.log("move triggered!");
+    }, [turn]);
 
     function newTile(row, col, val, color, id){
         return <div key={id} className={"tile tile-new position-" + (row + 1) + "-" + (col + 1)}>
@@ -46,6 +54,7 @@ function Board({p1color, p2color, board, owner, actions}) {
     function moveTile(row, col, val, color, id){
         let start = 'position-3-2';
         let finish = 'position-' + (row + 1) + '-' + (col + 1);
+        console.log("hasTransitionedIn:", hasTransitionedIn, "isMounted: ", isMounted);
         return <div key={id}
                 className={`tile tile-new ${hasTransitionedIn && finish} ${isMounted && start}`}
                 >

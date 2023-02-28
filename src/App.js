@@ -37,8 +37,8 @@ function App() {
     var arrowdownPressed = false;
     var resetPressed = false;
 
-    const [moveTriggered, setMoveTriggered] = useState(false);
     var localMoveTriggered = false;
+    var [moveSignal, setMoveSignal] = useState(0);
     // var moveTriggered = false;
     var moveType = "";
 
@@ -49,7 +49,6 @@ function App() {
 
             if (e.keyCode == 82 && !resetPressed){
                 resetPressed = true;
-                setMoveTriggered(true);
                 localMoveTriggered = true;
                 // moveTriggered = true;
                 moveType = "reset";
@@ -58,7 +57,6 @@ function App() {
 
             else if (e.keyCode == 37 && !arrowleftPressed){
                 arrowleftPressed = true;
-                setMoveTriggered(true);
                 localMoveTriggered = true;
                 // moveTriggered = true;
                 moveType = "left";
@@ -66,7 +64,6 @@ function App() {
             }
             else if (e.keyCode == 38 && !arrowupPressed){
                 arrowupPressed = true;
-                setMoveTriggered(true);
                 localMoveTriggered = true;
                 // moveTriggered = true;
                 moveType = "up";
@@ -74,7 +71,6 @@ function App() {
             }
             else if (e.keyCode == 39 && !arrowrightPressed){
                 arrowrightPressed = true;
-                setMoveTriggered(true);
                 localMoveTriggered = true;
                 // moveTriggered = true;
                 moveType = "right";
@@ -82,17 +78,16 @@ function App() {
             }
             else if (e.keyCode == 40 && !arrowdownPressed){
                 arrowdownPressed = true;
-                setMoveTriggered(true);
                 localMoveTriggered = true;
                 // moveTriggered = true;
                 moveType = "down";
                 console.log("down arrow pressed");
             }
 
-            console.log("Move triggered in app: ", moveTriggered);
             if (localMoveTriggered){
+                setMoveSignal(moveSignal + 1);
+                console.log("INCREASING MOVE SIGNAL to ", moveSignal);
                 updateBoard(moveType);
-                setMoveTriggered(false);
                 localMoveTriggered = false;
                 // moveTriggered = false;
             }
@@ -135,7 +130,6 @@ function App() {
             setBoard(myBoard.board);
             setOwner(myBoard.owner);
             setTurn(myBoard.player);
-            console.log("New Board:\n" + myBoard.build_grid());
         }
 
         else if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
@@ -160,7 +154,7 @@ function App() {
         <div className="App">
             <Title/>
             <GameWrapper p1color={p1color} p2color={p2color}
-            board={board} owner={owner} moveTriggered={moveTriggered}
+            board={board} owner={owner} moveTriggered={moveSignal}
             p1score={p1score} p2score={p2score}
             boardState={boardState} actions={actions}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}

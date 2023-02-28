@@ -9,10 +9,10 @@ const useMountTransition = (isMounted, unmountDelay) => {
       let timeoutId;
   
       if (isMounted && !hasTransitionedIn) {
-        console.log("transition in started!");
+        // console.log("transition in started!");
         timeoutId = setTimeout(() => setHasTransitionedIn(true), unmountDelay);
       } else if (!isMounted && hasTransitionedIn) {
-        console.log("transitioning out");
+        // console.log("transitioning out");
         setHasTransitionedIn(false);
       }
   
