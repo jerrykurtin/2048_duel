@@ -247,11 +247,10 @@ class BoardClass {
             var newrow = Array(this.board.length).fill(0);
             var newowner = Array(this.board.length).fill(-1);
             // stores [action, [end_row, end_col]] -> null, "move", "delete", "create"
-            var actionrow = Array(this.board.length).fill([null, null, null]);
+            var actionrow = Array(this.board.length).fill(null);
             var deleterow = Array(this.board.length).fill(false);
             var createrow = Array(this.board.length).fill(false);
             // stores start_col for each position with a piece
-            var actionrow_source = Array(this.board.length).fill(null);
             var newidx = 0;
 
             for (let col = 0; col < this.board[0].length; ++col){
@@ -267,10 +266,9 @@ class BoardClass {
                         }
 
                         // update destination for delete and move
-                        actionrow[col] = ["move", row, newidx - 1];
+                        actionrow[col] = [this.board[row][col], [row, newidx - 1]];
 
                         // update actions for 2 deleted and 1 created square
-                        // deleterow[actionrow_source[newidx - 1]] = true;
                         deleterow[newidx - 1] = true;
                         createrow[newidx - 1] = true;
                     }
@@ -282,8 +280,7 @@ class BoardClass {
                         newidx += 1;
 
                         // update actionrow
-                        actionrow[col] = ["move", row, newidx - 1];
-                        actionrow_source[newidx - 1] = col;
+                        actionrow[col] = [this.board[row][col], [row, newidx - 1]];
                     }
                 }
             }
@@ -543,15 +540,16 @@ function rotateCoordsCounter(coords, length=4){
 }
 
 function rotateActionsCounter(actions){
-    // actions = [actions, deleted, created]
+    // actions = [actions, val, deleted, created]
 
     // rotate the coordinates in actions[0]
     for (let row = 0; row < actions[0].length; ++row){
         for (let col = 0; col < actions[0][0].length; ++col){
-            let coords = [actions[0][row][col][1], actions[0][row][col][2]]
-            coords = rotateCoordsCounter(coords);
-            actions[0][row][col][1] = coords[0];
-            actions[0][row][col][2] = coords[1];
+            if (actions[0][row][col]){
+                let coords = actions[0][row][col][1];
+                coords = rotateCoordsCounter(coords);
+                actions[0][row][col][1] = coords;
+            }
         }
     }
 
@@ -585,10 +583,11 @@ function rotateActionsClock(actions){
     // rotate the coordinates in actions[0]
     for (let row = 0; row < actions[0].length; ++row){
         for (let col = 0; col < actions[0][0].length; ++col){
-            let coords = [actions[0][row][col][1], actions[0][row][col][2]]
-            coords = rotateCoordsClock(coords);
-            actions[0][row][col][1] = coords[0];
-            actions[0][row][col][2] = coords[1];
+            if (actions[0][row][col]){
+                let coords = actions[0][row][col][1];
+                coords = rotateCoordsClock(coords);
+                actions[0][row][col][1] = coords;
+            }
         }
     }
 

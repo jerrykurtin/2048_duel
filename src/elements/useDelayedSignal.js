@@ -7,7 +7,7 @@ const useDelayedSignal = (reset, setReset, delay) => {
     reset: react state, initially set to false, set to true to send signal, reset will set to false once finished
     setReset: the setter for the reset state
     
-    an example usecase is shown below:
+    an example usecase is shown below: parentSignal is the signal we wish to delay from
 
     const [reset, setReset] = useState(false);
     const delayedSignal = useDelayedSignal(reset, setReset, 25);
@@ -15,10 +15,11 @@ const useDelayedSignal = (reset, setReset, delay) => {
     useEffect( () => {
         setReset(true);
         console.log("move triggered!");
-    }, [turn]);
+    }, [parentSignal]);
     
     */
     const [hasFinishedDelay, sethasFinishedDelay] = useState(false);
+    var trigger = true;
   
     useEffect(() => {
       let timeoutId;
@@ -26,13 +27,14 @@ const useDelayedSignal = (reset, setReset, delay) => {
       if (reset) {
         sethasFinishedDelay(false);
         setReset(false);
+        trigger = true;
         console.log("transition reset!");
       }
-      // else will causen infinite loop
-      else if (true){
+      // prevent this from being entered more than once
+      else if (trigger = false){
         console.log("starting transition...");
         timeoutId = setTimeout(() => {
-            console.log("Transition finished! setting transitionedIn to true");
+            console.log("Transition finished!");
             sethasFinishedDelay(true);
         }, delay);
       } 

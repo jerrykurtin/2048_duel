@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect, useLayoutEffect} from 'react';
 import "./Board.css"
 import useDelayedSignal from './useDelayedSignal';
 
-function Board({p1color, p2color, board, owner, actions, moveTriggered, turn}) {
+function Board({p1color, p2color, board, owner, actions, turn}) {
     const [isMounted, setIsMounted] = useState(true);
     const [reset, setReset] = useState(false);
-    const delayedSignal = useDelayedSignal(reset, setReset, 25);
+    const delayedSignal = useDelayedSignal(reset, setReset, 2500);
 
 
     // used in conjunction with delayedSignal to 
@@ -20,19 +20,22 @@ function Board({p1color, p2color, board, owner, actions, moveTriggered, turn}) {
             </div>;
     }
 
-    function moveTile(row, col, val, color, id){
-        let start = 'position-3-2';
+    function moveTile(srow, scol, row, col, val, color, isDeleted, id){
+        console.log("moving square from " + srow + "," + scol + " to " + row + "," + col);
+        let start = 'position-' + (srow + 1) + '-' + (scol + 1);
         let finish = 'position-' + (row + 1) + '-' + (col + 1);
         return <div key={id}
-                className={`tile tile-new ${delayedSignal ? ("tile " + finish) : ("tile-temp " + start)}`}
+                className={`tile tile-new ${delayedSignal ? ("tile-temp " + start) : ("tile " + finish)} ${isDeleted && "deleted"}`}
                 // className={`tile tile-new ${isMounted && "tile-temp " + start} ${delayedSignal && "tile " + finish}`}
                 >
                 <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
             </div>;
     }
 
-    const squares = [];
-    console.log("board: ", board);
+    // console.log("board: ", board);
+    console.log("actions: ", actions);
+    const newSquares = {};
+    const movedSquares = {};
     for (let row = 0; row < 4; ++row){
         for (let col = 0; col < 4; ++col){
             var val = board[row][col].toString();
@@ -43,10 +46,68 @@ function Board({p1color, p2color, board, owner, actions, moveTriggered, turn}) {
                     color = p2color;
 
             if (val != 0){
-                squares.push(moveTile(row, col, val, color, row * 10 + col));
+                newSquares[row + "," + col] = [row, col, val, color]; // newTile(row, col, val, color, row * 10 + col);
+            }    
+            
+            // moved/deleted tiles
+            if (actions && actions[0][row][col]){
+                let drow = actions[0][row][col][1][0];
+                let dcol = actions[0][row][col][1][1];
+                let prevval = actions[0][row][col][0];
+                if (owner[drow][dcol] == 0)
+                    color = p1color;
+                else
+                    color = p2color;
+
+                // console.log("moved tile starts at " + row + "," +  col + " and ends at " + drow + "," + dcol);
+                if (!(row + "," + col in movedSquares))
+                    movedSquares[drow + "," + dcol] = [[row, col, drow, dcol, prevval, color]]; // moveTile(actions[0][row][col][1], actions[0][row][col][2], row, col, val, color, row * 10 + col));
+                else
+                    movedSquares[drow + "," + dcol].push([row, col, drow, dcol, prevval, color]); // moveTile(actions[0][row][col][1], actions[0][row][col][2], row, col, val, color, row * 10 + col));
+                // squares.push(moveTile(actions[0][row][col][1], actions[0][row][col][2], row, col, val, color, row * 10 + col));
             }
         }
     }
+
+    console.log("new squares: ", newSquares);
+    console.log("moved squares: ", movedSquares);
+    const squares = [];
+    var squareID = 0;
+    // second run to actually build objects
+    for (let row = 0; row < 4; ++row){
+        for (let col = 0; col < 4; ++col){
+            let loc = row + "," + col;
+            if (loc in newSquares){
+                // new square
+                if (!(loc in movedSquares)){
+                    console.log("new square at " + row + "," + col);
+                    squares.push(newTile(...newSquares[loc], squareID));
+                    squareID++;
+                }
+                // moved square
+                else if (movedSquares[loc].length == 1){
+                    console.log("moved square at " + row + "," + col);
+                    console.log("variables: " + movedSquares[loc][0]);
+                    squares.push(moveTile(...movedSquares[loc][0], false, squareID));
+                    squareID++;
+                }
+                
+                // merged square
+                else {
+                    console.log("merged square at " + row + "," + col);
+                    squares.push(newTile(...movedSquares[loc], squareID));
+                    squareID++;
+                    for (let idx = 0; idx < movedSquares[loc].length; ++idx){
+                        console.log("variables: " + movedSquares[loc][0]);
+                        squares.push(moveTile(...movedSquares[loc][idx], true, squareID));
+                        squareID++;
+                    }
+                }
+            }
+        }
+    }
+
+
     console.log(squares.length + " squares on board");
 
     return (

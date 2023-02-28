@@ -38,7 +38,6 @@ function App() {
     var resetPressed = false;
 
     var localMoveTriggered = false;
-    var [moveSignal, setMoveSignal] = useState(0);
     // var moveTriggered = false;
     var moveType = "";
 
@@ -85,8 +84,6 @@ function App() {
             }
 
             if (localMoveTriggered){
-                setMoveSignal(moveSignal + 1);
-                console.log("INCREASING MOVE SIGNAL to ", moveSignal);
                 updateBoard(moveType);
                 localMoveTriggered = false;
                 // moveTriggered = false;
@@ -122,7 +119,6 @@ function App() {
     }, []);
 
     function updateBoard(move){
-        console.log("UPDATING BOARD");
         if (!activeGame)
             return;
         if (move == "reset"){
@@ -133,6 +129,7 @@ function App() {
         }
 
         else if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
+            console.log("Previous board:\n" + myBoard.build_grid());
             let tempActions = myBoard.move(move);
             if (tempActions){
                 setBoard(myBoard.board);
@@ -154,7 +151,7 @@ function App() {
         <div className="App">
             <Title/>
             <GameWrapper p1color={p1color} p2color={p2color}
-            board={board} owner={owner} moveTriggered={moveSignal}
+            board={board} owner={owner}
             p1score={p1score} p2score={p2score}
             boardState={boardState} actions={actions}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
