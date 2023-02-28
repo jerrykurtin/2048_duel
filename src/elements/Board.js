@@ -3,8 +3,10 @@ import "./Board.css"
 import { CSSTransition } from 'react-transition-group';
 import Example from "./Example.js";
 
-const useMountTransition = (var1, setVar1, reset, setReset, delay) => {
+const useMountTransition = (reset, setReset, delay) => {
     const [hasTransitionedIn, setHasTransitionedIn] = useState(false);
+    const [var1, setVar1] = useState(true);
+
   
     useEffect(() => {
       let timeoutId;
@@ -35,9 +37,8 @@ const useMountTransition = (var1, setVar1, reset, setReset, delay) => {
 function Board({p1color, p2color, board, owner, actions, moveTriggered, turn}) {
     const [showButton, setShowButton] = useState(true);
     const [isMounted, setIsMounted] = useState(true);
-    const [var1, setVar1] = useState(true);
     const [reset, setReset] = useState(false);
-    const hasTransitionedIn = useMountTransition(var1, setVar1, reset, setReset, 1000);
+    const hasTransitionedIn = useMountTransition(reset, setReset, 50);
 
 
     useEffect( () => {
@@ -56,7 +57,9 @@ function Board({p1color, p2color, board, owner, actions, moveTriggered, turn}) {
         let finish = 'position-' + (row + 1) + '-' + (col + 1);
         console.log("hasTransitionedIn:", hasTransitionedIn, "isMounted: ", isMounted);
         return <div key={id}
-                className={`tile tile-new ${hasTransitionedIn && finish} ${isMounted && start}`}
+                // className = {"tile tile-new " + (hasTransitionedIn) ? "tile " : "tile-temp "}
+                className={`tile tile-new ${hasTransitionedIn ? ("tile " + finish) : ("tile-temp " + start)}`}
+                // className={`tile tile-new ${isMounted && "tile-temp " + start} ${hasTransitionedIn && "tile " + finish}`}
                 >
                 <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
             </div>;
