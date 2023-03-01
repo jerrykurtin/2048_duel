@@ -123,6 +123,7 @@ function App() {
             return;
         if (move == "reset"){
             myBoard = new BoardClass();
+            setActions(null);
             setBoard(myBoard.board);
             setOwner(myBoard.owner);
             setTurn(myBoard.player);

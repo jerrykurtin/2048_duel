@@ -28,7 +28,7 @@ const useDelayedSignal = (reset, setReset, delay) => {
         sethasFinishedDelay(false);
         setReset(false);
         trigger = true;
-        console.log("transition reset!");
+        // console.log("transition reset!");
       }
       // prevent this from being entered more than once
       else if (trigger = false){

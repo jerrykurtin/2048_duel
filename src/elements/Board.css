@@ -100,7 +100,8 @@ button.hidden {
 
     -webkit-transition: -webkit-transform 150ms ease-in;
     -moz-transition: -moz-transform 150ms ease-in;
-    transition: transform 150ms ease-in;
+    transition: all 150ms ease-in;
+    transition-property: transform, opacity;
 }
 
 .tile-temp {
