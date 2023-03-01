@@ -98,17 +98,17 @@ button.hidden {
     float: left;
     position: absolute;
 
-    -webkit-transition: -webkit-transform 150ms ease-in;
-    -moz-transition: -moz-transform 150ms ease-in;
-    transition: all 150ms ease-in;
-    transition-property: transform, opacity;
+    /* -webkit-transition: -webkit-transform 1500ms ease-in;
+    -moz-transition: -moz-transform 1500ms ease-in; */
+    transition: transform 150ms ease-in;
+    /* , opacity 1500ms ease-in; */
 }
 
-.tile-temp {
+/* .tile-temp {
     -webkit-transition: -webkit-transform 1ms ease-in-out;
     -moz-transition: -moz-transform 1ms ease-in-out;
     transition: transform 1ms ease-in-out;
-}
+} */
 
 .tile-inner {
 

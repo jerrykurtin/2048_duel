@@ -4,14 +4,14 @@ import useDelayedSignal from './useDelayedSignal';
 
 function Board({p1color, p2color, board, owner, actions, turn}) {
     const [isMounted, setIsMounted] = useState(true);
-    const [reset, setReset] = useState(false);
-    const delayedSignal = useDelayedSignal(reset, setReset, 25000);
+    // const [reset, setReset] = useState(false);
+    // const delayedSignal = useDelayedSignal(reset, setReset, 2500);
     const [squares, setSquares] = useState([]);
 
 
     // used in conjunction with delayedSignal to trigger motion
     useLayoutEffect( () => {
-        setReset(true);
+        // setReset(true);
         console.log("move triggered!");
 
         console.log("actions: ", actions);
@@ -22,7 +22,6 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                 movedSquares[row + "," + col] = [];
             }
         }
-
 
         for (let row = 0; row < 4; ++row){
             for (let col = 0; col < 4; ++col){
@@ -93,11 +92,17 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
         }
         
         setSquares(tempSquares);
-    }, [turn]);
+    }, [turn, board, owner, actions]);
 
     // generate a new tile
     function newTile(row, col, val, color, id){
-        return <div key={id} className={"tile tile-new position-" + (row + 1) + "-" + (col + 1)}>
+        let multiplier = 121;
+        let style = {
+            top: row * multiplier,
+            left: col * multiplier,
+            transition: "none",
+        };
+        return <div key={id} className={"tile tile-new"} style={style}>
                 <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
             </div>;
     }
@@ -105,13 +110,25 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
     // move a tile
     function moveTile(srow, scol, row, col, val, color, isDeleted, id){
         // console.log("moving square from " + srow + "," + scol + " to " + row + "," + col);
-        let start = 'position-' + (srow + 1) + '-' + (scol + 1);
-        let finish = 'position-' + (row + 1) + '-' + (col + 1);
+        let multiplier = 121;
+        let style = {
+            top: srow * multiplier,
+            left: scol * multiplier,
+            transform: "translate(" + (col - scol) * multiplier + ((col - scol != 0) ? "px" : "") + ", " + (row - srow) * multiplier + ((row - srow != 0) ? "px" : "") + ")",
+        };
         return <div key={id}
-                className={`tile ${delayedSignal ? ("tile-temp " + start) : ("tile " + finish)} ${(isDeleted) ? "deleted" : ""}`}
+                className={`tile ${(isDeleted) ? "deleted" : ""}`}
+                style={style}
                 >
                 <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
             </div>;
+        // let start = 'position-' + (srow + 1) + '-' + (scol + 1);
+        // let finish = 'position-' + (row + 1) + '-' + (col + 1);
+        // return <div key={id}
+        //         className={`tile ${delayedSignal ? ("tile-temp " + start) : ("tile " + finish)} ${(isDeleted) ? "deleted" : ""}`}
+        //         >
+        //         <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
+        //     </div>;
     }
 
     

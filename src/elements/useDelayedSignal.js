@@ -28,10 +28,11 @@ const useDelayedSignal = (reset, setReset, delay) => {
         sethasFinishedDelay(false);
         setReset(false);
         trigger = true;
-        // console.log("transition reset!");
+        console.log("transition reset!");
       }
       // prevent this from being entered more than once
-      else if (trigger = false){
+      else if (trigger){
+        trigger = false;
         console.log("starting transition...");
         timeoutId = setTimeout(() => {
             console.log("Transition finished!");
