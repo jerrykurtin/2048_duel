@@ -293,9 +293,9 @@
 
 /* Tile deletion object */
 .deleted {
-    /* -webkit-animation: delete-after-move 100ms;
+    -webkit-animation: delete-after-move 100ms;
     -moz-animation: delete-after-move 100ms;
-    animation: delete-after-move 100ms; */
+    animation: delete-after-move 100ms;
     visibility: hidden;
 }
 
