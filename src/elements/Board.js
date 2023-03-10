@@ -19,7 +19,11 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
     useLayoutEffect( () => {
         // setReset(true);
         console.log("move triggered!");
-        var tempIds = ids;
+        var tempIds = [
+            [-1, -1, -1, -1],
+            [-1, -1, -1, -1],
+            [-1, -1, -1, -1],
+            [-1, -1, -1, -1]];
         var squareID = idCounter;
 
         console.log("actions: ", actions);
@@ -71,36 +75,35 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                 if (loc in newSquares){
                     // new square
                     if (movedSquares[loc].length == 0){
-                        // console.log("new square at " + row + "," + col);
                         // new square gets a new id
                         tempIds[row][col] = squareID;
                         squareID++;
                         tempSquares.push(newTile(...newSquares[loc], tempIds[row][col]));
+                        console.log("new square with id " + tempIds[row][col] + " at " + row + "," + col);
                     }
                     // moved square
                     else if (movedSquares[loc].length == 1){
-                        // console.log("moved square at " + row + "," + col);
                         // console.log("variables: " + movedSquares[loc][0]);
                         // moved square gets its previous id
-                        let prevID = tempIds[movedSquares[loc][0][0]][movedSquares[loc][0][1]];
+                        let prevID = ids[movedSquares[loc][0][0]][movedSquares[loc][0][1]];
                         tempSquares.push(moveTile(...movedSquares[loc][0], false, prevID));
-                        tempIds[movedSquares[loc][0][0]][movedSquares[loc][0][1]] = -1;
                         tempIds[row][col] = prevID;
+                        console.log("moved square with id " + prevID + " from " + movedSquares[loc][0][0] + "," + movedSquares[loc][0][1] + " to " + row + "," + col);
                     }
                     
                     // merged square
                     else {
-                        // console.log("merged square at " + row + "," + col);
                         // new square gets a new id
                         tempIds[row][col] = squareID;
+                        console.log("merged square with id " + tempIds[row][col] + " at " + row + "," + col);
                         squareID++;
                         tempSquares.push(newTile(...newSquares[loc], tempIds[row][col]));
                         for (let idx = 0; idx < movedSquares[loc].length; ++idx){
                             // movd square gets its previous id
-                            let prevID = tempIds[movedSquares[loc][idx][0]][movedSquares[loc][idx][1]];
+                            let prevID = ids[movedSquares[loc][idx][0]][movedSquares[loc][idx][1]];
                             // console.log("variables: " + movedSquares[loc][0]);
                             tempSquares.push(moveTile(...movedSquares[loc][idx], true, prevID));
-                            tempIds[movedSquares[loc][idx][0]][movedSquares[loc][idx][1]] = -1;
+                            console.log("merged square with id " + prevID + " from " + movedSquares[loc][0][0] + "," + movedSquares[loc][0][1] + " to " + row + "," + col);
                             // tempIds[row][col] = prevID;
                         }
                     }
