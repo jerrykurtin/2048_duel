@@ -291,19 +291,3 @@
     }
 }
 
-/* Tile deletion object */
-.deleted {
-    -webkit-animation: delete-after-move var(--animation_duration);
-    -moz-animation: delete-after-move var(--animation_duration);
-    animation: delete-after-move var(--animation_duration);
-    visibility: hidden;
-}
-
-.tile-new .tile-inner {
-    -webkit-animation: appear var(--animation_duration) ease var(--animation_duration);
-    -moz-animation: appear var(--animation_duration) ease var(--animation_duration);
-    animation: appear var(--animation_duration) ease var(--animation_duration);
-    -webkit-animation-fill-mode: backwards;
-    -moz-animation-fill-mode: backwards;
-    animation-fill-mode: backwards;
-}

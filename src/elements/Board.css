@@ -1,10 +1,6 @@
 /* animations */
 @import "BoardAnimations.css";
 
-html, body {
-    --animation_duration : 1000ms;
-}
-
 .game-container {
     margin-top: 2.7vw;
     margin-bottom: 2.7vw;

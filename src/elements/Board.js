@@ -79,7 +79,7 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                         // new square gets a new id
                         tempIds[row][col] = squareID;
                         squareID++;
-                        tempSquares.push(newTile(...newSquares[loc], tempIds[row][col]));
+                        tempSquares.push([tempIds[row][col], newTile(...newSquares[loc], tempIds[row][col])]);
                         console.log("new square with id " + tempIds[row][col] + " at " + row + "," + col);
                     }
                     // moved square
@@ -87,7 +87,7 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                         // console.log("variables: " + movedSquares[loc][0]);
                         // moved square gets its previous id
                         let prevID = ids[movedSquares[loc][0][0]][movedSquares[loc][0][1]];
-                        tempSquares.push(moveTile(...movedSquares[loc][0], false, prevID));
+                        tempSquares.push([prevID, moveTile(...movedSquares[loc][0], false, prevID)]);
                         tempIds[row][col] = prevID;
                         console.log("moved square with id " + prevID + " from " + movedSquares[loc][0][0] + "," + movedSquares[loc][0][1] + " to " + row + "," + col);
                     }
@@ -98,12 +98,12 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                         tempIds[row][col] = squareID;
                         console.log("merged square with id " + tempIds[row][col] + " at " + row + "," + col);
                         squareID++;
-                        tempSquares.push(newTile(...newSquares[loc], tempIds[row][col]));
+                        tempSquares.push([tempIds[row][col], newTile(...newSquares[loc], tempIds[row][col])]);
                         for (let idx = 0; idx < movedSquares[loc].length; ++idx){
                             // movd square gets its previous id
                             let prevID = ids[movedSquares[loc][idx][0]][movedSquares[loc][idx][1]];
                             // console.log("variables: " + movedSquares[loc][0]);
-                            tempSquares.push(moveTile(...movedSquares[loc][idx], true, prevID));
+                            tempSquares.push([prevID, moveTile(...movedSquares[loc][idx], true, prevID)]);
                             console.log("merged square with id " + prevID + " from " + movedSquares[loc][0][0] + "," + movedSquares[loc][0][1] + " to " + row + "," + col);
                             // tempIds[row][col] = prevID;
                         }
@@ -111,6 +111,10 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                 }
             }
         }
+
+        // sort squares
+        tempSquares.sort();
+        var finalSquares = tempSquares.map( x => x[1]);
         
         let nodeState = "";
         for (let r = 0; r < tempIds.length; ++r){
@@ -119,7 +123,7 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
             nodeState += "\n";
         }
         console.log("node ids:\n " + nodeState);
-        setSquares(tempSquares);
+        setSquares(finalSquares);
         setIds(tempIds);
         setIdCounter(squareID);
     }, [turn, board, owner, actions]);

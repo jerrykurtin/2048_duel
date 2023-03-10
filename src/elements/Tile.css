@@ -1,3 +1,9 @@
+html, body {
+    --animation_duration : 150ms;
+    --appear_duration: 250ms;
+    --appear_delay: 150ms;
+}
+
 .tile-container {
     position: absolute;
     z-index: 2;
@@ -28,6 +34,23 @@
     line-height: 19.26vw;
 
     --shadow-size: 0 0 5.4vw 1.8vw;
+}
+
+/* Tile deletion object */
+.deleted {
+    -webkit-animation: delete-after-move var(--animation_duration);
+    -moz-animation: delete-after-move var(--animation_duration);
+    animation: delete-after-move var(--animation_duration);
+    visibility: hidden;
+}
+
+.tile-new .tile-inner {
+    -webkit-animation: appear var(--appear_duration) ease var(--appear_delay);
+    -moz-animation: appear var(--appear_duration) ease var(--appear_delay);
+    animation: appear var(--appear_duration) ease var(--appear_delay);
+    -webkit-animation-fill-mode: backwards;
+    -moz-animation-fill-mode: backwards;
+    animation-fill-mode: backwards;
 }
 
 @media screen and (min-width: 520px) {
