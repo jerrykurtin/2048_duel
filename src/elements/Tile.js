@@ -1,22 +1,17 @@
-import {useState} from "react";
-import {CSSTransition} from 'react-transition-group';
+import React from 'react'
 import "./Tile.css"
 
-function Example() {
-    const [isEnter, setIsEnter] = useState(false);
+function Tile({row, col, color, val, isNew, isDeleted}) {
+    let multiplier = 121;
+    let style = {
+        transform: "translate(" + (col) * multiplier + "px" + ", " + (row) * multiplier + "px" + ")",
+    };
+
     return (
-        <div class="container">
-            <button onClick={() => {
-                setIsEnter((v) => !v);
-            }}>Transition</button>
-            <CSSTransition
-                in={isEnter}
-                timeout={5000}
-                className="myclass"
-            >
-                <p class="my-paragraph">Animate Me!</p>
-            </CSSTransition>
+        <div className={"tile" + ((isNew) ? " tile-new" : "") + (isDeleted ? " deleted" : "")} style={style}>
+                <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
         </div>
     )
 }
-export default Example
+
+export default Tile
