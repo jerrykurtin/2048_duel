@@ -293,16 +293,16 @@
 
 /* Tile deletion object */
 .deleted {
-    -webkit-animation: delete-after-move 100ms;
-    -moz-animation: delete-after-move 100ms;
-    animation: delete-after-move 100ms;
+    -webkit-animation: delete-after-move var(--animation_duration);
+    -moz-animation: delete-after-move var(--animation_duration);
+    animation: delete-after-move var(--animation_duration);
     visibility: hidden;
 }
 
 .tile-new .tile-inner {
-    -webkit-animation: appear 200ms ease 100ms;
-    -moz-animation: appear 200ms ease 100ms;
-    animation: appear 200ms ease 100ms;
+    -webkit-animation: appear var(--animation_duration) ease var(--animation_duration);
+    -moz-animation: appear var(--animation_duration) ease var(--animation_duration);
+    animation: appear var(--animation_duration) ease var(--animation_duration);
     -webkit-animation-fill-mode: backwards;
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;

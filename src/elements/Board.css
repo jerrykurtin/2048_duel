@@ -1,6 +1,10 @@
 /* animations */
 @import "BoardAnimations.css";
 
+html, body {
+    --animation_duration : 1000ms;
+}
+
 .game-container {
     margin-top: 2.7vw;
     margin-bottom: 2.7vw;
@@ -100,7 +104,7 @@ button.hidden {
 
     /* -webkit-transition: -webkit-transform 1500ms ease-in;
     -moz-transition: -moz-transform 1500ms ease-in; */
-    transition: transform 100ms ease-in;
+    transition: transform var(--animation_duration) ease-in;
     /* , opacity 1500ms ease-in; */
 }
 
