@@ -4,6 +4,25 @@
 /* Page-wide settings */
 * {
     box-sizing: border-box;
+
+    --primary-color: 119, 110, 101;
+    --background-color: 250, 248, 239;
+    --p1color: var(--bluecolor);
+    --p2color: var(--salmoncolor);
+    /* --green: rgb(127, 160, 60);
+    --greencolor: 127, 160, 60; */
+    --green: rgb(0, 146, 69);
+    --greencolor: 0, 146, 69;
+    --blue: rgb(0, 110, 159);
+    --bluecolor: 0, 110, 159;
+    --salmon: rgb(242, 79, 70);
+    --salmoncolor: 242, 79, 70;
+    --purple:rgb(133, 102, 179);
+    --purplecolor: 133, 102, 179;
+
+    --g1: rgb(252,238,33);
+    --g2: rgb(0,146,69);
+    --g3: rgb(252,238,33);
 }
 
 .App {
@@ -17,18 +36,11 @@ body {
     margin: auto auto;
     float: none !important;
     max-width: 532px;
-    background: #faf8ef;
-    color: #776e65;
+    background: rgb(var(--background-color));
+    color: rgb(var(--primary-color));
     font-family: 'Arimo', sans-serif;
     font-size: 3.24vw;
     position: relative;
-
-    --p1color: var(--bluecolor);
-    --p2color: var(--salmoncolor);
-    --greencolor: 127, 160, 60;
-    --bluecolor: 0, 110, 159;
-    --salmoncolor: 242, 79, 70;
-    --purplecolor: 133, 102, 179;
 }
 
 /* General settings */
@@ -99,6 +111,45 @@ a:visited {
 .mode-select {
   margin-bottom: 4vw;
 }
+
+.coming-soon {
+  opacity: 0.75;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    transparent 100%
+  )
+}
+
+.cool-fill {
+  /* color: white; */
+  cursor: pointer;
+  background: linear-gradient(
+    130deg, 
+    transparent 0% 33%, 
+    transparent 66%,
+    rgb(var(--greencolor)) 100%
+  );
+  background-position: 0% 0%;
+  background-size: 300% 300%;
+  transition: background-position 350ms ease, transform 350ms ease;
+}
+
+.cool-fill:hover {
+  background-position: 100% 100%;
+  transform: scale(1.05, 1.05);
+}
+
+/* .cool-fill {
+  
+  content: "";
+  height: 100%;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+} */
 
 @media screen and (min-width: 520px) {
   .mode-select {

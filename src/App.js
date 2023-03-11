@@ -12,7 +12,7 @@ import Card from "react-bootstrap/Card";
 function App() {
 
     // determine colors
-    var p1color = "blue";
+    var p1color = "green";
     var p2color = "salmon";
 
     const [p1name, setP1name] = useState("Player 1");
@@ -159,7 +159,7 @@ function App() {
             return (
             <div>
                 <Title/>
-                <Card className="mode-select" border="secondary" onClick={() => setState("game")}>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setState("game")}>
                 <Card.Header className="text-center">Solo</Card.Header>
                     <Card.Body>
                         <Card.Text>
@@ -167,7 +167,7 @@ function App() {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <Card className="mode-select" border="secondary" onClick={() => setState("game")}>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setState("game")}>
                     <Card.Header className="text-center">Multiplayer</Card.Header>
                     <Card.Body>
                         <Card.Text>
@@ -175,7 +175,7 @@ function App() {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <Card className="mode-select">
+                <Card className="mode-select coming-soon">
                     <Card.Header className="text-center">Online (Coming soon)</Card.Header>
                     <Card.Body>
                         <Card.Text>
