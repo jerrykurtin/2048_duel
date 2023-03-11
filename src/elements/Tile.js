@@ -1,10 +1,22 @@
-import React from 'react'
+import React, {useState} from 'react'
 import "./Tile.css"
 
 function Tile({row, col, color, val, isNew, isDeleted}) {
-    let multiplier = 121;
+
+    const [tileDim, setTileDim] = useState((window.innerWidth < 520) ? 21.78 : 121);
+    const [measurement, setMeasurement] = useState((window.innerWidth < 520) ? "vw" : "px")
+
+    React.useEffect(() => {
+        // resize tiles to fit the screen
+        function handleResize() {
+            setTileDim((window.innerWidth < 520) ? 21.78 : 121);
+            setMeasurement((window.innerWidth < 520) ? "vw" : "px");
+        }
+        window.addEventListener("resize", handleResize);
+    })
+
     let style = {
-        transform: "translate(" + (col) * multiplier + "px" + ", " + (row) * multiplier + "px" + ")",
+        transform: "translate(" + (col) * tileDim + measurement + ", " + (row) * tileDim + measurement + ")",
     };
 
     return (

@@ -143,7 +143,6 @@ function App() {
             }
         }
         console.log("Board:\n" + myBoard.build_grid());
-        console.log("actions:\n", actions);
 
         setP1score(myBoard.p1score);
         setP2score(myBoard.p2score);
