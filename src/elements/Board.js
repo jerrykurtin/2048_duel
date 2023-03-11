@@ -23,13 +23,18 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
         var squareID = idCounter;
 
         // Determine the type of squares
-        const newSquares = {};
-        const movedSquares = {};
-        for (let row = 0; row < 4; ++row){
-            for (let col = 0; col < 4; ++col){
-                movedSquares[row + "," + col] = [];
-            }
-        }
+        const newSquares = [
+            [null, null, null, null],
+            [null, null, null, null],
+            [null, null, null, null],
+            [null, null, null, null],
+        ]
+        const movedSquares = [
+            [[], [], [], []],
+            [[], [], [], []],
+            [[], [], [], []],
+            [[], [], [], []],
+        ]
 
         for (let row = 0; row < 4; ++row){
             for (let col = 0; col < 4; ++col){
@@ -42,7 +47,7 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
 
                 // new square
                 if (val != 0){
-                    newSquares[row + "," + col] = [row, col, val, color];
+                    newSquares[row][col] = [row, col, val, color];
                 }    
                 
                 // moved/deleted squares
@@ -55,7 +60,7 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                     else
                         color = p2color;
 
-                    movedSquares[drow + "," + dcol].push([row, col, drow, dcol, prevval, color]);
+                    movedSquares[drow][dcol].push([row, col, drow, dcol, prevval, color]);
                 }
             }
         }
@@ -64,20 +69,19 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
         // second run to actually build objects
         for (let row = 0; row < 4; ++row){
             for (let col = 0; col < 4; ++col){
-                let loc = row + "," + col;
-                if (loc in newSquares){
+                if (newSquares[row][col]){
 
                     // new square, gets a new id
-                    if (movedSquares[loc].length == 0){
+                    if (movedSquares[row][col].length == 0){
                         tempIds[row][col] = squareID;
                         squareID++;
-                        tempSquares.push([tempIds[row][col], newTile(...newSquares[loc], tempIds[row][col])]);
+                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col])]);
                     }
 
                     // moved square gets its previous id
-                    else if (movedSquares[loc].length == 1){
-                        let prevID = ids[movedSquares[loc][0][0]][movedSquares[loc][0][1]];
-                        tempSquares.push([prevID, moveTile(...movedSquares[loc][0], false, prevID)]);
+                    else if (movedSquares[row][col].length == 1){
+                        let prevID = ids[movedSquares[row][col][0][0]][movedSquares[row][col][0][1]];
+                        tempSquares.push([prevID, moveTile(...movedSquares[row][col][0], false, prevID)]);
                         tempIds[row][col] = prevID;
                     }
                     
@@ -85,11 +89,11 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
                     else {
                         tempIds[row][col] = squareID;
                         squareID++;
-                        tempSquares.push([tempIds[row][col], newTile(...newSquares[loc], tempIds[row][col])]);
+                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col])]);
 
-                        for (let idx = 0; idx < movedSquares[loc].length; ++idx){
-                            let prevID = ids[movedSquares[loc][idx][0]][movedSquares[loc][idx][1]];
-                            tempSquares.push([prevID, moveTile(...movedSquares[loc][idx], true, prevID)]);
+                        for (let idx = 0; idx < movedSquares[row][col].length; ++idx){
+                            let prevID = ids[movedSquares[row][col][idx][0]][movedSquares[row][col][idx][1]];
+                            tempSquares.push([prevID, moveTile(...movedSquares[row][col][idx], true, prevID)]);
                         }
                     }
                 }
