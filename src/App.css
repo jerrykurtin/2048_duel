@@ -7,7 +7,6 @@
 }
 
 .App {
-    /* width: 500px; */
     width: 90%;
     margin: 5%;
     margin-top: 0;
@@ -55,12 +54,12 @@ ul {
     margin-top: 0;
 }
 
-li {
+/* li {
     line-height: 1.5;
     margin-bottom: 1.8vw;
-}
+} */
 
-button {
+/* button {
     background-color: #FFFFFF;
     border: 1px solid #776e65;
     box-sizing: border-box;
@@ -82,7 +81,7 @@ button {
     user-select: none;
     -webkit-user-select: none;
     width: auto;
-}
+} */
 
 /* button:focus-visible {
     box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
@@ -117,6 +116,11 @@ a:visited {
       font-size: 18px;
   }
 
+  .App {
+    width: 500px;
+    margin: auto;
+  }
+
   h1 {
       font-size: 75px;
   }
@@ -135,17 +139,17 @@ a:visited {
       margin-top: 0;
   }
 
-  li {
+  /* li {
       margin-bottom: 10px;
-  }
+  } */
 
-  button {
+  /* button {
       border: 1px solid #776e65;
       border-radius: 8px;
       font-size: 16px;
       line-height: 20px;
       padding: 7px 10px;
-  }
+  } */
 }
 
 /* Modifiers */

@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import './App.css';
 
-import Title from './elements/Title.js'
-import GameWrapper from "./elements/GameWrapper.js"
-import BoardClass from "./elements/BoardClass.js"
-import Example from "./elements/Example.js";
+import Title from './elements/Title.js';
+import GameWrapper from "./elements/GameWrapper.js";
+import BoardClass from "./elements/BoardClass.js";
+import Settings from "./elements/Settings";
+
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 function App() {
 
@@ -151,6 +154,7 @@ function App() {
     return (
         <div className="App">
             <Title/>
+            <Settings/>
             <GameWrapper p1color={p1color} p2color={p2color}
             board={board} owner={owner}
             p1score={p1score} p2score={p2score}
