@@ -1,0 +1,33 @@
+.endgame-msg {
+    display: inherit;
+    visibility: visible;
+    z-index: 10;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    line-height: 90vw;
+    text-align: center;
+    font-size: 6.3vw;
+    font-weight: bold;
+
+    background: rgb(238, 238, 238);
+    opacity: 0.8 !important;
+
+    -webkit-animation: appear 200ms ease 100ms;
+    -moz-animation: appear 200ms ease 100ms;
+    animation: appear 200ms ease 100ms;
+    -webkit-animation-fill-mode: backwards;
+    -moz-animation-fill-mode: backwards;
+    animation-fill-mode: backwards;
+}
+
+@media screen and (min-width: 520px) {
+
+    .endgame-msg {
+        font-size: 35px;
+        line-height: 500px;
+    }
+}

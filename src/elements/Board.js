@@ -1,9 +1,20 @@
 import React, { useState, useLayoutEffect} from 'react';
-import "./Board.css"
-import Tile from "./Tile"
+import "./Board.css";
+import Tile from "./Tile";
+import GameMessage from './GameMessage';
 
-function Board({p1color, p2color, board, owner, actions, turn}) {
+function winMsg(playerName){
+    if (playerName === "You")
+        return "You win!";
+    else if (playerName === "CPU")
+        return "CPU wins :(";
+    else
+        return playerName + " wins!";
+}
+
+function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, boardState}) {
     const [squares, setSquares] = useState([]);
+    const [endgame, setEndgame] = useState(null);
     const [idCounter, setIdCounter] = useState(0);
     const [ids, setIds] = useState([
         [-1, -1, -1, -1],
@@ -113,11 +124,26 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
         // }
         // console.log("node ids:\n " + nodeState);
 
+        // endgame message
+        if (boardState === "tie"){
+            setEndgame(<GameMessage text="It's a tie!"/>);
+        }
+        else if (boardState === "win1"){
+            setEndgame(<GameMessage color={p1color} text={winMsg(p1name)}/>);
+        }
+        else if (boardState === "win2"){
+            setEndgame(<GameMessage color={p2color} text={winMsg(p2name)}/>);
+        }
+        else {
+            setEndgame(null);
+        }
+
         setSquares(finalSquares);
         setIds(tempIds);
         setIdCounter(squareID);
     }, [turn, board, owner, actions]);
 
+    console.log("board state: " + boardState);
 
     // generate a new tile
     function newTile(row, col, val, color, id){
@@ -131,11 +157,8 @@ function Board({p1color, p2color, board, owner, actions, turn}) {
 
     return (
         <div>
-        <div className="game-container" id="game-container">
-                <div className="endgame-msg text hidden" id="endgame-msg"></div>
-                <div className="endgame-msg text hidden" id="start-msg">
-                    <button id="start-button">Start game (g)</button>
-                </div>
+            <div className="game-container" id="game-container">
+                {endgame}
                 <div className="grid-container">
                     <div className="grid-row">
                         <div className="grid-cell"></div>
