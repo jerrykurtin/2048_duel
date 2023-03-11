@@ -111,19 +111,6 @@ function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, b
             }
         }
 
-        // sort squares to get animations to work
-        tempSquares.sort();
-        var finalSquares = tempSquares.map( x => x[1]);
-        
-        // debug statement to view the ids of each square
-        // let nodeState = "";
-        // for (let r = 0; r < tempIds.length; ++r){
-        //     for (let c = 0; c < tempIds[0].length; ++c)
-        //     nodeState += tempIds[r][c] + "\t";
-        //     nodeState += "\n";
-        // }
-        // console.log("node ids:\n " + nodeState);
-
         // endgame message
         if (boardState === "tie"){
             setEndgame(<GameMessage text="It's a tie!"/>);
@@ -138,12 +125,14 @@ function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, b
             setEndgame(null);
         }
 
+        // sort squares to get animations to work
+        tempSquares.sort();
+        var finalSquares = tempSquares.map( x => x[1]);
+
         setSquares(finalSquares);
         setIds(tempIds);
         setIdCounter(squareID);
     }, [turn, board, owner, actions]);
-
-    console.log("board state: " + boardState);
 
     // generate a new tile
     function newTile(row, col, val, color, id){

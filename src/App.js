@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { CSSTransition } from "react-transition-group";
+import { SwitchTransition, CSSTransition } from "react-transition-group";
 import './App.css';
 
 import Title from './elements/Title.js';
 import GameWrapper from "./elements/GameWrapper.js";
 import BoardClass from "./elements/BoardClass.js";
 import Settings from "./elements/Settings";
-
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import { Button, Form } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
 
 function App() {
 
@@ -149,18 +148,80 @@ function App() {
         setBoardState(myBoard.board_state);
     }
 
+    const [state, setState] = React.useState("menu");
+    const helloRef = React.useRef(null);
+    const goodbyeRef = React.useRef(null);
+    const nodeRef = state ? helloRef : goodbyeRef;
+
+    function renderView(state){
+        console.log("rendering component " + state);
+        if (state === "menu"){
+            return (
+            <div>
+                <Title/>
+                <Card className="mode-select" border="secondary" onClick={() => setState("game")}>
+                <Card.Header className="text-center">Solo</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                        Play against an AI to hone your skills.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card className="mode-select" border="secondary" onClick={() => setState("game")}>
+                    <Card.Header className="text-center">Multiplayer</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                        Play with your friend on the same device
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card className="mode-select">
+                    <Card.Header className="text-center">Online (Coming soon)</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                        Play against a friend, or start a game with a stranger.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            </div>
+            )
+        } 
+
+        else if (state === "game") {
+            return (
+            <div>
+                <Button onClick={() => setState("menu")}>Return Home</Button>
+                <Settings/>
+                <GameWrapper p1color={p1color} p2color={p2color}
+                board={board} owner={owner}
+                p1score={p1score} p2score={p2score}
+                boardState={boardState} actions={actions}
+                p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
+                turn={turn}
+                />
+            </div>
+            )
+        }
+    }
+
+    
 
     return (
         <div className="App">
-            <Title/>
-            <Settings/>
-            <GameWrapper p1color={p1color} p2color={p2color}
-            board={board} owner={owner}
-            p1score={p1score} p2score={p2score}
-            boardState={boardState} actions={actions}
-            p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
-            turn={turn}
-            />
+            <SwitchTransition mode="out-in">
+                <CSSTransition
+                    key={state}
+                    nodeRef={nodeRef}
+                    addEndListener={(done) => {
+                    nodeRef.current.addEventListener("transitionend", done, false);
+                    }}
+                    classNames="fade"
+                >
+                    <div ref={nodeRef} className="button-container">
+                    {renderView(state)}
+                    </div>
+                </CSSTransition>
+            </SwitchTransition>
         </div>
     );
 }
