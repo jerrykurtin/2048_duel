@@ -4,9 +4,13 @@
     align-items: center;
 }
 
+.board_info-container hr {
+    margin: 5px;
+}
+
 .board_info-left {
     border-radius: 1.08vw;
-    background-color: var(--board-color);
+    /* background-color: var(--board-color); */
     padding: 1.8vw;
     width: 33%;
     float: left;
@@ -16,7 +20,7 @@
 
 .board_info-right {
     border-radius: 1.08vw;
-    background-color: var(--board-color);
+    /* background-color: var(--board-color); */
     padding: 1.8vw;
     width: 33%;
     float: left;
@@ -35,6 +39,10 @@
 
 #reset-button {
     margin-bottom: 0.9vw;
+    width: 100%;
+}
+
+.turn-info {
     width: 100%;
 }
 

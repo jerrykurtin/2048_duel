@@ -1,6 +1,8 @@
 import React from 'react'
 import "./TurnInfo.css"
 
+import Card from 'react-bootstrap/Card';
+
 function TurnInfo({p1color, p2color, p1name, p1possessive, p2name, p2possessive, turn, boardState}) {
 
     var msgColor = "";
@@ -47,9 +49,9 @@ function TurnInfo({p1color, p2color, p1name, p1possessive, p2name, p2possessive,
 
     return (
         <div>
-            <div className="turn-container">
+            <Card className="turn-container">
                 <div className={"turn text " + msgColor} id="turn">{msg}</div>
-            </div>
+            </Card>
         </div>
     )
 }
