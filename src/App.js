@@ -4,9 +4,6 @@ import './App.css';
 
 import Title from './elements/Title.js';
 import GameWrapper from "./elements/GameWrapper.js";
-import BoardClass from "./elements/BoardClass.js";
-import Settings from "./elements/Settings";
-import { Button, Form } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 
 function App() {
@@ -20,133 +17,14 @@ function App() {
     const [p2name, setP2name] = useState("Player 2");
     const [p2possessive, setP2possessive] = useState("Player 2's");
 
-    // board
-    var activeGame = true;
-    var myBoard = new BoardClass();
+    const [currMode, setCurrMode] = useState("Solo");
 
-    const [p1score, setP1score] = useState(myBoard.p1score);
-    const [p2score, setP2score] = useState(myBoard.p2score);
-    const [boardState, setBoardState] = useState(myBoard.board_state);
-    const [actions, setActions] = useState(null);
-    const [board, setBoard] = useState(myBoard.board);
-    const [owner, setOwner] = useState(myBoard.owner);
-    const [turn, setTurn] = useState(myBoard.player);
-
-    // handle keypresses
-    var arrowleftPressed = false;
-    var arrowupPressed = false;
-    var arrowrightPressed = false;
-    var arrowdownPressed = false;
-    var resetPressed = false;
-
-    var localMoveTriggered = false;
-    // var moveTriggered = false;
-    var moveType = "";
-
-    useEffect(() => {
-        function handleKeyDown(e) {
-            if (e.keyCode > 36 && e.keyCode < 41)
-                e.preventDefault();
-
-            if (e.keyCode == 82 && !resetPressed){
-                resetPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
-                moveType = "reset";
-                console.log("reset pressed");
-            }
-
-            else if (e.keyCode == 37 && !arrowleftPressed){
-                arrowleftPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
-                moveType = "left";
-                console.log("left arrow pressed");
-            }
-            else if (e.keyCode == 38 && !arrowupPressed){
-                arrowupPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
-                moveType = "up";
-                console.log("up arrow pressed");
-            }
-            else if (e.keyCode == 39 && !arrowrightPressed){
-                arrowrightPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
-                moveType = "right";
-                console.log("right arrow pressed");
-            }
-            else if (e.keyCode == 40 && !arrowdownPressed){
-                arrowdownPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
-                moveType = "down";
-                console.log("down arrow pressed");
-            }
-
-            if (localMoveTriggered){
-                updateBoard(moveType);
-                localMoveTriggered = false;
-                // moveTriggered = false;
-            }
-
-            // console.log("keydown:", e.keyCode); // code of keydown
-        }
-
-    function handleKeyUp(e) {
-        if (e.keyCode == 82)
-            resetPressed = false;
-
-        else if (e.keyCode == 37)
-            arrowleftPressed = false;
-        else if (e.keyCode == 38)
-            arrowupPressed = false;
-        else if (e.keyCode == 39)
-            arrowrightPressed = false;
-        else if (e.keyCode == 40)
-            arrowdownPressed = false;
-
-        // console.log("keyup:", e.keyCode); // code of keydown
+    function setMode(newMode){
+        setCurrMode(newMode);
+        setState("game");
     }
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-
-
-    return function cleanup() {
-        document.removeEventListener("keydown", handleKeyDown);
-        document.removeEventListener("keyup", handleKeyUp);
-    };
-    }, []);
-
-    function updateBoard(move){
-        if (!activeGame)
-            return;
-        if (move == "reset"){
-            myBoard = new BoardClass();
-            setActions(null);
-            setBoard(myBoard.board);
-            setOwner(myBoard.owner);
-            setTurn(myBoard.player);
-        }
-
-        else if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
-            console.log("Previous board:\n" + myBoard.build_grid());
-            let tempActions = myBoard.move(move);
-            if (tempActions){
-                setBoard(myBoard.board);
-                setOwner(myBoard.owner);
-                setActions(tempActions);
-                setTurn(myBoard.player);
-            }
-        }
-        console.log("Board:\n" + myBoard.build_grid());
-
-        setP1score(myBoard.p1score);
-        setP2score(myBoard.p2score);
-        setBoardState(myBoard.board_state);
-    }
+    
 
     const [state, setState] = React.useState("menu");
     const helloRef = React.useRef(null);
@@ -159,7 +37,7 @@ function App() {
             return (
             <div>
                 <Title/>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setState("game")}>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Solo")}>
                 <Card.Header className="text-center">Solo</Card.Header>
                     <Card.Body>
                         <Card.Text>
@@ -167,7 +45,7 @@ function App() {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setState("game")}>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Multiplayer")}>
                     <Card.Header className="text-center">Multiplayer</Card.Header>
                     <Card.Body>
                         <Card.Text>
@@ -190,13 +68,11 @@ function App() {
         else if (state === "game") {
             return (
             <div>
-                <Button onClick={() => setState("menu")}>Return Home</Button>
-                <GameWrapper p1color={p1color} p2color={p2color}
-                board={board} owner={owner}
-                p1score={p1score} p2score={p2score}
-                boardState={boardState} actions={actions}
-                p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
-                turn={turn}
+                <GameWrapper
+                    p1color={p1color} p2color={p2color}
+                    p1name={p1name} p2name={p2name}
+                    p1possessive={p1possessive} p2possessive={p2possessive}
+                    setState={setState} mode={currMode}
                 />
             </div>
             )
