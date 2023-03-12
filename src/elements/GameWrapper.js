@@ -15,7 +15,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { UilArrowLeft } from '@iconscout/react-unicons';
 
 
-function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessive, setState, mode}) {
+function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
 
     // board
     var activeGame = true;
@@ -23,10 +23,8 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
 
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
-    const [difficulty, setDifficulty] = useState("Easy");
-    const [timeLimit, setTimeLimit] = useState("null");
-    const [p1Color, setP1Color] = useState("green");
-    const [p2Color, setP2Color] = useState("purple");
+    const [difficulty, setDifficulty] = useState("easy");
+    const [timeLimit, setTimeLimit] = useState(60);
 
     // board values
     const [p1score, setP1score] = useState(myBoard.p1score);
@@ -130,6 +128,7 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
         if (!activeGame)
             return;
         if (move == "reset"){
+            console.log("processing reset");
             myBoard = new BoardClass();
             setActions(null);
             setBoard(myBoard.board);
@@ -163,7 +162,7 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
     <div>
         <Navbar variant="light">
             <Container>
-                <Navbar.Brand><strong>{"2048 Duel: " + mode}</strong></Navbar.Brand>
+                <Navbar.Brand><strong>{"2048 Duel: " + gamemode + " " + ((timer) ? timer : "")}</strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
                     {/* <Nav className="me-auto"> */}
@@ -174,11 +173,12 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
         </Navbar>
         <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
         <Board p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} board={board} owner={owner} actions={actions} turn={turn} boardState={boardState}/>
-        <Settings gamemode={null} timer={null} resetBoard={resetBoard}
+        <Settings gamemode={gamemode} timer={timer} resetBoard={resetBoard}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}
             difficulty={difficulty} setDifficulty={setDifficulty}
             timeLimit={timeLimit} setTimeLimit={setTimeLimit}
-            p1Color={p1Color} setP1Color={setP1Color} p2Color={p2Color} setP2Color={setP2Color}
+            p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
+            p1possessive={p1possessive} p2possessive={p2possessive}
         />
         
     </div>

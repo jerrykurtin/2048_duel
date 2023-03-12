@@ -9,21 +9,23 @@ import Card from "react-bootstrap/Card";
 function App() {
 
     // determine colors
-    var p1color = "green";
-    var p2color = "purple";
+
+    const [p1color, setP1color] = useState("green");
+    const [p2color, setP2color] = useState("purple");
 
     const [p1name, setP1name] = useState("Player 1");
     const [p1possessive, setP1possessive] = useState("Player 1's");
     const [p2name, setP2name] = useState("Player 2");
     const [p2possessive, setP2possessive] = useState("Player 2's");
 
-    const [currMode, setCurrMode] = useState("Solo");
+    const [gamemode, setGamemode] = useState("Solo");
+    const [timer, setTimer] = useState(null);
 
+    // setMode sets the gamemode and progresses to the next screen
     function setMode(newMode){
-        setCurrMode(newMode);
+        setGamemode(newMode);
         setState("game");
     }
-
     
 
     const [state, setState] = React.useState("menu");
@@ -70,9 +72,10 @@ function App() {
             <div>
                 <GameWrapper
                     p1color={p1color} p2color={p2color}
+                    setP1color={setP1color} setP2color={setP2color}
                     p1name={p1name} p2name={p2name}
                     p1possessive={p1possessive} p2possessive={p2possessive}
-                    setState={setState} mode={currMode}
+                    setState={setState} gamemode={gamemode} timer={timer}
                 />
             </div>
             )
