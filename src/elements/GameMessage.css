@@ -13,7 +13,7 @@
     font-size: 6.3vw;
     font-weight: bold;
 
-    background: rgb(238, 238, 238);
+    background: var(--board-color);
     opacity: 0.8 !important;
 
     -webkit-animation: appear 200ms ease 100ms;

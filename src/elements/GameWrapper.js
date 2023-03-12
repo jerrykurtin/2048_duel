@@ -21,6 +21,14 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
     var activeGame = true;
     var myBoard = new BoardClass();
 
+    // settings
+    const [winningPiece, setWinningPiece] = useState(64);
+    const [difficulty, setDifficulty] = useState("Easy");
+    const [timeLimit, setTimeLimit] = useState("null");
+    const [p1Color, setP1Color] = useState("green");
+    const [p2Color, setP2Color] = useState("purple");
+
+    // board values
     const [p1score, setP1score] = useState(myBoard.p1score);
     const [p2score, setP2score] = useState(myBoard.p2score);
     const [boardState, setBoardState] = useState(myBoard.board_state);
@@ -117,6 +125,7 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
     };
     }, []);
 
+    // update or reset the board
     function updateBoard(move){
         if (!activeGame)
             return;
@@ -145,6 +154,10 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
         setBoardState(myBoard.board_state);
     }
 
+    function resetBoard(){
+        updateBoard("reset");
+    }
+
 
     return (
     <div>
@@ -161,7 +174,12 @@ function GameWrapper({p1color, p2color, p1name, p2name, p1possessive, p2possessi
         </Navbar>
         <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
         <Board p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} board={board} owner={owner} actions={actions} turn={turn} boardState={boardState}/>
-        <Settings/>
+        <Settings gamemode={null} timer={null} resetBoard={resetBoard}
+            winningPiece={winningPiece} setWinningPiece={setWinningPiece}
+            difficulty={difficulty} setDifficulty={setDifficulty}
+            timeLimit={timeLimit} setTimeLimit={setTimeLimit}
+            p1Color={p1Color} setP1Color={setP1Color} p2Color={p2Color} setP2Color={setP2Color}
+        />
         
     </div>
     )
