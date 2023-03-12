@@ -17,14 +17,15 @@ import { UilArrowLeft } from '@iconscout/react-unicons';
 
 function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
 
-    // board
-    var activeGame = true;
-    var myBoard = new BoardClass();
-
+    
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("easy");
     const [timeLimit, setTimeLimit] = useState(60);
+    
+    // board
+    var activeGame = true;
+    const [myBoard, setMyBoard] = useState(new BoardClass(winningPiece));
 
     // board values
     const [p1score, setP1score] = useState(myBoard.p1score);
@@ -128,8 +129,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         if (!activeGame)
             return;
         if (move == "reset"){
-            console.log("processing reset");
-            myBoard = new BoardClass();
+            myBoard.reset_board(winningPiece);
+            // myBoard = new BoardClass();
             setActions(null);
             setBoard(myBoard.board);
             setOwner(myBoard.owner);
@@ -153,11 +154,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         setBoardState(myBoard.board_state);
     }
 
-    function resetBoard(){
-        updateBoard("reset");
-    }
-
-
     return (
     <div>
         <Navbar variant="light">
@@ -173,7 +169,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         </Navbar>
         <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
         <Board p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} board={board} owner={owner} actions={actions} turn={turn} boardState={boardState}/>
-        <Settings gamemode={gamemode} timer={timer} resetBoard={resetBoard}
+        <Settings gamemode={gamemode} timer={timer} updateBoard={updateBoard}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}
             difficulty={difficulty} setDifficulty={setDifficulty}
             timeLimit={timeLimit} setTimeLimit={setTimeLimit}

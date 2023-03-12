@@ -11,7 +11,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import "./Settings.css";
 
 
-function Settings({gamemode, timer, resetBoard, winningPiece, setWinningPiece, difficulty, setDifficulty, timeLimit, setTimeLimit, p1color, setP1color, p2color, setP2color, p1possessive, p2possessive}) {
+function Settings({gamemode, timer, updateBoard, winningPiece, setWinningPiece, difficulty, setDifficulty, timeLimit, setTimeLimit, p1color, setP1color, p2color, setP2color, p1possessive, p2possessive}) {
 
     // update a setting and reset the board.
     function updateSettings(type, event){
@@ -42,7 +42,7 @@ function Settings({gamemode, timer, resetBoard, winningPiece, setWinningPiece, d
             else {
                 console.log("ERROR: unknown updateSettings type: " + type);
             }
-            resetBoard();
+            updateBoard("reset");
         }
     }
 

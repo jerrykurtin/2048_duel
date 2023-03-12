@@ -61,6 +61,48 @@ class BoardClass {
         this.p2score = 2;
     }
 
+    /**
+     * Reset the board without creating a new instance of the class
+     * @param {*} win_condition 
+     * @returns nothing
+     */
+    reset_board(win_condition){
+        // board variables
+        this.board_size = 4;
+        this.win_condition = win_condition;
+        this.squares_added = 1;
+
+        this.board_state = "continue";  // "continue", "no_change", "win1", "win2", "tie"
+        this.player = 0;
+        this.first_round = true;
+
+        // create board
+        this.board = new Array(this.board_size);
+        for (let r = 0; r < this.board.length; ++r){
+            this.board[r] = new Array(this.board_size).fill(0);
+        }
+        this.owner = new Array(this.board_size);
+        for (let r = 0; r < this.owner.length; ++r){
+            this.owner[r] = new Array(this.board_size).fill(-1);
+        }
+
+        // initialize the first numbers
+        var st1 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+        var st2 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+        while (st1[0] == st2[0] || st1[1] == st2[1])
+            st2 = [randint(0, this.board_size - 1), randint(0, this.board_size - 1)]
+
+        this.board[st1[0]][st1[1]] = 2
+        this.owner[st1[0]][st1[1]] = 0
+
+        this.board[st2[0]][st2[1]] = 2
+        this.owner[st2[0]][st2[1]] = 1
+
+
+        this.p1score = 2;
+        this.p2score = 2;
+    }
+
     move(dir, add_squares=true){
         /* Moves in the direction specified, returning the array of actions for each block */
         
