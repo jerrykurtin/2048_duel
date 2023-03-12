@@ -27,7 +27,7 @@ html, body {
     text-align: center;
     font-weight: bold;
     font-size: 10.8vw;
-    color: rgba(255, 255, 255, 1);
+    color: var(--tile-text-color);
 
     width: 19.26vw;
     height: 19.26vw;

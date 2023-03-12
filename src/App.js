@@ -13,7 +13,7 @@ function App() {
 
     // determine colors
     var p1color = "green";
-    var p2color = "salmon";
+    var p2color = "purple";
 
     const [p1name, setP1name] = useState("Player 1");
     const [p1possessive, setP1possessive] = useState("Player 1's");
@@ -191,7 +191,6 @@ function App() {
             return (
             <div>
                 <Button onClick={() => setState("menu")}>Return Home</Button>
-                <Settings/>
                 <GameWrapper p1color={p1color} p2color={p2color}
                 board={board} owner={owner}
                 p1score={p1score} p2score={p2score}

@@ -55,22 +55,23 @@ function Settings() {
 
     return (
         <div>
-            <Navbar variant="light" className="main-navbar">
-                <Container>
-                    <Navbar.Brand href="#home">2048 Duel</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                        <Nav.Link onClick={() => setVisibleElements("instructions")}>Instructions</Nav.Link>
-                        <Nav.Link onClick={() => setVisibleElements("controls")}>Controls</Nav.Link>
-                        <Nav.Link onClick={() => setVisibleElements("settings")}>Settings</Nav.Link>
-                    </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-            <Collapse in={inst}>
-                <div id="how-to-play">
-                    <Alert variant="outline-light" dismissible onClose={() => setInst(false)}>
+            <Tabs
+                defaultActiveKey="controls"
+                justify
+                >
+                <Tab eventKey="controls" title="Controls">
+                    <div className="tab-contents">
+                        <p>
+                            Use the arrow keys (swipe for mobile) to move the pieces.
+                        </p>
+                        <hr />
+                        <p>
+                            For desktop multiplayer, player 1 moves with the arrow keys, and player 2 uses WASD.
+                        </p>
+                    </div>
+                </Tab>
+                <Tab eventKey="how-to" title="How to Play">
+                    <div className="tab-contents">
                         <p>
                             On your turn, choose which direction to move all pieces.
                             When pieces with the same number move into each other, the
@@ -86,27 +87,10 @@ function Settings() {
                             The winner is the first to create the winning piece (64)
                             or the one with the highest score when there are no available moves.
                         </p>
-                    </Alert>
-                </div>
-            </Collapse>
-            <Collapse in={controls}>
-                <div id="controls">
-                    <Alert variant="outline-light" dismissible onClose={() => setControls(false)}>
-                        <p>
-                            Use the arrow keys (swipe for mobile) to move the pieces.
-                        </p>
-                        <hr />
-                        <p>
-                            For desktop multiplayer, player 1 moves with the arrow keys, and player 2 uses WASD.
-                        </p>
-                        
-                    </Alert>
-                    
-                </div>
-            </Collapse>
-            <Collapse in={settings}>
-                <div id="controls">
-                    <Alert variant="outline-light" dismissible onClose={() => setSettings(false)}>
+                    </div>
+                </Tab>
+                <Tab eventKey="settings" title="Settings">
+                    <div className="tab-contents">
                         <ButtonGroup>
                             <Button variant="secondary" disabled>Winning Piece</Button>
                             <Button variant="outline-secondary">32</Button>
@@ -168,12 +152,12 @@ function Settings() {
                             Radio 3
                             </ToggleButton>
                         </ToggleButtonGroup>
+                    </div>
+                </Tab>
+            </Tabs>
 
-                    </Alert>
-
-                    
-                </div>
-            </Collapse>
+        <div className="bottom-buffer"/>
+            
         </div>
     )
 }

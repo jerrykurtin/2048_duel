@@ -6,7 +6,7 @@
 
 .board_info-left {
     border-radius: 1.08vw;
-    background-color: rgb(238, 238, 238);
+    background-color: var(--board-color);
     padding: 1.8vw;
     width: 33%;
     float: left;
@@ -16,7 +16,7 @@
 
 .board_info-right {
     border-radius: 1.08vw;
-    background-color: rgb(238, 238, 238);
+    background-color: var(--board-color);
     padding: 1.8vw;
     width: 33%;
     float: left;

@@ -7,6 +7,11 @@
 
     --primary-color: 119, 110, 101;
     --background-color: 250, 248, 239;
+
+    --board-color: rgb(245, 245, 245);
+    --muted-board-color: rgb(235, 235, 235);
+    --tile-text-color: rgb(255, 255, 255);
+
     --p1color: var(--bluecolor);
     --p2color: var(--salmoncolor);
     /* --green: rgb(127, 160, 60);
@@ -19,10 +24,6 @@
     --salmoncolor: 242, 79, 70;
     --purple:rgb(133, 102, 179);
     --purplecolor: 133, 102, 179;
-
-    --g1: rgb(252,238,33);
-    --g2: rgb(0,146,69);
-    --g3: rgb(252,238,33);
 }
 
 .App {
@@ -139,17 +140,6 @@ a:visited {
   background-position: 100% 100%;
   transform: scale(1.05, 1.05);
 }
-
-/* .cool-fill {
-  
-  content: "";
-  height: 100%;
-  left: 0px;
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  z-index: 1;
-} */
 
 @media screen and (min-width: 520px) {
   .mode-select {

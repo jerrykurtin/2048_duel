@@ -1,0 +1,35 @@
+.tab-contents {
+    padding: 2vw;
+    background-color: white;
+    /* background-color: var(--board-color); */
+    border-radius:  0 0 5px 5px;
+}
+
+/* change tab color */
+.nav-link {
+    color: var(--primary-color);
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+/* change the color of the tab */
+/* .nav-link.active {
+    background-color: var(--board-color) !important;
+} */
+
+
+.bottom-buffer {
+    margin-bottom: 5vw;
+}
+
+@media screen and (min-width: 520px) {
+    .tab-contents {
+        padding: 10px;
+    }
+
+    .bottom-buffer {
+        margin-bottom: 25vw;
+    }
+}
