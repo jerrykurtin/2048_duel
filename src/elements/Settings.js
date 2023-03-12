@@ -21,7 +21,11 @@ function Settings({gamemode, timer, updateBoard, winningPiece, setWinningPiece, 
 
             if (type === "winningPiece"){
                 setWinningPiece(newValue);
+                // calling updateBoard with new value prevents updateBoard from running with stale winningPiece
+                updateBoard("reset", newValue);
+                return;
             }
+
             else if (type === "difficulty"){
                 console.log("setting difficulty to " + newValue);
                 setDifficulty(newValue);

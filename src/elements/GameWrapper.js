@@ -20,6 +20,10 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
+    // function to update w
+    function updateWinner(val){
+
+    }
     const [difficulty, setDifficulty] = useState("easy");
     const [timeLimit, setTimeLimit] = useState(60);
     
@@ -125,11 +129,11 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     }, []);
 
     // update or reset the board
-    function updateBoard(move){
+    function updateBoard(move, wp=winningPiece){
         if (!activeGame)
             return;
         if (move == "reset"){
-            myBoard.reset_board(winningPiece);
+            myBoard.reset_board(wp);
             // myBoard = new BoardClass();
             setActions(null);
             setBoard(myBoard.board);
