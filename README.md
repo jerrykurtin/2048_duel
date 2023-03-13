@@ -2,6 +2,8 @@
 Resetting immediately after a move sometimes causes defects
 timers start immediately
 resetting board does not immediately start timer
+weird bug moving screen on mobile
+menu goes to 2 lines for multiplayer timer on mobile
 
 # Getting Started with Create React App
 
