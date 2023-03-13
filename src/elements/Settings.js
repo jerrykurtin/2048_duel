@@ -70,6 +70,10 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
             </>)
         }
 
+        else if (gamemode.toLowerCase() === "multiplayer"){
+            return null;
+        }
+
         else {
             console.log("ERROR: gamemode " + gamemode + " not recognized");
             return null;

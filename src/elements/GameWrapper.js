@@ -36,7 +36,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [timeLimit, setTimeLimit] = useState(60);
     
     // board
-    var activeGame = true;
+    const [activeGame, setActiveGame] = useState(true);
     const [myBoard, setMyBoard] = useState(new BoardClass(winningPiece));
 
     // board values
@@ -63,9 +63,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const boardRef = useRef();
 
     const [moveType, setMoveType] = useState("reset");
-    // var moveTriggered = false;
-    var awaitingCPU = false;
-    // var moveType = "";
+    var [awaitingCPU, setAwaitingCPU] = useState(false);
 
     // keypress handlers
     function handleKeyDown(e) {
@@ -74,45 +72,30 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
         if (e.keyCode == 82 && !resetPressed){
             resetPressed = true;
-            // moveTriggered = true;
-            // moveType = "reset";
             setMoveType("reset");
             console.log("reset pressed");
         }
 
         else if ((e.keyCode == 37 || e.keyCode == 65) && !arrowleftPressed){
             arrowleftPressed = true;
-            // moveTriggered = true;
-            // moveType = "left";
             setMoveType("left");
             console.log("left arrow pressed");
         }
         else if ((e.keyCode == 38 || e.keyCode == 87) && !arrowupPressed){
             arrowupPressed = true;
-            // moveTriggered = true;
-            // moveType = "up";
             setMoveType("up");
             console.log("up arrow pressed");
         }
         else if ((e.keyCode == 39 || e.keyCode == 68) && !arrowrightPressed){
             arrowrightPressed = true;
-            // moveTriggered = true;
-            // moveType = "right";
             setMoveType("right");
             console.log("right arrow pressed");
         }
         else if ((e.keyCode == 40 || e.keyCode == 83) && !arrowdownPressed){
             arrowdownPressed = true;
-            // moveTriggered = true;
-            // moveType = "down";
             setMoveType("down");
             console.log("down arrow pressed");
         }
-        
-        // if (moveTriggered){
-        //     updateBoard(moveType, winningPiece, gamemode, difficulty);
-        //     moveTriggered = false;
-        // }
     }
     
     function handleKeyUp(e) {
@@ -150,10 +133,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             if (Math.abs(xdiff) / actualWidth > touchThreshold){
                 if (xdiff < 0)
                     setMoveType("left");
-                    // moveType = "left";
                 else
                     setMoveType("right");
-                    // moveType = "right";
                 touchPressed = false;
                 touchTriggered = true;
             }
@@ -162,10 +143,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             else if (Math.abs(ydiff) / actualWidth > touchThreshold){
                 if (ydiff < 0)
                     setMoveType("up");
-                    // moveType = "up";
                 else
                     setMoveType("down");
-                    // moveType = "down";
                 touchPressed = false;
                 touchTriggered = true;
             }
@@ -176,6 +155,20 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         touchPressed = false;
     }
 
+    // Update hooks with the new information
+    function setBoardInfo(tempActions){
+        // if (tempActions){
+        setActions(tempActions);
+        // }
+        setBoard(myBoard.board);
+        setOwner(myBoard.owner);
+        setTurn(myBoard.player);
+        setP1score(myBoard.p1score);
+        setP2score(myBoard.p2score);
+        setBoardState(myBoard.board_state);
+    }
+
+    // Input handlers
     useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
         document.addEventListener("keyup", handleKeyUp);
@@ -197,49 +190,57 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         };
     }, []);
 
-    // process a move
+    // Process a move
     useEffect (() => {
-        if (moveType && activeGame && !awaitingCPU){
-            if (moveType === "reset"){
-                myBoard.reset_board(winningPiece);
-                setActions(null);
-                setBoard(myBoard.board);
-                setOwner(myBoard.owner);
-                setTurn(myBoard.player);
-            }
-    
-            else if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
+        if (!moveType) 
+            return;
+        else if (moveType === "reset"){
+            myBoard.reset_board(winningPiece);
+            setBoardInfo(null);
+            // setActions(null);
+            // setBoard(myBoard.board);
+            // setOwner(myBoard.owner);
+            // setTurn(myBoard.player);
+            setActiveGame(true);
+            setMoveType(null);
+        }
+
+        else if (activeGame && !awaitingCPU){
+            if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
                 console.log("Previous board:\n" + myBoard.build_grid());
                 let tempActions = myBoard.move(moveType);
-                if (tempActions){
-                    setBoard(myBoard.board);
-                    setOwner(myBoard.owner);
-                    setActions(tempActions);
-                    setTurn(myBoard.player);
-                }
+                setBoardInfo(tempActions);
+                // if (tempActions){
+                //     setBoard(myBoard.board);
+                //     setOwner(myBoard.owner);
+                //     setActions(tempActions);
+                //     setTurn(myBoard.player);
+                // }
     
                 // cpu moves after a delay
                 if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
-                    awaitingCPU = true;
+                    // use awaitingCPU to prevent user from moving again (kinda like a mutex)
+                    setAwaitingCPU(true);
                     
                     const cpuMove = setTimeout( () => {
                         let tempActions = myBoard.cpu_move(difficulty);
-                        if (tempActions){
-                            setBoard(myBoard.board);
-                            setOwner(myBoard.owner);
-                            setActions(tempActions);
-                            setTurn(myBoard.player);
-                        }
-                        awaitingCPU = false;
+                        setBoardInfo(tempActions);
+                        // if (tempActions){
+                        //     setBoard(myBoard.board);
+                        //     setOwner(myBoard.owner);
+                        //     setActions(tempActions);
+                        //     setTurn(myBoard.player);
+                        // }
+                        setAwaitingCPU(false);
                     }, 1000);
     
                 }
             }
             console.log("Board:\n" + myBoard.build_grid());
     
-            setP1score(myBoard.p1score);
-            setP2score(myBoard.p2score);
-            setBoardState(myBoard.board_state);
+            // setP1score(myBoard.p1score);
+            // setP2score(myBoard.p2score);
+            // setBoardState(myBoard.board_state);
             setMoveType(null);
         }
 
@@ -252,9 +253,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 <Navbar.Brand><strong>{"2048 Duel: " + gamemode + " " + ((timer) ? timer : "")}</strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
-                    {/* <Nav className="me-auto"> */}
-                        <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Return Home</Nav.Link>
-                    {/* </Nav> */}
+                    <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Return Home</Nav.Link>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
