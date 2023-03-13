@@ -11,14 +11,48 @@ function App() {
     // determine colors
     const [p1color, setP1color] = useState("green");
     const [p2color, setP2color] = useState("purple");
-
+    
     const [p1name, setP1name] = useState("Player 1");
     const [p1possessive, setP1possessive] = useState("Player 1's");
     const [p2name, setP2name] = useState("Player 2");
     const [p2possessive, setP2possessive] = useState("Player 2's");
-
+    
     const [gamemode, setGamemode] = useState("Solo");
     const [timer, setTimer] = useState(null);
+
+    // states used for loading react elements
+    const [state, setState] = useState("menu");
+    const [prevState, setPrevState] = useState(null);
+    const [currState, setCurrState] = useState(state);
+    const [animateDir, setAnimateDir] = useState("fade");
+    const animateRef = useRef(null);
+    
+    // update previous state when state is changed
+    useEffect (() => {
+        setPrevState(currState);
+        setCurrState(state);
+
+    }, [state]);
+    
+    // when previous state is updated, change the fade direction based on current and previous state
+    useEffect( () => {
+        // decide which direction to animate
+        if (state === "game"){
+            setAnimateDir("fade-fr");
+        }
+        else if (state === "menu"){
+            if (prevState === "game"){
+                setAnimateDir("fade-rf");
+            }
+            else{
+                setAnimateDir("fade");
+            }
+        }
+
+        else if (state === "timer"){
+            setAnimateDir("fade");
+        }
+    }, [prevState]);
 
     // setMode sets the gamemode and progresses to the next screen
     function setMode(newMode){
@@ -43,47 +77,6 @@ function App() {
         setState("game");
     }
 
-    // states used for loading react elements
-    const [state, setState] = useState("menu");
-    const [prevState, setPrevState] = useState(null);
-    const [currState, setCurrState] = useState(state);
-    const [animateDir, setAnimateDir] = useState("fade");
-    const animateRef = useRef(null);
-    
-    // update previous state when state is changed
-    useEffect (() => {
-        setPrevState(currState);
-        setCurrState(state);
-
-    }, [state]);
-    
-    // when previous state is updated, change the fade direction based on current and previous state
-    useEffect( () => {
-
-        // console.log("current state: " + state);
-        // console.log("previous state: " + prevState);
-    
-        // decide which direction to animate
-        if (state === "game"){
-            // console.log("setting animate dir to fade-fr");
-            setAnimateDir("fade-fr");
-        }
-        else if (state === "menu"){
-            if (prevState === "game"){
-                // console.log("setting animate dir to fade-rf");
-                setAnimateDir("fade-rf");
-            }
-            else{
-                // console.log("setting animate dir to fade");
-                setAnimateDir("fade");
-            }
-        }
-
-        else if (state === "timer"){
-            // console.log("setting animate dir to fade");
-            setAnimateDir("fade");
-        }
-    }, [prevState]);
 
     function renderView(state){
         console.log("rendering component " + state);
