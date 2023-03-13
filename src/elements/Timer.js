@@ -45,8 +45,8 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
     // reset timer
     useEffect(() => {
         if (resetTimer){
-            setTime(startValue * 1000);
             setResetTimer(false);
+            setTime(startValue * 1000);
         }
     }, [resetTimer]);
 

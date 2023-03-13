@@ -1,3 +1,8 @@
+# Known Bugs
+Resetting immediately after a move sometimes causes defects
+speed timer sometimes does not reset
+timers start immediately
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -33,7 +33,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("easy");
-    const [timeLimit, setTimeLimit] = useState(60);
+    const [timeLimit, setTimeLimit] = useState((timer.toLowerCase() === "timed") ? 60 : 3);
     
     // board
     const [activeGame, setActiveGame] = useState(true);
@@ -54,6 +54,9 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [player1Finish, setPlayer1Finish] = useState(false);
     const [startStopP1Timer, setStartStopP1Timer] = useState(false);
     const [resetP1Timer, setResetP1Timer] = useState(false);
+    const [player2Finish, setPlayer2Finish] = useState(false);
+    const [startStopP2Timer, setStartStopP2Timer] = useState(false);
+    const [resetP2Timer, setResetP2Timer] = useState(false);
 
     // holds a reference to the Board element for swipe listeners
     const boardRef = useRef();
@@ -79,6 +82,24 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             }
         };
     }, []);
+
+    // handle timeout
+    useEffect(() => {
+        if (player1Finish){
+            console.log("player 1 timeout, turn is " + turn);
+            if (timer.toLowerCase() === "speed"){
+                setMoveType("random");
+            }
+            setPlayer1Finish(false);
+        }
+        else if (player2Finish){
+            console.log("player 2 timeout");
+            if (timer.toLowerCase() === "speed"){
+                setMoveType("random");
+            }
+            setPlayer2Finish(false);
+        }
+    }, [player1Finish, player2Finish])
     
     // Process a move
     useEffect (() => {
@@ -91,26 +112,53 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             setMoveType(null);
 
             if (timer){
-                if (turn == 0){
-                    console.log("starting player 1 timer")
-                    setResetP1Timer(true);
-                    setStartStopP1Timer(true);
-                }
-
-                else {
-                    console.log("stopping player 1 timer");
-                    setStartStopP1Timer(false);
-                }
-
+                console.log("restarting timers");
+                setPlayer1Finish(false);
+                setPlayer2Finish(false);
+                setResetP1Timer(true);
+                setResetP2Timer(true);
+                setStartStopP1Timer(true);
             }
         }
     
         else if (activeGame && !awaitingCPU){
             if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
+                
                 console.log("Previous board:\n" + myBoard.build_grid());
-                let tempActions = myBoard.move(moveType);
+                var tempActions;
+                if (moveType === "random"){
+                    console.log("random move");
+                    do {
+                        console.log("trying random move");
+                        tempActions = myBoard.move(randchoice(["left", "up", "right", "down"]));
+                    } while (myBoard.board_state === "no_change");
+                }
+                else{
+                    tempActions = myBoard.move(moveType);
+                }
+                
+                console.log("new board state: " + myBoard.board_state);
                 setBoardInfo(tempActions);
+                
+                // update timer
+                if (timer && myBoard.board_state !== "no_change"){
+                    if (myBoard.player == 0){
+                        console.log("starting player 1 timer")
+                        setStartStopP1Timer(true);
+                        setStartStopP2Timer(false);
+                        if (timer.toLowerCase() === "speed")
+                            setResetP2Timer(true);
+                    }
     
+                    else {
+                        console.log("starting player 2 timer");
+                        setStartStopP2Timer(true);
+                        setStartStopP1Timer(false);
+                        if (timer.toLowerCase() === "speed")
+                            setResetP1Timer(true);
+                    }
+                }
+
                 // cpu moves after a delay
                 if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
                     // use awaitingCPU to prevent user from moving again (kinda like a mutex)
@@ -124,6 +172,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     
                 }
             }
+
             console.log("Board:\n" + myBoard.build_grid());
             setMoveType(null);
         }
@@ -234,14 +283,16 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     // Update hooks with the new information
     function setBoardInfo(tempActions){
-        // if (tempActions){
-        setActions(tempActions);
-        // }
-        setBoard(myBoard.board);
-        setOwner(myBoard.owner);
-        setTurn(myBoard.player);
-        setP1score(myBoard.p1score);
-        setP2score(myBoard.p2score);
+        if (tempActions){
+            setActions(tempActions);
+        }
+        if (myBoard.board_state !== "no_change"){
+            setBoard(myBoard.board);
+            setOwner(myBoard.owner);
+            setTurn(myBoard.player);
+            setP1score(myBoard.p1score);
+            setP2score(myBoard.p2score);
+        }
         setBoardState(myBoard.board_state);
     }
 
@@ -259,8 +310,9 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         </Navbar>
         <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
-            turn={turn} boardState={boardState} setMoveType={setMoveType}
-            timeLimit={timeLimit} setPlayer1Finish={setPlayer1Finish} startStopP1Timer={startStopP1Timer} resetP1Timer={resetP1Timer} setResetP1Timer={setResetP1Timer}
+            turn={turn} boardState={boardState} setMoveType={setMoveType} timeLimit={timeLimit} 
+            setPlayer1Finish={setPlayer1Finish} startStopP1Timer={startStopP1Timer} resetP1Timer={resetP1Timer} setResetP1Timer={setResetP1Timer}
+            setPlayer2Finish={setPlayer2Finish} startStopP2Timer={startStopP2Timer} resetP2Timer={resetP2Timer} setResetP2Timer={setResetP2Timer}
         />
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}

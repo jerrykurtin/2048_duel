@@ -8,7 +8,8 @@ import Timer from './Timer';
 import "./BoardInfo.css"
 
 function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1possessive, p2possessive, turn, boardState, setMoveType,
-					timeLimit, setPlayer1Finish, startStopP1Timer, resetP1Timer, setResetP1Timer}) {
+					timeLimit, setPlayer1Finish, startStopP1Timer, resetP1Timer, setResetP1Timer,
+					setPlayer2Finish, startStopP2Timer, resetP2Timer, setResetP2Timer}) {
 
 	return (
 		<div>
@@ -34,7 +35,7 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 				<div className="board_info-internal text header" id="player2-header"><strong>{p2name}</strong></div>
 				<div className="board_info-internal text" id="player2-timer">
 					<div className="timer-container-right">
-					{/* <strong><Timer signalFinish={setPlayer1Finish} startValue={timeLimit} startStopTimer={startStopP1Timer} resetTimer={resetP1Timer} setResetTimer={setResetP1Timer}/></strong><pre>{" "}</pre>- Time */}
+					<strong><Timer signalFinish={setPlayer2Finish} startValue={timeLimit} startStopTimer={startStopP2Timer} resetTimer={resetP2Timer} setResetTimer={setResetP2Timer}/></strong><pre>{" "}</pre>- Time
 					</div>
 				</div>
 				<div className="board_info-internal text" id="player2-score"><strong>{p2score}</strong> - Score</div>
