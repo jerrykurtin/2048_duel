@@ -20,12 +20,12 @@
     --greencolor: 127, 160, 60; */
     --green: rgb(0, 146, 69);
     --greencolor: 0, 146, 69;
-    --blue: rgb(0, 110, 159);
-    --bluecolor: 0, 110, 159;
-    --salmon: rgb(242, 79, 70);
-    --salmoncolor: 242, 79, 70;
-    --purple:rgb(133, 102, 179);
-    --purplecolor: 133, 102, 179;
+    --blue: rgb(0, 85, 255);
+    --bluecolor: 0, 85, 255;
+    --salmon: rgb(255, 69, 69);
+    --salmoncolor: 255, 69, 69;
+    --purple:rgb(138, 69, 241);
+    --purplecolor: 138, 69, 241;
 }
 
 .App {
