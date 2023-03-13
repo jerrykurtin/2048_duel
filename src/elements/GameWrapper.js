@@ -118,6 +118,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 setResetP1Timer(true);
                 setResetP2Timer(true);
                 setStartStopP1Timer(true);
+                setStartStopP2Timer(false);
             }
         }
     
