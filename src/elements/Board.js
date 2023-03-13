@@ -21,10 +21,12 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         [-1, -1, -1, -1],
         [-1, -1, -1, -1],
         [-1, -1, -1, -1]]);
-
-
+        
+        
     // update the board after a move
     useLayoutEffect( () => {
+        if (boardState === "no_change")
+            return
         // store the new ids
         var tempIds = [
             [-1, -1, -1, -1],
@@ -132,7 +134,7 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         setSquares(finalSquares);
         setIds(tempIds);
         setIdCounter(squareID);
-    }, [turn, board, owner, actions]);
+    }, [turn, board, owner, actions, boardState]);
 
     // generate a new tile
     function newTile(row, col, val, color, id){

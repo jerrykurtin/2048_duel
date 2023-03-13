@@ -1,7 +1,7 @@
 # Known Bugs
 Resetting immediately after a move sometimes causes defects
-speed timer sometimes does not reset
 timers start immediately
+resetting board does not immediately start timer
 
 # Getting Started with Create React App
 
