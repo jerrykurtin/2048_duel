@@ -11,7 +11,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import "./Settings.css";
 
 
-function Settings({gamemode, timer, updateBoard, winningPiece, setWinningPiece, difficulty, setDifficulty, timeLimit, setTimeLimit, p1color, setP1color, p2color, setP2color, p1possessive, p2possessive}) {
+function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, difficulty, setDifficulty, timeLimit, setTimeLimit, p1color, setP1color, p2color, setP2color, p1possessive, p2possessive}) {
 
     // update a setting and reset the board.
     function updateSettings(type, event){
@@ -21,8 +21,7 @@ function Settings({gamemode, timer, updateBoard, winningPiece, setWinningPiece, 
 
             if (type === "winningPiece"){
                 setWinningPiece(newValue);
-                // calling updateBoard with new value prevents updateBoard from running with stale winningPiece
-                updateBoard("reset", newValue, gamemode, difficulty);
+                setMoveType("reset");
                 return;
             }
 
@@ -46,7 +45,7 @@ function Settings({gamemode, timer, updateBoard, winningPiece, setWinningPiece, 
             else {
                 console.log("ERROR: unknown updateSettings type: " + type);
             }
-            updateBoard("reset", winningPiece, gamemode, difficulty);
+            setMoveType("reset");
         }
     }
 

@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 
 import "./BoardInfo.css"
 
-function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1possessive, p2possessive, turn, boardState, updateBoard}) {
+function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1possessive, p2possessive, turn, boardState, setMoveType}) {
 
 	return (
 		<div>
@@ -20,7 +20,7 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 				
 			</div> */}
 			<div className="board_info-center">
-				<Button id="reset-button" variant="outline-main-color" onClick={() => updateBoard("reset")}>Reset (r)</Button>
+				<Button id="reset-button" variant="outline-main-color" onClick={() => setMoveType("reset")}>Reset (r)</Button>
 				<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
 
 			</div>
