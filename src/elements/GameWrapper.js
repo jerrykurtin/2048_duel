@@ -26,10 +26,10 @@ function randchoice(arr){
 
 
 function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
-
+    
     // screen / viewport
     const [actualWidth, setActualWidth] = useState(Math.min(window.innerWidth, window.screen.availWidth));
-
+    
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("easy");
@@ -38,7 +38,9 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     // board
     const [activeGame, setActiveGame] = useState(true);
     const [myBoard, setMyBoard] = useState(new BoardClass(winningPiece));
-
+    const [moveType, setMoveType] = useState("reset");
+    var [awaitingCPU, setAwaitingCPU] = useState(false);
+    
     // board values
     const [p1score, setP1score] = useState(myBoard.p1score);
     const [p2score, setP2score] = useState(myBoard.p2score);
@@ -48,22 +50,97 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [owner, setOwner] = useState(myBoard.owner);
     const [turn, setTurn] = useState(myBoard.player);
 
+    // timer
+    const [player1Finish, setPlayer1Finish] = useState(false);
+    const [startStopP1Timer, setStartStopP1Timer] = useState(false);
+    const [resetP1Timer, setResetP1Timer] = useState(false);
+
+    // holds a reference to the Board element for swipe listeners
+    const boardRef = useRef();
+
+    // Input handlers
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("keyup", handleKeyUp);
+        window.addEventListener("resize", handleResize);
+        if (boardRef && boardRef.current){
+            boardRef.current.addEventListener("touchstart", handleTouchStart);
+            boardRef.current.addEventListener("touchmove", handleTouchMove);
+            boardRef.current.addEventListener("touchend", handleTouchEnd);
+        }
+        
+        return function cleanup() {
+            document.removeEventListener("keydown", handleKeyDown);
+            document.removeEventListener("keyup", handleKeyUp);
+            if (boardRef && boardRef.current){
+                boardRef.current.removeEventListener("touchstart", handleTouchStart);
+                boardRef.current.removeEventListener("touchmove", handleTouchMove);
+                boardRef.current.removeEventListener("touchend", handleTouchEnd);
+            }
+        };
+    }, []);
+    
+    // Process a move
+    useEffect (() => {
+        if (!moveType) 
+            return;
+        else if (moveType === "reset"){
+            myBoard.reset_board(winningPiece);
+            setBoardInfo(null);
+            setActiveGame(true);
+            setMoveType(null);
+
+            if (timer){
+                if (turn == 0){
+                    console.log("starting player 1 timer")
+                    setResetP1Timer(true);
+                    setStartStopP1Timer(true);
+                }
+
+                else {
+                    console.log("stopping player 1 timer");
+                    setStartStopP1Timer(false);
+                }
+
+            }
+        }
+    
+        else if (activeGame && !awaitingCPU){
+            if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
+                console.log("Previous board:\n" + myBoard.build_grid());
+                let tempActions = myBoard.move(moveType);
+                setBoardInfo(tempActions);
+    
+                // cpu moves after a delay
+                if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
+                    // use awaitingCPU to prevent user from moving again (kinda like a mutex)
+                    setAwaitingCPU(true);
+                    
+                    const cpuMove = setTimeout( () => {
+                        let tempActions = myBoard.cpu_move(difficulty);
+                        setBoardInfo(tempActions);
+                        setAwaitingCPU(false);
+                    }, 1000);
+    
+                }
+            }
+            console.log("Board:\n" + myBoard.build_grid());
+            setMoveType(null);
+        }
+    
+    }, [moveType]);
+    
     // handle keypresses
     var arrowleftPressed = false;
     var arrowupPressed = false;
     var arrowrightPressed = false;
     var arrowdownPressed = false;
-
+    
     var resetPressed = false;
     var touchPressed = false;
     var initialX = 0;
     var initialY = 0;
     var touchThreshold = .1;
-    // holds a reference to the Board element for swipe listeners
-    const boardRef = useRef();
-
-    const [moveType, setMoveType] = useState("reset");
-    var [awaitingCPU, setAwaitingCPU] = useState(false);
 
     // keypress handlers
     function handleKeyDown(e) {
@@ -168,83 +245,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         setBoardState(myBoard.board_state);
     }
 
-    // Input handlers
-    useEffect(() => {
-        document.addEventListener("keydown", handleKeyDown);
-        document.addEventListener("keyup", handleKeyUp);
-        window.addEventListener("resize", handleResize);
-        if (boardRef && boardRef.current){
-            boardRef.current.addEventListener("touchstart", handleTouchStart);
-            boardRef.current.addEventListener("touchmove", handleTouchMove);
-            boardRef.current.addEventListener("touchend", handleTouchEnd);
-        }
-        
-        return function cleanup() {
-            document.removeEventListener("keydown", handleKeyDown);
-            document.removeEventListener("keyup", handleKeyUp);
-            if (boardRef && boardRef.current){
-                boardRef.current.removeEventListener("touchstart", handleTouchStart);
-                boardRef.current.removeEventListener("touchmove", handleTouchMove);
-                boardRef.current.removeEventListener("touchend", handleTouchEnd);
-            }
-        };
-    }, []);
-
-    // Process a move
-    useEffect (() => {
-        if (!moveType) 
-            return;
-        else if (moveType === "reset"){
-            myBoard.reset_board(winningPiece);
-            setBoardInfo(null);
-            // setActions(null);
-            // setBoard(myBoard.board);
-            // setOwner(myBoard.owner);
-            // setTurn(myBoard.player);
-            setActiveGame(true);
-            setMoveType(null);
-        }
-
-        else if (activeGame && !awaitingCPU){
-            if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
-                console.log("Previous board:\n" + myBoard.build_grid());
-                let tempActions = myBoard.move(moveType);
-                setBoardInfo(tempActions);
-                // if (tempActions){
-                //     setBoard(myBoard.board);
-                //     setOwner(myBoard.owner);
-                //     setActions(tempActions);
-                //     setTurn(myBoard.player);
-                // }
-    
-                // cpu moves after a delay
-                if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
-                    // use awaitingCPU to prevent user from moving again (kinda like a mutex)
-                    setAwaitingCPU(true);
-                    
-                    const cpuMove = setTimeout( () => {
-                        let tempActions = myBoard.cpu_move(difficulty);
-                        setBoardInfo(tempActions);
-                        // if (tempActions){
-                        //     setBoard(myBoard.board);
-                        //     setOwner(myBoard.owner);
-                        //     setActions(tempActions);
-                        //     setTurn(myBoard.player);
-                        // }
-                        setAwaitingCPU(false);
-                    }, 1000);
-    
-                }
-            }
-            console.log("Board:\n" + myBoard.build_grid());
-    
-            // setP1score(myBoard.p1score);
-            // setP2score(myBoard.p2score);
-            // setBoardState(myBoard.board_state);
-            setMoveType(null);
-        }
-
-    }, [moveType]);
 
     return (
     <div>
@@ -259,7 +259,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         </Navbar>
         <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
-             turn={turn} boardState={boardState} setMoveType={setMoveType}
+            turn={turn} boardState={boardState} setMoveType={setMoveType}
+            timeLimit={timeLimit} setPlayer1Finish={setPlayer1Finish} startStopP1Timer={startStopP1Timer} resetP1Timer={resetP1Timer} setResetP1Timer={setResetP1Timer}
         />
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
