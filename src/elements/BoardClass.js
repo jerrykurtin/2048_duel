@@ -1,6 +1,7 @@
 import React from 'react'
 
 var cardinal_moves = ["up", "down", "left", "right"];
+var aiDebug = false;
 
 class BoardClass {
     constructor(win_condition=64, copy_board=null) {
@@ -392,6 +393,47 @@ class BoardClass {
         return actions;
     }
 
+    cpu_move(difficulty){
+        // search for the best possible moves, return in sorted order
+        var dirs = this.explore_moves();
+        if (!dirs || dirs.length == 0){
+            dirs = [[0, "up"],[ 0, "down"],[ 0, "left"],[ 0, "right"]]
+        }
+        var options = [], costs = [];
+        for (let idx = 0; idx < dirs.length; ++idx){
+            options.push(dirs[idx][1]);
+            costs.push(dirs[idx][0]);
+        }
+        if (aiDebug) console.log("options: " + options + "\, costs (negative of differential for player 2): " + costs);
+
+        var weight;
+        if (difficulty === "easy")
+            weight = [30, 30, 20, 20];
+        else if (difficulty === "medium")
+            weight = [40, 30, 20, 10];
+        else if (difficulty === "hard")
+            weight = [60, 30, 7, 3];
+        else if (difficulty === "impossible")
+            weight = [100, 0, 0, 0];
+        else
+            weight = [1, 1, 1, 1];
+
+        let move = selectrand(options, weight);
+        console.log("CPU moving in direction " + move + " with difficulty " + difficulty);
+        let actions = this.move(move);
+        
+        // failsafe: try every direction if first fails
+        for (let idx = 0; idx < 4; ++idx){
+            if (this.board_state != "no_change")
+                break;
+            move = options[idx];
+            if (aiDebug) console.log("FAILSAFE: CPU moving in direction " + move + " with difficulty " + difficulty);
+            actions = this.move(move);
+        }
+
+        return actions;
+    }
+
     find_move_value(){
         /* finds the maximum and minimum next-turn move values for a board (p1score - p2score) */
         // TO-DO: add depth argument for recursion
@@ -435,7 +477,7 @@ class BoardClass {
         var dirs = [[0, cardinal_moves[0]], [0, cardinal_moves[1]], [0, cardinal_moves[2]], [0, cardinal_moves[3]]];
         var player = this.player;
         // var initial_diff = this.p1score - this.p2score;
-        console.log("received board:\n" + this.build_grid() + " as player " + (player + 1));
+        if (aiDebug) console.log("received board:\n" + this.build_grid() + " as player " + (player + 1));
         // console.log("initial differential (p1score - p2score): " + initial_diff);
 
         // search the moves in every direction
@@ -445,7 +487,7 @@ class BoardClass {
             // var move_diff = temp_board.p1score - temp_board.p2score - initial_diff;
             // move_diff = 0;
 
-            console.log("exploring move " + cardinal_moves[dir] + ", has board\n" + temp_board.build_grid());
+            if (aiDebug) console.log("exploring move " + cardinal_moves[dir] + ", has board\n" + temp_board.build_grid());
 
             // don't promote no_change
             if (temp_board.board_state == "no_change"){
@@ -475,17 +517,17 @@ class BoardClass {
                     var added = min_max[1];
                 // console.log("choosing opponent move with differential " + added);
                 dirs[dir][0] =  added;  // + move_diff;
-                console.log("if the opponent plays optimally, the max score differential they can reach is " + dirs[dir][0]);
+                if (aiDebug) console.log("if the opponent plays optimally, the max score differential they can reach is " + dirs[dir][0]);
                 if (player == 1){
                     dirs[dir][0] = -1 * dirs[dir][0];
                 }
             }
 
-            if (dirs[dir][0] == Number.MAX_VALUE){
-                console.log("prioritizing this move!");
-            }
-            else if (dirs[dir][0] == -Number.MAX_VALUE){
-                console.log("avoiding this move at all costs!");
+            if (aiDebug){
+                if (dirs[dir][0] == Number.MAX_VALUE)
+                    console.log("prioritizing this move!");
+                else if (dirs[dir][0] == -Number.MAX_VALUE)
+                    console.log("avoiding this move at all costs!");
             }
         }
 

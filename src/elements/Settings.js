@@ -22,7 +22,7 @@ function Settings({gamemode, timer, updateBoard, winningPiece, setWinningPiece, 
             if (type === "winningPiece"){
                 setWinningPiece(newValue);
                 // calling updateBoard with new value prevents updateBoard from running with stale winningPiece
-                updateBoard("reset", newValue);
+                updateBoard("reset", newValue, gamemode, difficulty);
                 return;
             }
 
@@ -46,7 +46,7 @@ function Settings({gamemode, timer, updateBoard, winningPiece, setWinningPiece, 
             else {
                 console.log("ERROR: unknown updateSettings type: " + type);
             }
-            updateBoard("reset");
+            updateBoard("reset", winningPiece, gamemode, difficulty);
         }
     }
 

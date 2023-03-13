@@ -23,6 +23,18 @@ function App() {
 
     // setMode sets the gamemode and progresses to the next screen
     function setMode(newMode){
+        if (newMode.toLowerCase() === "solo"){
+            setP1name("You");
+            setP1possessive("Your");
+            setP2name("CPU");
+            setP2possessive("CPU's");
+        }
+        else {
+            setP1name("Player 1");
+            setP1possessive("Player 1's");
+            setP2name("Player 2");
+            setP2possessive("Player 2's");
+        }
         setGamemode(newMode);
         setState("game");
     }

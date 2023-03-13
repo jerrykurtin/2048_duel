@@ -14,6 +14,16 @@ import Navbar from 'react-bootstrap/Navbar';
 
 import { UilArrowLeft } from '@iconscout/react-unicons';
 
+/* random number between min and max, inclusive */
+function randint(min, max){
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+/* random choice of values in a function */
+function randchoice(arr){
+    let idx = randint(0, arr.length - 1);
+    return arr[idx];
+}
+
 
 function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
 
@@ -53,12 +63,12 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const boardRef = useRef();
 
     var moveTriggered = false;
+    var awaitingCPU = false;
+    var cpuActive = false;
     var moveType = "";
 
     useEffect(() => {
         function handleKeyDown(e) {
-            console.log(e.keyCode);
-
             if (e.keyCode > 36 && e.keyCode < 41)
                 e.preventDefault();
 
@@ -95,7 +105,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             }
 
             if (moveTriggered){
-                updateBoard(moveType);
+                updateBoard(moveType, winningPiece, gamemode, difficulty);
                 moveTriggered = false;
             }
 
@@ -176,7 +186,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         }
 
         if (touchTriggered)
-            updateBoard(moveType);
+            updateBoard(moveType, winningPiece, gamemode, difficulty);
     }
 
     function handleTouchEnd(e) {
@@ -185,10 +195,12 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
 
     // update or reset the board
-    function updateBoard(move, wp=winningPiece){
-        if (!activeGame)
+    function updateBoard(move, wp=winningPiece, gmode=gamemode, dfct=difficulty){
+        if (!activeGame || awaitingCPU)
             return;
+        
         if (move == "reset"){
+            console.log("resetting board with winning piece " + wp + ", gamemode " + gmode + ", difficulty " + dfct);
             myBoard.reset_board(wp);
             // myBoard = new BoardClass();
             setActions(null);
@@ -198,6 +210,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         }
 
         else if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
+            console.log("inside move condition, winning piece " + wp + ", gamemode " + gmode + ", difficulty " + dfct);
             console.log("Previous board:\n" + myBoard.build_grid());
             let tempActions = myBoard.move(move);
             if (tempActions){
@@ -205,6 +218,24 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 setOwner(myBoard.owner);
                 setActions(tempActions);
                 setTurn(myBoard.player);
+            }
+
+            // cpu moves after a delay
+            if (gmode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
+                awaitingCPU = true;
+                
+                const cpuMove = setTimeout( () => {
+                    console.log("inside cpuMove, winning piece " + wp + ", gamemode " + gmode + ", difficulty " + dfct);
+                    let tempActions = myBoard.cpu_move(dfct);
+                    if (tempActions){
+                        setBoard(myBoard.board);
+                        setOwner(myBoard.owner);
+                        setActions(tempActions);
+                        setTurn(myBoard.player);
+                    }
+                    awaitingCPU = false;
+                }, randint(500, 1500));
+
             }
         }
         console.log("Board:\n" + myBoard.build_grid());
