@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { SwitchTransition, CSSTransition } from "react-transition-group";
 import './App.css';
 
@@ -9,7 +9,6 @@ import Card from "react-bootstrap/Card";
 function App() {
 
     // determine colors
-
     const [p1color, setP1color] = useState("green");
     const [p2color, setP2color] = useState("purple");
 
@@ -36,14 +35,55 @@ function App() {
             setP2possessive("Player 2's");
         }
         setGamemode(newMode);
+        setState("timer");
+    }
+
+    function setTimerStyle(newTimer){
+        setTimer(newTimer);
         setState("game");
     }
-    
 
-    const [state, setState] = React.useState("menu");
-    const helloRef = React.useRef(null);
-    const goodbyeRef = React.useRef(null);
-    const nodeRef = state ? helloRef : goodbyeRef;
+    // states used for loading react elements
+    const [state, setState] = useState("menu");
+    const [prevState, setPrevState] = useState(null);
+    const [currState, setCurrState] = useState(state);
+    const [animateDir, setAnimateDir] = useState("fade");
+    const animateRef = useRef(null);
+    
+    // update previous state when state is changed
+    useEffect (() => {
+        setPrevState(currState);
+        setCurrState(state);
+
+    }, [state]);
+    
+    // when previous state is updated, change the fade direction based on current and previous state
+    useEffect( () => {
+
+        // console.log("current state: " + state);
+        // console.log("previous state: " + prevState);
+    
+        // decide which direction to animate
+        if (state === "game"){
+            // console.log("setting animate dir to fade-fr");
+            setAnimateDir("fade-fr");
+        }
+        else if (state === "menu"){
+            if (prevState === "game"){
+                // console.log("setting animate dir to fade-rf");
+                setAnimateDir("fade-rf");
+            }
+            else{
+                // console.log("setting animate dir to fade");
+                setAnimateDir("fade");
+            }
+        }
+
+        else if (state === "timer"){
+            // console.log("setting animate dir to fade");
+            setAnimateDir("fade");
+        }
+    }, [prevState]);
 
     function renderView(state){
         console.log("rendering component " + state);
@@ -79,6 +119,38 @@ function App() {
             )
         } 
 
+        else if (state === "timer"){
+            return (
+            <div>
+                <Title/>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle(null)}>
+                <Card.Header className="text-center">No Timer</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                        Classic 2048 Duel with no time limit
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle("Timed")}>
+                    <Card.Header className="text-center">Timed</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                        A timer runs down during your turn. If it reaches 0, your opponent wins!
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle("Speed")}>
+                    <Card.Header className="text-center">Speed</Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                        Each turn, you have a few seconds to move before a random move is chosen for you!
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            </div>
+            )
+        } 
+
         else if (state === "game") {
             return (
             <div>
@@ -101,13 +173,13 @@ function App() {
             <SwitchTransition mode="out-in">
                 <CSSTransition
                     key={state}
-                    nodeRef={nodeRef}
+                    nodeRef={animateRef}
                     addEndListener={(done) => {
-                    nodeRef.current.addEventListener("transitionend", done, false);
+                    animateRef.current.addEventListener("transitionend", done, false);
                     }}
-                    classNames="fade"
+                    classNames={animateDir}
                 >
-                    <div ref={nodeRef} className="button-container">
+                    <div ref={animateRef} id="rendered-view-div">
                     {renderView(state)}
                     </div>
                 </CSSTransition>
