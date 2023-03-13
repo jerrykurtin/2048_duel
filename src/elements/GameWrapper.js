@@ -57,6 +57,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     useEffect(() => {
         function handleKeyDown(e) {
+            console.log(e.keyCode);
+
             if (e.keyCode > 36 && e.keyCode < 41)
                 e.preventDefault();
 
@@ -67,25 +69,25 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 console.log("reset pressed");
             }
 
-            else if (e.keyCode == 37 && !arrowleftPressed){
+            else if ((e.keyCode == 37 || e.keyCode == 65) && !arrowleftPressed){
                 arrowleftPressed = true;
                 moveTriggered = true;
                 moveType = "left";
                 console.log("left arrow pressed");
             }
-            else if (e.keyCode == 38 && !arrowupPressed){
+            else if ((e.keyCode == 38 || e.keyCode == 87) && !arrowupPressed){
                 arrowupPressed = true;
                 moveTriggered = true;
                 moveType = "up";
                 console.log("up arrow pressed");
             }
-            else if (e.keyCode == 39 && !arrowrightPressed){
+            else if ((e.keyCode == 39 || e.keyCode == 68) && !arrowrightPressed){
                 arrowrightPressed = true;
                 moveTriggered = true;
                 moveType = "right";
                 console.log("right arrow pressed");
             }
-            else if (e.keyCode == 40 && !arrowdownPressed){
+            else if ((e.keyCode == 40 || e.keyCode == 83) && !arrowdownPressed){
                 arrowdownPressed = true;
                 moveTriggered = true;
                 moveType = "down";
@@ -103,13 +105,13 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         if (e.keyCode == 82)
             resetPressed = false;
 
-        else if (e.keyCode == 37)
+        else if (e.keyCode == 37 || e.keyCode == 65)
             arrowleftPressed = false;
-        else if (e.keyCode == 38)
+        else if (e.keyCode == 38 || e.keyCode == 87)
             arrowupPressed = false;
-        else if (e.keyCode == 39)
+        else if (e.keyCode == 39 || e.keyCode == 68)
             arrowrightPressed = false;
-        else if (e.keyCode == 40)
+        else if (e.keyCode == 40 || e.keyCode == 83)
             arrowdownPressed = false;
     }
 
