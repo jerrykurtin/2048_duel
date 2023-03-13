@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./GameWrapper.css";
 
 import BoardClass from "./BoardClass.js";
@@ -17,13 +17,11 @@ import { UilArrowLeft } from '@iconscout/react-unicons';
 
 function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
 
-    
+    // screen / viewport
+    const [actualWidth, setActualWidth] = useState(Math.min(window.innerWidth, window.screen.availWidth));
+
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
-    // function to update w
-    function updateWinner(val){
-
-    }
     const [difficulty, setDifficulty] = useState("easy");
     const [timeLimit, setTimeLimit] = useState(60);
     
@@ -45,10 +43,16 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     var arrowupPressed = false;
     var arrowrightPressed = false;
     var arrowdownPressed = false;
-    var resetPressed = false;
 
-    var localMoveTriggered = false;
-    // var moveTriggered = false;
+    var resetPressed = false;
+    var touchPressed = false;
+    var initialX = 0;
+    var initialY = 0;
+    var touchThreshold = .1;
+    // holds a reference to the Board element for swipe listeners
+    const boardRef = useRef();
+
+    var moveTriggered = false;
     var moveType = "";
 
     useEffect(() => {
@@ -58,48 +62,41 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
             if (e.keyCode == 82 && !resetPressed){
                 resetPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
+                moveTriggered = true;
                 moveType = "reset";
                 console.log("reset pressed");
             }
 
             else if (e.keyCode == 37 && !arrowleftPressed){
                 arrowleftPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
+                moveTriggered = true;
                 moveType = "left";
                 console.log("left arrow pressed");
             }
             else if (e.keyCode == 38 && !arrowupPressed){
                 arrowupPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
+                moveTriggered = true;
                 moveType = "up";
                 console.log("up arrow pressed");
             }
             else if (e.keyCode == 39 && !arrowrightPressed){
                 arrowrightPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
+                moveTriggered = true;
                 moveType = "right";
                 console.log("right arrow pressed");
             }
             else if (e.keyCode == 40 && !arrowdownPressed){
                 arrowdownPressed = true;
-                localMoveTriggered = true;
-                // moveTriggered = true;
+                moveTriggered = true;
                 moveType = "down";
                 console.log("down arrow pressed");
             }
 
-            if (localMoveTriggered){
+            if (moveTriggered){
                 updateBoard(moveType);
-                localMoveTriggered = false;
-                // moveTriggered = false;
+                moveTriggered = false;
             }
 
-            // console.log("keydown:", e.keyCode); // code of keydown
         }
 
     function handleKeyUp(e) {
@@ -114,19 +111,76 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             arrowrightPressed = false;
         else if (e.keyCode == 40)
             arrowdownPressed = false;
-
-        // console.log("keyup:", e.keyCode); // code of keydown
     }
 
+    function handleResize() {
+        setActualWidth(Math.min(window.innerWidth, window.screen.availWidth));
+    }
+
+    
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("resize", handleResize);
+    if (boardRef && boardRef.current){
+        boardRef.current.addEventListener("touchstart", handleTouchStart);
+        boardRef.current.addEventListener("touchmove", handleTouchMove);
+        boardRef.current.addEventListener("touchend", handleTouchEnd);
+    }
 
 
     return function cleanup() {
         document.removeEventListener("keydown", handleKeyDown);
         document.removeEventListener("keyup", handleKeyUp);
+        if (boardRef && boardRef.current){
+            boardRef.current.removeEventListener("touchstart", handleTouchStart);
+            boardRef.current.removeEventListener("touchmove", handleTouchMove);
+            boardRef.current.removeEventListener("touchend", handleTouchEnd);
+        }
     };
     }, []);
+
+    function handleTouchStart(e) {
+        touchPressed = true;
+        initialX = e.touches[0].pageX;
+        initialY = e.touches[0].pageY;
+    }
+
+    function handleTouchMove(e){
+        let xdiff = e.touches[0].pageX - initialX;
+        let ydiff = e.touches[0].pageY - initialY;
+        let touchTriggered = false;
+
+        if (touchPressed){
+            e.preventDefault();
+            // left or right move
+            if (Math.abs(xdiff) / actualWidth > touchThreshold){
+                if (xdiff < 0)
+                    moveType = "left";
+                else
+                    moveType = "right";
+                touchPressed = false;
+                touchTriggered = true;
+            }
+
+            // up or down move
+            else if (Math.abs(ydiff) / actualWidth > touchThreshold){
+                if (ydiff < 0)
+                    moveType = "up";
+                else
+                    moveType = "down";
+                touchPressed = false;
+                touchTriggered = true;
+            }
+        }
+
+        if (touchTriggered)
+            updateBoard(moveType);
+    }
+
+    function handleTouchEnd(e) {
+        touchPressed = false;
+    }
+
 
     // update or reset the board
     function updateBoard(move, wp=winningPiece){
@@ -175,7 +229,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
              turn={turn} boardState={boardState} updateBoard={updateBoard}
         />
-        <Board p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
+        <Board ref={boardRef}
+            p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
             board={board} owner={owner} actions={actions}
             turn={turn} boardState={boardState}
         />

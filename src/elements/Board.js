@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect} from 'react';
+import React, { useState, useLayoutEffect, forwardRef} from 'react';
 import "./Board.css";
 import Tile from "./Tile";
 import GameMessage from './GameMessage';
@@ -12,7 +12,7 @@ function winMsg(playerName){
         return playerName + " wins!";
 }
 
-function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, boardState}) {
+const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, boardState}, ref) {
     const [squares, setSquares] = useState([]);
     const [endgame, setEndgame] = useState(null);
     const [idCounter, setIdCounter] = useState(0);
@@ -144,9 +144,14 @@ function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, b
         return <Tile key={id} row={row} col={col} val={val} color={color} isNew={false} isDeleted={isDeleted}/>
     }
 
+    const testHandler = (e) => {
+        console.log("inside test handler");
+        e.preventDefault();
+    };
+
     return (
         <div>
-            <div className="game-container" id="game-container">
+            <div ref={ref} className="game-container" id="game-container">
                 {endgame}
                 <div className="grid-container">
                     <div className="grid-row">
@@ -180,6 +185,6 @@ function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, b
             </div>
         </div>
     )
-}
+});
 
 export default Board
