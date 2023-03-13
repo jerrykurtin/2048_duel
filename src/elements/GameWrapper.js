@@ -171,8 +171,14 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 </Navbar.Collapse>
             </Container>
         </Navbar>
-        <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
-        <Board p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} board={board} owner={owner} actions={actions} turn={turn} boardState={boardState}/>
+        <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score}
+            p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
+             turn={turn} boardState={boardState} updateBoard={updateBoard}
+        />
+        <Board p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
+            board={board} owner={owner} actions={actions}
+            turn={turn} boardState={boardState}
+        />
         <Settings gamemode={gamemode} timer={timer} updateBoard={updateBoard}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}
             difficulty={difficulty} setDifficulty={setDifficulty}
