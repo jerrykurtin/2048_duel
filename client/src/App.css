@@ -20,11 +20,11 @@
     --greencolor: 127, 160, 60; */
     --green: rgb(0, 146, 69);
     --greencolor: 0, 146, 69;
-    --blue: rgb(0, 85, 255);
+    --blue: #0055ff;
     --bluecolor: 0, 85, 255;
-    --salmon: rgb(255, 69, 69);
+    --salmon: #ff4747;
     --salmoncolor: 255, 69, 69;
-    --purple:rgb(138, 69, 241);
+    --purple:#8a45f1;
     --purplecolor: 138, 69, 241;
 }
 

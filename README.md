@@ -1,3 +1,12 @@
+# Temporary build instructions
+
+to run docker:
+```Bash
+docker-compose up
+```
+
+
+
 # Known Bugs
 Resetting immediately after a move sometimes causes defects
 timers start immediately
