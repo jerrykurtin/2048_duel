@@ -49,14 +49,23 @@ function App() {
             }
         }
 
-        else if (state === "timer"){
+        else if (state === "timer" || state === "online-lobby"){
             setAnimateDir("fade");
         }
     }, [prevState]);
 
     // setMode sets the gamemode and progresses to the next screen
     function setMode(newMode){
-        if (newMode.toLowerCase() === "solo"){
+        setGamemode(newMode);
+        if (newMode.toLowerCase() === "online") {
+            setP1name("You");
+            setP1possessive("Your");
+            setP2name("Opponent");
+            setP2possessive("Opponent's");
+            setState("online-lobby");
+            return;
+        }
+        else if (newMode.toLowerCase() === "solo"){
             setP1name("You");
             setP1possessive("Your");
             setP2name("CPU");
@@ -68,7 +77,6 @@ function App() {
             setP2name("Player 2");
             setP2possessive("Player 2's");
         }
-        setGamemode(newMode);
         setState("timer");
     }
 
@@ -100,8 +108,8 @@ function App() {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <Card className="mode-select coming-soon">
-                    <Card.Header className="text-center">Online (Coming soon)</Card.Header>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Online")}>
+                    <Card.Header className="text-center">Online</Card.Header>
                     <Card.Body>
                         <Card.Text>
                         Play against a friend, or start a game with a stranger.
@@ -144,6 +152,16 @@ function App() {
             )
         } 
 
+        else if (state === "online-lobby") {
+            return (
+            <div>
+                <h1>Waiting for Match...</h1>
+                <p>people in lobby: 1</p>
+
+            </div>
+            )
+        }
+
         else if (state === "game") {
             return (
             <div>
@@ -158,7 +176,6 @@ function App() {
             )
         }
     }
-
     
 
     return (

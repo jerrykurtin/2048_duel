@@ -1,20 +1,20 @@
 version: '1.0'
 services:
   api:
-    build: ./api
-    container_name: api_backend
+    build: ./server
+    container_name: 2048_duel-server
     ports:
       - '4000:4000'
     volumes:
-      - ./api:/app
-      - ./api:/node_modules
+      - ./server:/app
+      - ./server:/node_modules
   client:
     build: ./client
-    container_name: client_frontend
+    container_name: 2048_duel-client
     ports:
       - '3000:3000'
     volumes:
       - ./client:/app
-      - ./api:/node_modules
+      - ./client:/node_modules
     stdin_open: true
     tty: true
