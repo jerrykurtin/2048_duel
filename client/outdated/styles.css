@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 
 /* Note: sizing is set for vw with a screen width of 94% (3% margin on each side) */
-
 /* Page-wide settings */
 * {
     box-sizing: border-box;
@@ -337,7 +336,6 @@ a:visited {
     display: inherit;
     visibility: visible;
     z-index: 10;
-
 
     position: absolute;
     top: 0;

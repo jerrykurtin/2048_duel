@@ -1,0 +1,103 @@
+/* animations */
+@import "BoardAnimations.css";
+
+
+.game-container {
+    margin-top: 2.7vw;
+    margin-bottom: 2.7vw;
+    position: relative;
+    padding: 2.7vw;
+    cursor: default;
+    -ms-touch-action: none;
+    touch-action: none;
+    background: var(--board-color);
+    /* background: rgb(238, 238, 238); */
+    border-radius: 1.08vw;
+    width: 90vw;
+    height: 90vw;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* Tiles */
+.grid-container {
+    position: absolute;
+    width: 84.6vw;
+    height: 84.6vw;
+    z-index: 1;
+}
+
+.grid-row {
+    margin-bottom: 2.7vw;
+    width: 84.6vw;
+    height: 19.125vw;
+}
+
+.final-row {
+    margin-bottom: 0px;
+}
+
+.grid-cell {
+    width: 19.125vw;
+    height: 19.125vw;
+    margin-right: 2.7vw;
+    float: left;
+    border-radius: 0.54vw;
+    background: var(--muted-board-color);
+    /* background: rgba(147, 152, 157, 0.2); */
+}
+
+.final-cell {
+    margin-right: 0px;
+}
+
+
+
+/* Endgame Message */
+
+@media screen and (min-width: 520px) {
+    .game-container {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: 15px;
+        width: 500px;
+        height: 500px;
+        border-radius: 6px;
+    }
+
+    .endgame-msg {
+        font-size: 35px;
+        line-height: 500px;
+        border-radius: 6px;
+    }
+
+    .grid-container {
+        width: 470px;
+        height: 470px;
+    }
+
+    .grid-row {
+        margin-bottom: 15px;
+        width: 470px;
+        height: 106.25px;
+    }
+
+    .final-row {
+        margin-bottom: 0px;
+    }
+
+    .grid-cell {
+        width: 106.25px;
+        height: 106.25px;
+        margin-right: 15px;
+        border-radius: 3px;
+    }
+
+    .final-cell {
+        margin-right: 0px;
+    }
+
+    
+}
+

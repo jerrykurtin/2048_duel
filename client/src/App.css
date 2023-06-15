@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+/* Note: sizing is set for vw with a screen width of 94% (3% margin on each side) */
+/* Page-wide settings */
+* {
+    box-sizing: border-box;
+
+    --primary-color: rgb(119, 110, 101);
+    --primary-color-numbers: 119, 110, 101;
+    --background-color: rgb(250, 248, 239);
+    --background-color-numbers: 250, 248, 239;
+
+    --board-color: rgb(255, 255, 255);
+    --muted-board-color: rgb(240, 240, 240);
+    --tile-text-color: rgb(255, 255, 255);
+
+    --p1color: var(--bluecolor);
+    --p2color: var(--salmoncolor);
+    /* --green: rgb(127, 160, 60);
+    --greencolor: 127, 160, 60; */
+    --green: rgb(0, 146, 69);
+    --greencolor: 0, 146, 69;
+    --blue: #0055ff;
+    --bluecolor: 0, 85, 255;
+    --salmon: #ff4747;
+    --salmoncolor: 255, 69, 69;
+    --purple:#8a45f1;
+    --purplecolor: 138, 69, 241;
+}
+
+.App {
+    width: 90%;
+    margin: 5%;
+    margin-top: 0;
+}
+
+html,
+body {
+    margin: auto auto;
+    float: none !important;
+    max-width: 532px;
+    background: var(--background-color);
+    color: var(--primary-color);
+    font-family: 'Arimo', sans-serif;
+    font-size: 3.24vw;
+    position: relative;
+}
+
+/* General settings */
+h1 {
+    font-size: 13.5vw;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 5.04vw;
+    font-weight: bold;
+    margin-top: 2.52vw;
+    /* margin-bottom: 2.52vw; */
+}
+
+p {
+    margin-bottom: 0;
+    display: block;
+    line-height: 1.5;
+}
+
+ul {
+    margin-top: 0;
+}
+
+a:link {
+    color: #776e65;
+    font-weight: bold;
+}
+
+a:visited {
+    color: #776e65;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 520px) {
+  html,
+  body {
+      font-size: 18px;
+  }
+
+  .App {
+    width: 500px;
+    margin: auto;
+  }
+
+  h1 {
+      font-size: 75px;
+  }
+
+  h2 {
+      font-size: 28px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+  }
+
+  p {
+      margin-bottom: 0;
+  }
+
+  ul {
+      margin-top: 0;
+  }
+
+}
+
+/* Title screen */
+.mode-select {
+  margin-bottom: 4vw;
+}
+
+.coming-soon {
+  opacity: 0.75;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    transparent 100%
+  )
+}
+
+.cool-fill {
+  /* color: white; */
+  cursor: pointer;
+  background: linear-gradient(
+    130deg, 
+    var(--board-color) 0% 33%, 
+    var(--board-color) 66%,
+    rgb(var(--greencolor)) 100%
+  );
+  background-position: 0% 0%;
+  background-size: 300% 300%;
+  transition: background-position 350ms ease, transform 350ms ease;
+}
+
+.cool-fill:hover {
+  background-position: 100% 100%;
+  transform: scale(1.05, 1.05);
+}
+
+@media screen and (min-width: 520px) {
+  .mode-select {
+    margin-bottom: 20px;
+  }
+
+}
+
+
+/* Modifiers */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.bolded {
+  font-weight: 600;
+}
+
+.player1.background {
+  background: rgb(var(--p1color));
+}
+
+.player2.background {
+  background: rgb(var(--p2color));
+}
+
+.green.background {
+  background: rgb(var(--greencolor));
+}
+
+.blue.background {
+  background: rgb(var(--bluecolor));
+}
+
+.salmon.background {
+  background: rgb(var(--salmoncolor));
+}
+
+.purple.background {
+  background: rgb(var(--purplecolor));
+}
+
+
+.player1.text {
+  color: rgb(var(--p1color));
+  opacity: 0.75;
+}
+
+.player2.text {
+  color: rgb(var(--p2color));
+  opacity: 0.75;
+}
+
+.green.text {
+  color: rgb(var(--greencolor));
+  opacity: 0.75;
+}
+
+.blue.text {
+  color: rgb(var(--bluecolor));
+  opacity: 0.75;
+}
+
+.salmon.text {
+  color: rgb(var(--salmoncolor));
+  opacity: 0.75;
+}
+
+.purple.text {
+  color: rgb(var(--purplecolor));
+  opacity: 0.75;
+}
+
+
+/* Transitions */
+/* Accept forward, return forward */
+.fade-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-exit{
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-exit-active{
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.fade-enter-active,
+.fade-exit-active{
+  transition: opacity 500ms, transform 500ms;
+}
+
+/* Accept reverse, return forward */
+.fade-rf-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.fade-rf-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-rf-exit{
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-rf-exit-active{
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.fade-rf-enter-active,
+.fade-rf-exit-active{
+  transition: opacity 500ms, transform 500ms;
+}
+
+/* Accept forward, return Reverse */
+.fade-fr-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.fade-fr-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-fr-exit{
+  opacity: 1;
+  transform: translateX(0%);
+}
+.fade-fr-exit-active{
+  opacity: 0;
+  transform: translateX(100%);
+}
+.fade-fr-enter-active,
+.fade-fr-exit-active{
+  transition: opacity 500ms, transform 500ms;
+}
+
+
+
+/* Change the bootstrap behavior and add a new button */
+.btn-outline-main-color {
+  --bs-btn-color: var(--primary-color);
+  --bs-btn-border-color: var(--primary-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--primary-color);
+  --bs-btn-hover-border-color: var(--primary-color);
+  --bs-btn-focus-shadow-rgb: 108, 117, 125;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--primary-color);
+  --bs-btn-active-border-color: var(--primary-color);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--primary-color);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--primary-color);
+  --bs-gradient: none;
+}
+
+.navbar-brand {
+  color: var(--primary-color);
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}

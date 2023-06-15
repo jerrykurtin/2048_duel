@@ -1,0 +1,27 @@
+.turn-container {
+    /* font-size: 4.5vw; */
+    /* margin-bottom: 2.7vw; */
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+}
+
+.turn {
+    /* border-radius: 1.08vw; */
+    /* background-color: rgb(238, 238, 238); */
+    padding: 0.45vw 1.8vw;
+    text-align: center;
+}
+
+@media screen and (min-width: 520px) {
+    /* .turn-container {
+        font-size: 25px;
+        margin-bottom: 15px;
+    }
+    */
+
+    .turn {
+        /* border-radius: 6px; */
+        padding: 2.5px 10px;
+    }
+}
