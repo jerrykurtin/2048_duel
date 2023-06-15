@@ -22,3 +22,4 @@ timers start immediately
 resetting board does not immediately start timer
 weird bug moving screen on mobile
 menu goes to 2 lines for multiplayer timer on mobile
+navigation arrows don't work like you'd expect
