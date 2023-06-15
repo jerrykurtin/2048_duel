@@ -5,6 +5,7 @@ import './App.css';
 import Title from './elements/Title.js';
 import GameWrapper from "./elements/GameWrapper.js";
 import Card from "react-bootstrap/Card";
+import OnlineLobby from "./OnlineLobby";
 
 function App() {
 
@@ -155,9 +156,7 @@ function App() {
         else if (state === "online-lobby") {
             return (
             <div>
-                <h1>Waiting for Match...</h1>
-                <p>people in lobby: 1</p>
-
+                <OnlineLobby/>
             </div>
             )
         }
