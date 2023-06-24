@@ -8,35 +8,61 @@ function OnlineLobby() {
     const [playersOnline, setPlayersOnline] = useState(0);
     const [onlineStatus, setOnlineStatus] = useState("lobby");  // "lobby", "waiting", "privateWaiting", "inGame"
     const [username, setUsername] = useState("");
+    const [socket, setSocket] = useState(null);
+    const [room, setRoom] = useState(null);
 
     // start and end socket connnection
     useEffect(() => {
-        const socket = socketIOClient(ENDPOINT);
+        const newSocket = socketIOClient(ENDPOINT);
 
-        socket.on("TestTime", data => {
+        newSocket.on("TestTime", data => {
             console.log("response received!");
             setResponse(data);
         });
 
-        socket.on("OnlineCount", (pOnline) => {
+        newSocket.on("OnlineCount", (pOnline) => {
             console.log("new player");
             setPlayersOnline(pOnline);
         })
 
-        socket.on("username", (newUsername) => {
+        newSocket.on("username", (newUsername) => {
             console.log("new username given: ", newUsername);
             setUsername(newUsername);
         })
 
+        newSocket.on("RoomAssigned", (newRoom) => {
+            console.log("room assigned!");
+            setRoom(newRoom);
+        })
+
+        setSocket(newSocket);
+
         // clean up
-        return () => socket.disconnect();
+        return () => newSocket.disconnect();
     }, []);
+
+    /**
+     * Join the random room queue
+     */
+    function joinQueue() {
+        socket.emit("JoinQueue", {username: username});
+        setOnlineStatus("waiting");
+    }
+
+    /**
+     * leave the random room queue.
+     */
+    function leaveQueue() {
+        socket.emit("LeaveQueue", {username: username});
+        setRoom(null);
+        setOnlineStatus("lobby");
+    }
 
     function loadView(status) {
         if (status === "lobby") {
             return (<>
                 <h1>Lobby</h1>
-                <Button onClick={() => setOnlineStatus("waiting")}>Join Random Match</Button>
+                <Button onClick={() => joinQueue()}>Join Random Match</Button>
                 <Button>Start Local Match</Button>
                 <Button>Join Local Match</Button>
             </>);
@@ -45,8 +71,7 @@ function OnlineLobby() {
         else if (status === "waiting") {
             return (<>
                 <h1>Waiting for Match...</h1>
-                <Button onClick={() => setOnlineStatus("lobby")}>Return</Button>
-    
+                <Button onClick={() => leaveQueue()}>Return</Button>
             </>);
         }
     }
@@ -55,6 +80,7 @@ function OnlineLobby() {
     <div>
         <p>{"Username: " + username}</p>
         <p>{"Players online: " + playersOnline}</p>
+        <p>{"Room: " + room}</p>
         <p>It's <time dateTime={response}>{response}</time></p>
         { loadView(onlineStatus) }
     </div>

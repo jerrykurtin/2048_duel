@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const http = require("http");
+const http = require('http');
 const socketIo = require('socket.io');
+const { Queue } = require('@datastructures-js/queue');
+
 
 const PORT = process.env.PORT || 4000;
 const index = require("./routes/index");
@@ -18,15 +20,19 @@ const io = socketIo(server, {
 });
 
 // ------------------------ Settings ------------------------
-const GUEST_ID_LENGTH = 5;
-
+const GUEST_ID_LENGTH = 6;
+const GAME_ROOM_LENGTH = 5;
 // ----------------------------------------------------------
 
 // ------------------------ Server Information ------------------------
 const activeUsers = new Set();
 // map a user to their socket
-const clientMap = new Map();
+const socketMap = new Map();
 var playersOnline = 0;
+const lobbyQueue = new Queue();
+const usersInLobbyQueue = new Set();
+// map a user to their active game
+const gameMap = new Map();
 
 // --------------------------------------------------------------------
 
@@ -34,10 +40,16 @@ let intervals = {};
 io.on("connection", (socket) => {
     console.log("New client connected");
     const newUsername = addUser(socket);
-    clientMap.set(newUsername, socket);
-    console.log(clientMap.get(newUsername).id);
+    socketMap.set(newUsername, socket);
 
     intervals[socket.id] = setInterval(() => emitTestTime(socket), 1000);
+
+    socket.on("JoinQueue", ({username}) => {
+        joinQueue(username);
+    });
+    socket.on("LeaveQueue", ({username}) => {
+        leaveQueue(username);
+    })
 
     // disconnect a user
     socket.on("disconnect", () => {
@@ -46,7 +58,7 @@ io.on("connection", (socket) => {
         delete intervals[socket.id];
 
         removeUser(socket, newUsername);
-        clientMap.delete(newUsername);
+        socketMap.delete(newUsername);
 
     });
 });
@@ -77,7 +89,7 @@ function addUser(socket) {
     playersOnline++;
     var newUsername;
     do {
-        newUsername = generateGuestId(GUEST_ID_LENGTH);
+        newUsername = "guest-" + generateRandomName(GUEST_ID_LENGTH);
     } while (activeUsers.has(newUsername));
 
     activeUsers.add(newUsername);
@@ -96,11 +108,55 @@ function removeUser(socket, username) {
     io.emit("OnlineCount", playersOnline);
 }
 
-function generateGuestId(idLength) {
-    let result = 'guest-';
-    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+/**
+ * Create a new guest username
+ */
+function generateRandomName(idLength) {
+    let result = '';
+    const characters = 'abcdefghjkmnpqrstuvwxyz23456789';
     for (let i = 0; i < idLength; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return result;
+}
+
+/**
+ * Add a user to queue, dequeue if enough for a match.
+ */
+function joinQueue(username) {
+    lobbyQueue.push(username);
+    usersInLobbyQueue.add(username);
+    console.log("joined queue with username: ", username);
+
+    if (usersInLobbyQueue.size > 1) {
+        createGameRoom();
+    }
+}
+
+/**
+ * Allows a user to forcefully leave queue
+ */
+function leaveQueue(username) {
+    usersInLobbyQueue.delete(username);
+    console.log("left queue with username: ", username);
+}
+
+/**
+ * Create a matching between 2 users.
+ */
+function createGameRoom() {
+    var gameRoom = generateRandomName(GAME_ROOM_LENGTH);
+    console.log("creating new room:", gameRoom);
+
+    for (let pl = 0; pl < 2; ++pl) {
+        while (!usersInLobbyQueue.has(lobbyQueue.front())) {
+            lobbyQueue.pop();
+        }
+        let newPlayer = lobbyQueue.pop();
+        usersInLobbyQueue.delete(newPlayer);
+
+        gameMap.set(newPlayer, gameRoom);
+        socketMap.get(newPlayer).emit("RoomAssigned", gameRoom);
+        console.log("added player ", newPlayer, " to game room ", gameRoom);
+    }
 }
