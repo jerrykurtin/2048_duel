@@ -1,5 +1,4 @@
 * {
-    --card-radius: 2vw;
     --card-width: 31%;
 }
 
@@ -14,7 +13,7 @@
 }
 
 .board_info-left {
-    border-radius: var(--card-radius);
+    border-radius: var(--border-radius);
     /* background-color: var(--board-color); */
     padding: 1.8vw;
     width: var(--card-width);
@@ -24,7 +23,7 @@
 }
 
 .board_info-right {
-    border-radius: var(--card-radius);
+    border-radius: var(--border-radius);
     /* background-color: var(--board-color); */
     padding: 1.8vw;
     width: var(--card-width);
@@ -49,7 +48,7 @@
 
 #reset-button {
     /* margin-bottom: 0.9vw; */
-    border-radius: var(--card-radius);
+    border-radius: var(--border-radius);
     width: 100%;
 	margin: 0 auto 1vw;
 }
@@ -91,12 +90,10 @@ pre {
     }
 
     .board_info-left {
-        border-radius: 6px;
         padding: 10px;
     }
 
     .board_info-right {
-        border-radius: 6px;
         padding: 10px;
     }
 

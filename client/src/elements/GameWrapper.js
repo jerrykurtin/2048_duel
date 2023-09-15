@@ -32,7 +32,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
-    const [difficulty, setDifficulty] = useState("easy");
+    const [difficulty, setDifficulty] = useState("Easy");
     const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
     
     // board
@@ -170,7 +170,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                             setResetP1Timer(true);
                     }
                 }
-
                 // cpu moves after a delay
                 if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
                     // use awaitingCPU to prevent user from moving again (kinda like a mutex)
@@ -328,7 +327,11 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     <div>
         <Navbar variant="light">
             <Container>
-                <Navbar.Brand><strong>{"2048 Duel: " + gamemode + " " + ((timer) ? timer : "")}</strong></Navbar.Brand>
+                <Navbar.Brand><strong>{
+                    ((p1color === p2color) ? " Blind! " : "2048 Duel: ") + 
+                    ((gamemode.toLowerCase() == "solo") ? difficulty : gamemode) +
+                    ((timer) ? " " + timer : "")}
+                </strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
                     <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Return Home</Nav.Link>

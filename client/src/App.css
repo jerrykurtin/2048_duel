@@ -26,7 +26,22 @@
     --salmoncolor: 255, 69, 69;
     --purple:#8a45f1;
     --purplecolor: 138, 69, 241;
+
+    --border-radius-large: 4vw;
+    --border-radius: 2vw;
+    --border-radius-small: 1.5vw;
 }
+
+@media screen and (min-width: 520px) {
+    * {
+        --border-radius-large: 15.6px;
+        --border-radius: 10.4px;
+        --border-radius-small: 7.8px;
+    }
+}
+
+
+
 
 .App {
     width: 90%;
@@ -121,7 +136,7 @@ a:visited {
 .mode-select {
   margin-bottom: 4vw;
   height: 20vh;
-  border-radius: 2vh;
+  border-radius: var(--border-radius-large);
 }
 
 .mode-select-text {
@@ -330,4 +345,12 @@ a:visited {
 
 .nav-link:hover {
   text-decoration: underline;
+}
+
+.nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+.card-header, .card-body {
+    color: var(--primary-color) !important;
 }

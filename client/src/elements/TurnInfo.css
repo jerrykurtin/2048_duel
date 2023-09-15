@@ -1,6 +1,7 @@
 .turn-container {
     width: 80%;
     margin: auto;
+    border-radius: var(--border-radius-small);
 }
 
 .turn {
