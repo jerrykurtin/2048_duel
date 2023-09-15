@@ -19,6 +19,12 @@ docker-compose up
 ## Build instructions for Capacitor
 ### Developing locally
 Uncomment server code in capacitor.config.ts
+```
+server: {
+    url: 'http://<ip_address>:<port>',
+    cleartext: true
+}
+```
 
 Start app locally
 ```Bash

@@ -1,9 +1,6 @@
 .turn-container {
-    /* font-size: 4.5vw; */
-    /* margin-bottom: 2.7vw; */
-    display: flex;
-    justify-content: center;
-    /* align-items: center; */
+    width: 80%;
+    margin: auto;
 }
 
 .turn {

@@ -92,7 +92,7 @@ function App() {
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Multiplayer")}>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Multi")}>
                     <Card.Header className="text-center">Multiplayer</Card.Header>
                     <Card.Body>
                         <Card.Text>

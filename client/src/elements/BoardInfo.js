@@ -29,8 +29,9 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 
 			<div className="board_info-center">
 				<Button id="reset-button" variant="outline-main-color" onClick={() => setMoveType("reset")}>Reset (r)</Button>
-				<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
-
+				<div className="turn-info-wrapper">
+					<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
+				</div>
 			</div>
 
 			<Card className={"board_info-right text text-right " + p2color}>

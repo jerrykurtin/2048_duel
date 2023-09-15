@@ -12,7 +12,7 @@
     border-radius: 1.08vw;
     /* background-color: var(--board-color); */
     padding: 1.8vw;
-    width: 33%;
+    width: 31%;
     float: left;
     margin-left: 0;
     margin-right: 1.5%;
@@ -22,7 +22,7 @@
     border-radius: 1.08vw;
     /* background-color: var(--board-color); */
     padding: 1.8vw;
-    width: 33%;
+    width: 31%;
     float: right;
     justify-content: right;
     margin-left: 1.5%;
@@ -30,21 +30,22 @@
 }
 
 .board_info-center {
-    display: grid;
+    /* display: grid; */
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 31%;
+    width: 35%;
     float: left;
 }
 
-#reset-button {
-    margin-bottom: 0.9vw;
-    width: 100%;
+.turn-info-wrapper {
+    margin: auto;
 }
 
-.turn-info {
+#reset-button {
+    /* margin-bottom: 0.9vw; */
     width: 100%;
+	margin: 0 auto 1vw;
 }
 
 #settings-link {

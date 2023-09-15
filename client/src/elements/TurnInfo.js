@@ -31,7 +31,7 @@ function TurnInfo({p1color, p2color, p1name, p1possessive, p2name, p2possessive,
             msgColor = p1color;
         else
             msgColor = p2color;
-        msg = "No change, move again"
+        msg = "Move again"
     }
 
     // normal turn
@@ -48,11 +48,11 @@ function TurnInfo({p1color, p2color, p1name, p1possessive, p2name, p2possessive,
 
 
     return (
-        <div>
+        <>
             <Card className="turn-container">
                 <div className={"turn text " + msgColor} id="turn">{msg}</div>
             </Card>
-        </div>
+        </>
     )
 }
 
