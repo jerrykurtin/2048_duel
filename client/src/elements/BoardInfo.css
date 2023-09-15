@@ -49,6 +49,7 @@
 
 #reset-button {
     /* margin-bottom: 0.9vw; */
+    border-radius: var(--card-radius);
     width: 100%;
 	margin: 0 auto 1vw;
 }
