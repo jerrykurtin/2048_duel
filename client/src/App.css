@@ -120,6 +120,12 @@ a:visited {
 /* Title screen */
 .mode-select {
   margin-bottom: 4vw;
+  height: 20vh;
+  border-radius: 2vh;
+}
+
+.mode-select-text {
+    text-align: center;
 }
 
 .coming-soon {
