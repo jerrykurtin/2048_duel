@@ -21,8 +21,6 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
 
             if (type === "winningPiece"){
                 setWinningPiece(newValue);
-                setMoveType("reset");
-                return;
             }
 
             else if (type === "difficulty"){
@@ -36,10 +34,14 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
             else if (type === "p1color"){
                 console.log("setting p1 color: " + newValue);
                 setP1color(newValue);
+                setMoveType("refresh");
+                return;
             }
             else if (type === "p2color"){
                 console.log("setting p2 color: " + newValue);
                 setP2color(newValue);
+                setMoveType("refresh");
+                return;
             }
 
             else {

@@ -49,6 +49,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [board, setBoard] = useState(myBoard.board);
     const [owner, setOwner] = useState(myBoard.owner);
     const [turn, setTurn] = useState(myBoard.player);
+    const [boardRefresh, setBoardRefresh] = useState(false);
 
     // timer
     const [player1Finish, setPlayer1Finish] = useState(false);
@@ -116,6 +117,12 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     useEffect (() => {
         if (!moveType) 
             return;
+
+        else if (moveType === "refresh") {
+            setBoardRefresh(!boardRefresh);
+            setMoveType(null);
+        }
+
         else if (moveType === "reset"){
             myBoard.reset_board(winningPiece);
             setBoardInfo(null);
@@ -334,7 +341,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 </strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
-                    <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Return Home</Nav.Link>
+                    <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Home</Nav.Link>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
@@ -347,7 +354,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
             board={board} owner={owner} actions={actions}
-            turn={turn} boardState={boardState}
+            turn={turn} boardState={boardState} refresh={boardRefresh}
         />
         <Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}
