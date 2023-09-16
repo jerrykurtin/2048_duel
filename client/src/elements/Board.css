@@ -12,12 +12,16 @@
     touch-action: none;
     background: var(--board-color);
     /* background: rgb(238, 238, 238); */
-    border-radius: 1.08vw;
+    border-radius: var(--border-radius);
     width: 90vw;
     height: 90vw;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.endgame-msg {
+    border-radius: var(--border-radius);
 }
 
 /* Tiles */
@@ -43,7 +47,7 @@
     height: 19.125vw;
     margin-right: 2.7vw;
     float: left;
-    border-radius: 0.54vw;
+    border-radius: var(--border-radius-small);
     background: var(--muted-board-color);
     /* background: rgba(147, 152, 157, 0.2); */
 }
@@ -63,13 +67,13 @@
         padding: 15px;
         width: 500px;
         height: 500px;
-        border-radius: 6px;
+        border-radius: var(--border-radius);
     }
 
     .endgame-msg {
         font-size: 35px;
         line-height: 500px;
-        border-radius: 6px;
+        border-radius: var(--border-radius);
     }
 
     .grid-container {
@@ -91,7 +95,7 @@
         width: 106.25px;
         height: 106.25px;
         margin-right: 15px;
-        border-radius: 3px;
+        border-radius: var(--border-radius-small);
     }
 
     .final-cell {

@@ -1,7 +1,13 @@
 .tab-contents {
     padding: 2vw;
     background-color: var(--board-color);
-    border-radius:  0 0 5px 5px;
+    border-radius:  0 0 var(--border-radius) var(--border-radius);
+}
+
+.toggle-name {
+    color: var(--primary-color) !important;
+    opacity: 1 !important;
+    /* font-weight: 500; */
 }
 
 /* change tab color */

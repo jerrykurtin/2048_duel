@@ -87,15 +87,15 @@ function App() {
                 <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Solo")}>
                 <Card.Header className="text-center">Solo</Card.Header>
                     <Card.Body>
-                        <Card.Text>
+                        <Card.Text className="mode-select-text">
                         Play against an AI to hone your skills.
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Multiplayer")}>
+                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Multi")}>
                     <Card.Header className="text-center">Multiplayer</Card.Header>
                     <Card.Body>
-                        <Card.Text>
+                        <Card.Text className="mode-select-text">
                         Play with your friend on the same device
                         </Card.Text>
                     </Card.Body>
@@ -103,7 +103,7 @@ function App() {
                 <Card className="mode-select coming-soon">
                     <Card.Header className="text-center">Online (Coming soon)</Card.Header>
                     <Card.Body>
-                        <Card.Text>
+                        <Card.Text className="mode-select-text">
                         Play against a friend, or start a game with a stranger.
                         </Card.Text>
                     </Card.Body>
@@ -119,7 +119,7 @@ function App() {
                 <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle(null)}>
                 <Card.Header className="text-center">No Timer</Card.Header>
                     <Card.Body>
-                        <Card.Text>
+                        <Card.Text className="mode-select-text">
                         Classic 2048 Duel with no time limit
                         </Card.Text>
                     </Card.Body>
@@ -127,7 +127,7 @@ function App() {
                 <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle("Timed")}>
                     <Card.Header className="text-center">Timed</Card.Header>
                     <Card.Body>
-                        <Card.Text>
+                        <Card.Text className="mode-select-text">
                         A timer runs down during your turn. If it reaches 0, your opponent wins!
                         </Card.Text>
                     </Card.Body>
@@ -135,7 +135,7 @@ function App() {
                 <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle("Speed")}>
                     <Card.Header className="text-center">Speed</Card.Header>
                     <Card.Body>
-                        <Card.Text>
+                        <Card.Text className="mode-select-text">
                         Each turn, you have a few seconds to move before a random move is chosen for you!
                         </Card.Text>
                     </Card.Body>

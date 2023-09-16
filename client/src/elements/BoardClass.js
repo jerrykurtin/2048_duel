@@ -407,13 +407,13 @@ class BoardClass {
         if (aiDebug) console.log("options: " + options + "\, costs (negative of differential for player 2): " + costs);
 
         var weight;
-        if (difficulty === "easy")
+        if (difficulty.toLowerCase() === "easy")
             weight = [30, 30, 20, 20];
-        else if (difficulty === "medium")
+        else if (difficulty.toLowerCase() === "medium")
             weight = [40, 30, 20, 10];
-        else if (difficulty === "hard")
+        else if (difficulty.toLowerCase() === "hard")
             weight = [60, 30, 7, 3];
-        else if (difficulty === "impossible")
+        else if (difficulty.toLowerCase() === "impossible")
             weight = [100, 0, 0, 0];
         else
             weight = [1, 1, 1, 1];

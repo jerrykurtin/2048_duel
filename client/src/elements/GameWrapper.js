@@ -24,6 +24,10 @@ function randchoice(arr){
     return arr[idx];
 }
 
+function swappable(board_state) {
+    return (["no_change", "win1", "win2"].indexOf(board_state) === -1);
+}
+
 
 function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
     
@@ -32,7 +36,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
-    const [difficulty, setDifficulty] = useState("easy");
+    const [difficulty, setDifficulty] = useState("Easy");
     const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
     
     // board
@@ -49,6 +53,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [board, setBoard] = useState(myBoard.board);
     const [owner, setOwner] = useState(myBoard.owner);
     const [turn, setTurn] = useState(myBoard.player);
+    const [boardRefresh, setBoardRefresh] = useState(false);
+    const [boardTimeout, setBoardTimeout] = useState(false);
 
     // timer
     const [player1Finish, setPlayer1Finish] = useState(false);
@@ -57,6 +63,20 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [player2Finish, setPlayer2Finish] = useState(false);
     const [startStopP2Timer, setStartStopP2Timer] = useState(false);
     const [resetP2Timer, setResetP2Timer] = useState(false);
+
+    function stopAllTimers() {
+        setStartStopP1Timer(false);
+        setStartStopP2Timer(false);
+    }
+
+    function resetBoard() {
+        myBoard.reset_board(winningPiece);
+            setBoardRefresh(!boardRefresh);
+            setBoardTimeout(false);
+            setBoardInfo(null);
+            setActiveGame(true);
+            setMoveType(null);
+    }
 
     // holds a reference to the Board element for swipe listeners
     const boardRef = useRef();
@@ -95,7 +115,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             else if (timer.toLowerCase() === "timed"){
                 forceBoardState("win2");
                 setActiveGame(false);
-                setBoardInfo(null);
+                stopAllTimers();
             }
             setPlayer1Finish(false);
         }
@@ -107,6 +127,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             else if (timer.toLowerCase() === "timed"){
                 forceBoardState("win1");
                 setActiveGame(false);
+                stopAllTimers();
             }
             setPlayer2Finish(false);
         }
@@ -116,11 +137,14 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     useEffect (() => {
         if (!moveType) 
             return;
-        else if (moveType === "reset"){
-            myBoard.reset_board(winningPiece);
-            setBoardInfo(null);
-            setActiveGame(true);
+
+        else if (moveType === "refresh") {
+            setBoardRefresh(!boardRefresh);
             setMoveType(null);
+        }
+
+        else if (moveType === "reset"){
+            resetBoard();
 
             if (timer){
                 console.log("restarting timers");
@@ -153,7 +177,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 setBoardInfo(tempActions);
                 
                 // update timer
-                if (timer && myBoard.board_state !== "no_change"){
+                if (timer && swappable(myBoard.board_state)){
                     if (myBoard.player == 0){
                         console.log("starting player 1 timer")
                         setStartStopP1Timer(true);
@@ -170,29 +194,38 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                             setResetP1Timer(true);
                     }
                 }
-
                 // cpu moves after a delay
                 if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
                     // use awaitingCPU to prevent user from moving again (kinda like a mutex)
                     setAwaitingCPU(true);
                     
                     const cpuMove = setTimeout( () => {
+                        if (player1Finish || player2Finish) {
+                            return;
+                        }
                         let tempActions = myBoard.cpu_move(difficulty);
                         setBoardInfo(tempActions);
                         setAwaitingCPU(false);
 
                         // update timers
-                        if (timer && myBoard.board_state !== "no_change"){
-                            console.log("starting player 1 timer")
+                        if (timer && swappable(myBoard.board_state)){
+                            console.log("board state is " + myBoard.board_state + ",starting player 1 timer")
                             setStartStopP1Timer(true);
                             setStartStopP2Timer(false);
                             if (timer.toLowerCase() === "speed")
                                 setResetP2Timer(true);
                         }
-                    }, ((timer === "speed") ? 900 : 1100));
+                    // 11:11 :)
+                    }, ((timer === "speed") ? 900 + randint(-200, 200) : 1111 + randint(-200, 200)));
     
                 }
             }
+
+            // stop clock on endgame
+            if (timer && (["continue", "no_change"].indexOf(myBoard.board_state) === -1)) {
+                stopAllTimers();
+            }
+
 
             console.log("Board:\n" + myBoard.build_grid());
             setMoveType(null);
@@ -321,6 +354,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     function forceBoardState(state){
         myBoard.board_state = state;
         setBoardState(myBoard.board_state);
+        setBoardTimeout(true);
     }
 
 
@@ -328,10 +362,14 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     <div>
         <Navbar variant="light">
             <Container>
-                <Navbar.Brand><strong>{"2048 Duel: " + gamemode + " " + ((timer) ? timer : "")}</strong></Navbar.Brand>
+                <Navbar.Brand><strong>{
+                    ((p1color === p2color) ? " Blind! " : "2048 Duel: ") + 
+                    ((gamemode.toLowerCase() == "solo") ? difficulty : gamemode) +
+                    ((timer) ? " " + timer : "")}
+                </strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
-                    <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Return Home</Nav.Link>
+                    <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Home</Nav.Link>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
@@ -344,7 +382,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
             board={board} owner={owner} actions={actions}
-            turn={turn} boardState={boardState}
+            turn={turn} boardState={boardState} refresh={boardRefresh} boardTimeout={boardTimeout}
         />
         <Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}

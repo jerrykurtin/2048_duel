@@ -16,6 +16,33 @@ to run docker:
 docker-compose up
 ```
 
+## Build instructions for Capacitor
+### Developing locally
+Uncomment server code in capacitor.config.ts
+```
+server: {
+    url: 'http://<ip_address>:<port>',
+    cleartext: true
+}
+```
+
+Start app locally
+```Bash
+npm start
+```
+Sync ios and android with latest changes
+```
+npx cap sync
+```
+Run in Xcode, and changes should be up-to-date
+
+### Developing for deployment
+```Bash
+npm run build
+npx cap sync
+```
+App is ready to run!
+
 # Known Bugs
 Resetting immediately after a move sometimes causes defects
 timers start immediately

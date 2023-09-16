@@ -22,7 +22,8 @@ html, body {
 
 .tile-inner {
 
-    border-radius: 0.54vw;
+    /* border-radius: 0.54vw; */
+    border-radius: var(--border-radius);
     line-height: 19.26vw;
     text-align: center;
     font-weight: bold;
@@ -60,7 +61,7 @@ html, body {
     }
 
     .tile-inner {
-        border-radius: 3px;
+        border-radius: var(--border-radius-small);
         line-height: 107px;
         font-size: 60px;
 
