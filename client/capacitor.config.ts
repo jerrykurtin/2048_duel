@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: '2048_duel',
   webDir: 'build',
   bundledWebRuntime: false,
-  server: {
-    url: 'http://192.168.0.28:3000',
-    cleartext: true
-  }
+  // server: {
+  //   url: 'http://192.168.0.28:3000',
+  //   cleartext: true
+  // }
 };
 
 export default config;
