@@ -28,6 +28,17 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
     useLayoutEffect( () => {
         if (boardState === "no_change")
             return
+        
+        // forced win
+        if (boardState === "win1") {
+            setEndgame(<GameMessage color={p1color} text={winMsg(p1name)}/>);
+            return;
+        }
+        else if (boardState === "win2"){
+            setEndgame(<GameMessage color={p2color} text={winMsg(p2name)}/>);
+            return;
+        }
+
         var refreshed = false;
         if (prevRefresh != refresh) {
             setPrevRefresh(refresh);

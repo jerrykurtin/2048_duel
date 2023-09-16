@@ -24,6 +24,10 @@ function randchoice(arr){
     return arr[idx];
 }
 
+function swappable(board_state) {
+    return (["no_change", "win1", "win2"].indexOf(board_state) === -1);
+}
+
 
 function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
     
@@ -33,7 +37,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("Easy");
-    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
+    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 5 : 3);
     
     // board
     const [activeGame, setActiveGame] = useState(true);
@@ -58,6 +62,11 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [player2Finish, setPlayer2Finish] = useState(false);
     const [startStopP2Timer, setStartStopP2Timer] = useState(false);
     const [resetP2Timer, setResetP2Timer] = useState(false);
+
+    function stopAllTimers() {
+        setStartStopP1Timer(false);
+        setStartStopP2Timer(false);
+    }
 
     // holds a reference to the Board element for swipe listeners
     const boardRef = useRef();
@@ -96,7 +105,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             else if (timer.toLowerCase() === "timed"){
                 forceBoardState("win2");
                 setActiveGame(false);
-                setBoardInfo(null);
+                stopAllTimers();
             }
             setPlayer1Finish(false);
         }
@@ -108,6 +117,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             else if (timer.toLowerCase() === "timed"){
                 forceBoardState("win1");
                 setActiveGame(false);
+                stopAllTimers();
             }
             setPlayer2Finish(false);
         }
@@ -160,7 +170,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 setBoardInfo(tempActions);
                 
                 // update timer
-                if (timer && myBoard.board_state !== "no_change"){
+                if (timer && swappable(myBoard.board_state)){
                     if (myBoard.player == 0){
                         console.log("starting player 1 timer")
                         setStartStopP1Timer(true);
@@ -183,22 +193,31 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                     setAwaitingCPU(true);
                     
                     const cpuMove = setTimeout( () => {
+                        if (player1Finish || player2Finish) {
+                            return;
+                        }
                         let tempActions = myBoard.cpu_move(difficulty);
                         setBoardInfo(tempActions);
                         setAwaitingCPU(false);
 
                         // update timers
-                        if (timer && myBoard.board_state !== "no_change"){
-                            console.log("starting player 1 timer")
+                        if (timer && swappable(myBoard.board_state)){
+                            console.log("board state is " + myBoard.board_state + ",starting player 1 timer")
                             setStartStopP1Timer(true);
                             setStartStopP2Timer(false);
                             if (timer.toLowerCase() === "speed")
                                 setResetP2Timer(true);
                         }
-                    }, ((timer === "speed") ? 900 : 1100));
+                    }, ((timer === "speed") ? 900 : 1200));
     
                 }
             }
+
+            // stop clock on endgame
+            if (timer && (["continue", "no_change"].indexOf(myBoard.board_state) === -1)) {
+                stopAllTimers();
+            }
+
 
             console.log("Board:\n" + myBoard.build_grid());
             setMoveType(null);
