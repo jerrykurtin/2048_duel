@@ -12,7 +12,7 @@ function winMsg(playerName){
         return playerName + " wins!";
 }
 
-const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, boardState, refresh}, ref) {
+const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, boardState, refresh, boardTimeout}, ref) {
     const [squares, setSquares] = useState([]);
     const [endgame, setEndgame] = useState(null);
     const [idCounter, setIdCounter] = useState(0);
@@ -28,13 +28,13 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
     useLayoutEffect( () => {
         if (boardState === "no_change")
             return
-        
+
         // forced win
-        if (boardState === "win1") {
+        if (boardTimeout && boardState === "win1") {
             setEndgame(<GameMessage color={p1color} text={winMsg(p1name)}/>);
             return;
         }
-        else if (boardState === "win2"){
+        else if (boardTimeout && boardState === "win2") {
             setEndgame(<GameMessage color={p2color} text={winMsg(p2name)}/>);
             return;
         }

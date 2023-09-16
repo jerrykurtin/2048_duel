@@ -37,7 +37,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("Easy");
-    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 5 : 3);
+    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
     
     // board
     const [activeGame, setActiveGame] = useState(true);
@@ -54,6 +54,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [owner, setOwner] = useState(myBoard.owner);
     const [turn, setTurn] = useState(myBoard.player);
     const [boardRefresh, setBoardRefresh] = useState(false);
+    const [boardTimeout, setBoardTimeout] = useState(false);
 
     // timer
     const [player1Finish, setPlayer1Finish] = useState(false);
@@ -66,6 +67,15 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     function stopAllTimers() {
         setStartStopP1Timer(false);
         setStartStopP2Timer(false);
+    }
+
+    function resetBoard() {
+        myBoard.reset_board(winningPiece);
+            setBoardRefresh(!boardRefresh);
+            setBoardTimeout(false);
+            setBoardInfo(null);
+            setActiveGame(true);
+            setMoveType(null);
     }
 
     // holds a reference to the Board element for swipe listeners
@@ -134,10 +144,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         }
 
         else if (moveType === "reset"){
-            myBoard.reset_board(winningPiece);
-            setBoardInfo(null);
-            setActiveGame(true);
-            setMoveType(null);
+            resetBoard();
 
             if (timer){
                 console.log("restarting timers");
@@ -208,7 +215,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                             if (timer.toLowerCase() === "speed")
                                 setResetP2Timer(true);
                         }
-                    }, ((timer === "speed") ? 900 : 1200));
+                    // 11:11 :)
+                    }, ((timer === "speed") ? 900 + randint(-200, 200) : 1111 + randint(-200, 200)));
     
                 }
             }
@@ -346,6 +354,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     function forceBoardState(state){
         myBoard.board_state = state;
         setBoardState(myBoard.board_state);
+        setBoardTimeout(true);
     }
 
 
@@ -373,7 +382,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
             board={board} owner={owner} actions={actions}
-            turn={turn} boardState={boardState} refresh={boardRefresh}
+            turn={turn} boardState={boardState} refresh={boardRefresh} boardTimeout={boardTimeout}
         />
         <Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}
