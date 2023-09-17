@@ -447,7 +447,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         />
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
-            board={board} owner={owner} actions={actions} pauseState={pauseState} setPauseState={setPauseState}
+            board={board} owner={owner} actions={actions} pauseState={pauseState} moveType={moveType} setMoveType={setMoveType}
             turn={turn} boardState={boardState} refresh={boardRefresh} setRefresh={setBoardRefresh}
             boardTimeout={boardTimeout} newGame={newGame}
         />

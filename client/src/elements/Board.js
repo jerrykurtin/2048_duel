@@ -12,7 +12,7 @@ function winMsg(playerName){
         return playerName + " wins!";
 }
 
-const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board, owner, actions, pauseState, setPauseState, turn, boardState, refresh, setRefresh, boardTimeout, newGame}, ref) {
+const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board, owner, actions, pauseState, moveType, setMoveType, turn, boardState, refresh, setRefresh, boardTimeout, newGame}, ref) {
     const [squares, setSquares] = useState([]);
     const [endgame, setEndgame] = useState(null);
     const [idCounter, setIdCounter] = useState(0);
@@ -21,13 +21,7 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         [-1, -1, -1, -1],
         [-1, -1, -1, -1],
         [-1, -1, -1, -1],
-        [-1, -1, -1, -1]]);
-
-    function hidePauseWindow() {
-        setPauseState(null);
-        setRefresh(!refresh);
-    }
-        
+        [-1, -1, -1, -1]]);  
         
     // update the board after a move
     useLayoutEffect( () => {
@@ -110,7 +104,7 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
                     if (movedSquares[row][col].length == 0){
                         tempIds[row][col] = squareID;
                         squareID++;
-                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col], !refreshed || newGame)]);
+                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col], newGame || ["resume", "pause"].indexOf(moveType) == -1)]);
                     }
 
                     // moved square gets its previous id
@@ -138,7 +132,7 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         // start - pause game message
         if (pauseState === "not_started") {
             console.log("rendering not started screen");
-            setEndgame(<GameMessage isButton={true} onClick={() => hidePauseWindow()} text="Start Game"/>);
+            setEndgame(<GameMessage isButton={true} onClick={() => setMoveType("resume")} text="Start Game"/>);
         }
 
         // endgame message
