@@ -30,6 +30,11 @@
     --border-radius-large: 4vw;
     --border-radius: 2vw;
     --border-radius-small: 1.5vw;
+
+    --animation_duration : 150ms;
+    --appear_duration: 250ms;
+    --appear_delay: 150ms;
+    --vertical-width: 1vw;
 }
 
 @media screen and (min-width: 520px) {
@@ -37,10 +42,9 @@
         --border-radius-large: 15.6px;
         --border-radius: 10.4px;
         --border-radius-small: 7.8px;
+        --vertical-width: 5.2px;
     }
 }
-
-
 
 
 .App {
@@ -203,6 +207,38 @@ a:visited {
 .player2.background {
   background: rgb(var(--p2color));
 }
+
+.outline {
+    outline-style: solid;
+    outline-width: calc(1 * var(--vertical-width));
+    outline-offset: calc(-1 * var(--vertical-width));
+    transition: outline-color calc(var(--animation_duration) + var(--appear_duration));
+}
+
+.player1.outline {
+    outline-color: rgba(var(--p1color), 0.75);
+}
+
+.player2.outline {
+    outline-color: rgba(var(--p2color), 0.75);
+}
+
+.green.outline {
+    outline-color: rgba(var(--greencolor), 0.75);
+}
+
+.blue.outline {
+    outline-color: rgba(var(--bluecolor), 0.75);
+}
+
+.salmon.outline {
+    outline-color: rgba(var(--salmoncolor), 0.75);
+}
+
+.purple.outline {
+    outline-color: rgba(var(--purplecolor), 0.75);
+}
+
 
 .green.background {
   background: rgb(var(--greencolor));

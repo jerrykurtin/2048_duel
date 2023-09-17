@@ -12,7 +12,7 @@ function winMsg(playerName){
         return playerName + " wins!";
 }
 
-const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board, owner, actions, turn, boardState, refresh, boardTimeout}, ref) {
+const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board, owner, actions, pauseState, setPauseState, turn, boardState, refresh, setRefresh, boardTimeout, newGame}, ref) {
     const [squares, setSquares] = useState([]);
     const [endgame, setEndgame] = useState(null);
     const [idCounter, setIdCounter] = useState(0);
@@ -22,6 +22,11 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         [-1, -1, -1, -1],
         [-1, -1, -1, -1],
         [-1, -1, -1, -1]]);
+
+    function hidePauseWindow() {
+        setPauseState(null);
+        setRefresh(!refresh);
+    }
         
         
     // update the board after a move
@@ -105,7 +110,7 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
                     if (movedSquares[row][col].length == 0){
                         tempIds[row][col] = squareID;
                         squareID++;
-                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col])]);
+                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col], !refreshed || newGame)]);
                     }
 
                     // moved square gets its previous id
@@ -130,8 +135,14 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
             }
         }
 
+        // start - pause game message
+        if (pauseState === "not_started") {
+            console.log("rendering not started screen");
+            setEndgame(<GameMessage isButton={true} onClick={() => hidePauseWindow()} text="Start Game"/>);
+        }
+
         // endgame message
-        if (boardState === "tie"){
+        else if (boardState === "tie"){
             setEndgame(<GameMessage text="It's a tie!"/>);
         }
         else if (boardState === "win1"){
@@ -151,11 +162,11 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         setSquares(finalSquares);
         setIds(tempIds);
         setIdCounter(squareID);
-    }, [turn, board, owner, actions, boardState, refresh]);
+    }, [turn, board, owner, actions, pauseState, boardState, refresh]);
 
     // generate a new tile
-    function newTile(row, col, val, color, id){
-        return <Tile key={id} row={row} col={col} val={val} color={color} isNew={true}/>
+    function newTile(row, col, val, color, id, isNew = true){
+        return <Tile key={id} row={row} col={col} val={val} color={color} isNew={isNew}/>
     }
 
     // move a tile
@@ -165,7 +176,7 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
 
     return (
         <div>
-            <div ref={ref} className="game-container" id="game-container">
+            <div ref={ref} className={"game-container outline " + ((turn === 0) ? p1color : p2color)} id="game-container">
                 {endgame}
                 <div className="grid-container">
                     <div className="grid-row">
