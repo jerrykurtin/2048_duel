@@ -1,7 +1,5 @@
 html, body {
-    --animation_duration : 150ms;
-    --appear_duration: 250ms;
-    --appear_delay: 150ms;
+    
 }
 
 .tile-container {

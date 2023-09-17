@@ -31,18 +31,22 @@ function swappable(board_state) {
 
 function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
     
+    const cpuPlayer = 1;
+
     // screen / viewport
     const [actualWidth, setActualWidth] = useState(Math.min(window.innerWidth, window.screen.availWidth));
     
     // settings
     const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("Easy");
+    const [responseTime, setResponseTime] = useState(900);
     const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
     
     // board
     const [activeGame, setActiveGame] = useState(true);
     const [myBoard, setMyBoard] = useState(new BoardClass(winningPiece));
     const [moveType, setMoveType] = useState("reset");
+    const [pauseState, setPauseState] = useState("not_started"); // not_started, paused, null
     var [awaitingCPU, setAwaitingCPU] = useState(false);
     
     // board values
@@ -55,6 +59,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [turn, setTurn] = useState(myBoard.player);
     const [boardRefresh, setBoardRefresh] = useState(false);
     const [boardTimeout, setBoardTimeout] = useState(false);
+    const [newGame, setNewGame] = useState(true);
 
     // timer
     const [player1Finish, setPlayer1Finish] = useState(false);
@@ -71,11 +76,12 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     function resetBoard() {
         myBoard.reset_board(winningPiece);
-            setBoardRefresh(!boardRefresh);
-            setBoardTimeout(false);
-            setBoardInfo(null);
-            setActiveGame(true);
-            setMoveType(null);
+        setBoardRefresh(!boardRefresh);
+        setBoardTimeout(false);
+        setBoardInfo(null);
+        setActiveGame(true);
+        setMoveType(null);
+        setNewGame(true);
     }
 
     // holds a reference to the Board element for swipe listeners
@@ -121,6 +127,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         }
         else if (player2Finish){
             console.log("player 2 timeout");
+            // in case the cpu times out
+            setAwaitingCPU(false);
             if (timer.toLowerCase() === "speed"){
                 setMoveType("random");
             }
@@ -131,33 +139,85 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             }
             setPlayer2Finish(false);
         }
-    }, [player1Finish, player2Finish])
+    }, [player1Finish, player2Finish]);
+
+    // Calculate cpu's response time
+    useEffect (() => {
+        if (difficulty === null) {
+            return;
+        }
+        switch (difficulty.toLowerCase()) {
+            case "easy":
+                setResponseTime(850);
+                break;
+            case "medium":
+                setResponseTime(800);
+                break;
+            case "hard":
+                setResponseTime(700);
+                break;
+            case "impossible":
+                setResponseTime(500);
+                break;
+            default:
+                console.log("ERROR: invalid difficulty when calculating response time");
+                setResponseTime(null);
+        }
+
+    }, [difficulty]);
+
     
     // Process a move
     useEffect (() => {
+        if (newGame) {
+            setNewGame(false);
+        }
         if (!moveType) 
             return;
 
-        else if (moveType === "refresh") {
+        if (moveType === "refresh") {
             setBoardRefresh(!boardRefresh);
             setMoveType(null);
         }
 
         else if (moveType === "reset"){
+            setPauseState(null);
             resetBoard();
-
-            if (timer){
-                console.log("restarting timers");
+            if (timer) {
+                console.log("resetting timer");
                 setPlayer1Finish(false);
                 setPlayer2Finish(false);
                 setResetP1Timer(true);
                 setResetP2Timer(true);
-                setStartStopP1Timer(true);
+                setPauseState("not_started")
+            }
+        }
+
+        else if (moveType === "resume") {
+            setPauseState(null);
+            if (timer){
+                console.log("starting or resuming timers");
+                if (myBoard.player === 0) {
+                    setStartStopP1Timer(true);
+                    setStartStopP2Timer(false);
+                }
+                else {
+                    setStartStopP1Timer(false);
+                    setStartStopP2Timer(true);
+                }
+            }
+        }
+
+        else if (moveType === "pause") {
+            setPauseState("paused")
+            if (timer){
+                console.log("pausing timers");
+                setStartStopP1Timer(false);
                 setStartStopP2Timer(false);
             }
         }
-    
-        else if (activeGame && !awaitingCPU){
+
+        else if (activeGame && !pauseState && !awaitingCPU){
             if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
                 
                 console.log("Previous board:\n" + myBoard.build_grid());
@@ -195,14 +255,20 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                     }
                 }
                 // cpu moves after a delay
-                if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"){
+                if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"  && myBoard.player === cpuPlayer){
                     // use awaitingCPU to prevent user from moving again (kinda like a mutex)
                     setAwaitingCPU(true);
+                    console.log("timer: " + timer);
                     
                     const cpuMove = setTimeout( () => {
                         if (player1Finish || player2Finish) {
                             return;
                         }
+                        // timeout catch
+                        if (myBoard.player === 0) {
+                            return;
+                        }
+
                         let tempActions = myBoard.cpu_move(difficulty);
                         setBoardInfo(tempActions);
                         setAwaitingCPU(false);
@@ -216,7 +282,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                                 setResetP2Timer(true);
                         }
                     // 11:11 :)
-                    }, ((timer === "speed") ? 900 + randint(-200, 200) : 1111 + randint(-200, 200)));
+                    }, ((timer && timer.toLowerCase() === "speed") ? responseTime + randint(-50, 50) : responseTime + randint(200, 250)));
     
                 }
             }
@@ -381,8 +447,9 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         />
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
-            board={board} owner={owner} actions={actions}
-            turn={turn} boardState={boardState} refresh={boardRefresh} boardTimeout={boardTimeout}
+            board={board} owner={owner} actions={actions} pauseState={pauseState} moveType={moveType} setMoveType={setMoveType}
+            turn={turn} boardState={boardState} refresh={boardRefresh} setRefresh={setBoardRefresh}
+            boardTimeout={boardTimeout} newGame={newGame}
         />
         <Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}
