@@ -16,6 +16,11 @@ to run docker:
 docker-compose up
 ```
 
+## Deploy changes to GitHub Pages
+```Bash
+npm run deploy
+```
+
 ## Build instructions for Capacitor
 ### Developing locally
 Uncomment server code in capacitor.config.ts

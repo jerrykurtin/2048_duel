@@ -72,7 +72,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
             </>)
         }
 
-        else if (gamemode.toLowerCase() === "multiplayer"){
+        else if (gamemode.toLowerCase() === "multi"){
             return null;
         }
 
