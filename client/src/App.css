@@ -209,34 +209,32 @@ a:visited {
 }
 
 .outline {
-    outline-style: solid;
-    outline-width: calc(1 * var(--vertical-width));
-    outline-offset: calc(-1 * var(--vertical-width));
-    transition: outline-color calc(var(--animation_duration) + var(--appear_duration));
+    box-shadow: 0 0 0 calc(1 * var(--vertical-width));
+    transition: color calc(var(--animation_duration) + var(--appear_duration));
 }
 
 .player1.outline {
-    outline-color: rgba(var(--p1color), 0.75);
+    color: rgba(var(--p1color), 0.75);
 }
 
 .player2.outline {
-    outline-color: rgba(var(--p2color), 0.75);
+    color: rgba(var(--p2color), 0.75);
 }
 
 .green.outline {
-    outline-color: rgba(var(--greencolor), 0.75);
+    color: rgba(var(--greencolor), 0.75);
 }
 
 .blue.outline {
-    outline-color: rgba(var(--bluecolor), 0.75);
+    color: rgba(var(--bluecolor), 0.75);
 }
 
 .salmon.outline {
-    outline-color: rgba(var(--salmoncolor), 0.75);
+    color: rgba(var(--salmoncolor), 0.75);
 }
 
 .purple.outline {
-    outline-color: rgba(var(--purplecolor), 0.75);
+    color: rgba(var(--purplecolor), 0.75);
 }
 
 
