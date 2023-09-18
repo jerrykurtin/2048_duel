@@ -104,7 +104,7 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
                     if (movedSquares[row][col].length == 0){
                         tempIds[row][col] = squareID;
                         squareID++;
-                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col], newGame || ["resume", "pause"].indexOf(moveType) == -1)]);
+                        tempSquares.push([tempIds[row][col], newTile(...newSquares[row][col], tempIds[row][col], newGame || (["resume", "pause"].indexOf(moveType) == -1) && !refreshed)]);
                     }
 
                     // moved square gets its previous id
