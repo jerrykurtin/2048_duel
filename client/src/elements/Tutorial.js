@@ -14,11 +14,17 @@ function getCapacitorCookies() {
   return ret;
 }
 
+const getCookies = () => {
+  return document.cookie;
+};
+const clearAllCookies = async () => {
+  await CapacitorCookies.clearAllCookies();
+};
+
 const testCapacitorCookie = async () => {
   await CapacitorCookies.setCookie({
-    url: 'http://example.com',
-    key: 'language',
-    value: 'en',
+    key: 'test1',
+    value: 'yes',
   });
 };
 
@@ -26,7 +32,6 @@ const testCapacitorCookie = async () => {
 const setCapacitorCookie = async (k, v) => {
   console.log("SETTING CAPACITOR COOKIE");
   await CapacitorCookies.setCookie({
-    url: '/',
     key: k,
     value: v,
   });
@@ -64,7 +69,7 @@ function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-main-color" onClick={() => {
-          // setCapacitorCookie('tutorialShown', 'shown');
+          setCapacitorCookie("tutorialShown", "shown");
           props.onHide();
         }}>Close</Button>
       </Modal.Footer>
@@ -73,23 +78,16 @@ function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
 }
 
 function Tutorial({winningPiece}) {
-  const [modalShow, setModalShow] = React.useState(true);
-  // const [cookies, setCookies] = useState(getCapacitorCookies());
-  testCapacitorCookie();
+  const [modalShow, setModalShow] = useState(true);
+  const [cookies, setCookies] = useState(getCapacitorCookies());
 
-  // useEffect(() => {
-  //   console.log("re-querying for cookies");
-  //   setCookies(getCapacitorCookies());
-  // }, []);
-  
-  // console.log("cookies: ", cookies);
-  console.log(document.cookie);
-  // console.log("is tutorialShown? -> " + cookies.get('tutorialShown') !== "shown");
-  // console.log("tutorialshown: " + cookies.get('tutorialShown'));
-  // cookies.get('tutorialShown')
+  useEffect(() => {
+    setCookies(getCapacitorCookies());
+  }, []);
+
   return (
     <>
-      {((true !== "shown") 
+      {((cookies.get("tutorialShown") !== "shown") 
       ? <MyVerticallyCenteredModal winningPiece={winningPiece} show={modalShow} onHide={() => setModalShow(false)}/>
       : null)}
     </>
