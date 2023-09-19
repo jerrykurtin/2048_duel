@@ -1,9 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-import Cookies from 'universal-cookie';
+import { CapacitorCookies } from '@capacitor/core';
+
+function getCapacitorCookies() {
+  const ret = new Map();
+  document.cookie.split('; ').forEach((cookie) => {
+    const [key, ...v] = cookie.split('=');
+    ret.set(key, v.join('='));
+  });
+  return ret;
+}
+
+const testCapacitorCookie = async () => {
+  await CapacitorCookies.setCookie({
+    url: 'http://example.com',
+    key: 'language',
+    value: 'en',
+  });
+};
+
+
+const setCapacitorCookie = async (k, v) => {
+  console.log("SETTING CAPACITOR COOKIE");
+  await CapacitorCookies.setCookie({
+    url: '/',
+    key: k,
+    value: v,
+  });
+};
+
+// const getCapacitorCookie = async () => {
+//   return await CapacitorCookies.getCookies();
+// }
 
 function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
   return (
@@ -33,7 +64,7 @@ function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-main-color" onClick={() => {
-          cookies.set('tutorialShown', 'shown', {path: '/'});
+          // setCapacitorCookie('tutorialShown', 'shown');
           props.onHide();
         }}>Close</Button>
       </Modal.Footer>
@@ -43,12 +74,23 @@ function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
 
 function Tutorial({winningPiece}) {
   const [modalShow, setModalShow] = React.useState(true);
-  const cookies = new Cookies();
+  // const [cookies, setCookies] = useState(getCapacitorCookies());
+  testCapacitorCookie();
 
+  // useEffect(() => {
+  //   console.log("re-querying for cookies");
+  //   setCookies(getCapacitorCookies());
+  // }, []);
+  
+  // console.log("cookies: ", cookies);
+  console.log(document.cookie);
+  // console.log("is tutorialShown? -> " + cookies.get('tutorialShown') !== "shown");
+  // console.log("tutorialshown: " + cookies.get('tutorialShown'));
+  // cookies.get('tutorialShown')
   return (
     <>
-      {((cookies.get('tutorialShown') !== 'shown') 
-      ? <MyVerticallyCenteredModal winningPiece={winningPiece} cookies={cookies} show={modalShow} onHide={() => setModalShow(false)}/>
+      {((true !== "shown") 
+      ? <MyVerticallyCenteredModal winningPiece={winningPiece} show={modalShow} onHide={() => setModalShow(false)}/>
       : null)}
     </>
   )
