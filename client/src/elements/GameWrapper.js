@@ -5,8 +5,8 @@ import BoardClass from "./BoardClass.js";
 
 import BoardInfo from "./BoardInfo.js";
 import Board from "./Board.js";
-import TurnInfo from "./TurnInfo.js";
 import Settings from "./Settings";
+import Tutorial from "./Tutorial";
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -426,6 +426,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     return (
     <div>
+        <Tutorial winningPiece={winningPiece}/>
         <Navbar variant="light">
             <Container>
                 <Navbar.Brand><strong>{
