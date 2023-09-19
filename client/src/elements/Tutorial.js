@@ -14,32 +14,12 @@ function getCapacitorCookies() {
   return ret;
 }
 
-const getCookies = () => {
-  return document.cookie;
-};
-const clearAllCookies = async () => {
-  await CapacitorCookies.clearAllCookies();
-};
-
-const testCapacitorCookie = async () => {
-  await CapacitorCookies.setCookie({
-    key: 'test1',
-    value: 'yes',
-  });
-};
-
-
 const setCapacitorCookie = async (k, v) => {
-  console.log("SETTING CAPACITOR COOKIE");
   await CapacitorCookies.setCookie({
     key: k,
     value: v,
   });
 };
-
-// const getCapacitorCookie = async () => {
-//   return await CapacitorCookies.getCookies();
-// }
 
 function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
   return (
