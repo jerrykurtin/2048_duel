@@ -24,11 +24,11 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         [-1, -1, -1, -1]]);  
         
     // update the board after a move
-    useLayoutEffect( () => {
+    useEffect(() => {
         if (boardState === "no_change")
             return
 
-        // forced win
+        // forced win, must be caught before trying to move again
         if (boardTimeout && boardState === "win1") {
             setEndgame(<GameMessage color={p1color} text={winMsg(p1name)}/>);
             return;
@@ -150,10 +150,10 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         setSquares(finalSquares);
         setIds(tempIds);
         setIdCounter(squareID);
-    }, [turn, board, owner, actions, boardState, refresh]);
+    }, [actions, boardState, refresh]);
 
     // start - pause game message
-    useEffect (() => {
+    useEffect(() => {
         if (pauseState === "notStarted") {
             console.log("rendering not started screen");
             setEndgame(<GameMessage isButton={true} onClick={() => setMoveType("resume")} text="Start Game"/>);
