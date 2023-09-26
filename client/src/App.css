@@ -31,9 +31,9 @@
     --border-radius: 2vw;
     --border-radius-small: 1.5vw;
 
-    --animation_duration : 175ms;
-    --appear_duration: 225ms;
-    --appear_delay: 175ms;
+    --animation_duration: 150ms;
+    --appear_duration: 250ms;
+    --appear_delay: var(--animation_duration);
     --vertical-width: 1vw;
 }
 
