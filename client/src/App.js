@@ -93,7 +93,7 @@ function App() {
                 <MenuOption 
                     title={"Multiplayer"} 
                     contents={"Play with your friend on the same device."} 
-                    onClick={() => setMode("Multiplayer")}
+                    onClick={() => setMode("Multi")}
                 />
                 <MenuOption 
                     title={"Online (Coming Soon)"} 

@@ -37,10 +37,10 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [actualWidth, setActualWidth] = useState(Math.min(window.innerWidth, window.screen.availWidth));
     
     // settings
-    const [winningPiece, setWinningPiece] = useState(8);
+    const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("Easy");
     const [responseTime, setResponseTime] = useState(900);
-    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 5 : 3);
+    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
     
     // board
     const [activeGame, setActiveGame] = useState(true);
