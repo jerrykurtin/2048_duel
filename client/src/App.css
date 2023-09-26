@@ -86,7 +86,6 @@ h2 {
 }
 
 p {
-    margin-bottom: 0;
     display: block;
     line-height: 1.5;
 }
@@ -126,10 +125,6 @@ a:visited {
       margin-bottom: 14px;
   }
 
-  p {
-      margin-bottom: 0;
-  }
-
   ul {
       margin-top: 0;
   }
@@ -141,11 +136,13 @@ a:visited {
   margin-bottom: 4vw;
   height: 20vh;
   border-radius: var(--border-radius-large);
+  text-align: center;
+  background-color: var(--board-color);
 }
 
-.mode-select-text {
+/* .mode-select-text {
     text-align: center;
-}
+} */
 
 .coming-soon {
   opacity: 0.75;

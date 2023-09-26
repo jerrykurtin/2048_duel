@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import HowToPlay from './HowToPlay';
+
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
@@ -35,17 +37,7 @@ function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h5>Controls</h5>
-        <ul>
-          <li>Swipe or use arrow keys to move all squares in a direction.</li>
-          <li>Collide two squares of the same number to combine them and double the number</li>
-        </ul>
-        <h5>Duel</h5>
-        <ul>
-          <li>Your pieces are color-coded</li>
-          <li>On your turn, collide one of your squares with your oponnent's to steal it</li>
-          <li>The first to create the {winningPiece} squares wins!</li>
-        </ul>
+        <HowToPlay winningPiece={winningPiece}/>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-main-color" onClick={() => {

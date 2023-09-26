@@ -37,10 +37,10 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [actualWidth, setActualWidth] = useState(Math.min(window.innerWidth, window.screen.availWidth));
     
     // settings
-    const [winningPiece, setWinningPiece] = useState(64);
+    const [winningPiece, setWinningPiece] = useState(8);
     const [difficulty, setDifficulty] = useState("Easy");
     const [responseTime, setResponseTime] = useState(900);
-    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
+    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 5 : 3);
     
     // board
     const [activeGame, setActiveGame] = useState(true);
@@ -82,6 +82,17 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         setActiveGame(true);
         setMoveType(null);
         setNewGame(true);
+    }
+
+    function finishMove() {
+        // stop clock on endgame
+        if (timer !== null && (["continue", "no_change"].indexOf(myBoard.board_state) === -1)) {
+            stopAllTimers();
+        }
+
+        // clear out moves
+        console.log("Board:\n" + myBoard.build_grid());
+        setMoveType(null);
     }
 
     // holds a reference to the Board element for swipe listeners
@@ -225,7 +236,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 if (moveType === "random"){
                     console.log("random move");
                     do {
-                        console.log("trying random move");
                         tempActions = myBoard.move(randchoice(["left", "up", "right", "down"]));
                     } while (myBoard.board_state === "no_change");
                 }
@@ -258,14 +268,15 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"  && myBoard.player === cpuPlayer){
                     // use awaitingCPU to prevent user from moving again (kinda like a mutex)
                     setAwaitingCPU(true);
-                    console.log("timer: " + timer);
                     
                     const cpuMove = setTimeout( () => {
                         if (player1Finish || player2Finish) {
+                            console.log("cpu returning, game over");
                             return;
                         }
                         // timeout catch
                         if (myBoard.player === 0) {
+                            console.log("ERROR: cpu returning, timed out");
                             return;
                         }
 
@@ -281,20 +292,15 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                             if (timer.toLowerCase() === "speed")
                                 setResetP2Timer(true);
                         }
+
+                        finishMove();
                     // 11:11 :)
                     }, ((timer && timer.toLowerCase() === "speed") ? responseTime + randint(-50, 50) : responseTime + randint(200, 250)));
     
                 }
             }
 
-            // stop clock on endgame
-            if (timer && (["continue", "no_change"].indexOf(myBoard.board_state) === -1)) {
-                stopAllTimers();
-            }
-
-
-            console.log("Board:\n" + myBoard.build_grid());
-            setMoveType(null);
+            finishMove();
         }
     
     }, [moveType]);

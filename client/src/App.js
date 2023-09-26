@@ -3,6 +3,7 @@ import { SwitchTransition, CSSTransition } from "react-transition-group";
 import './App.css';
 
 import Title from './elements/Title.js';
+import MenuOption from "./elements/MenuOption";
 import GameWrapper from "./elements/GameWrapper.js";
 import Card from "react-bootstrap/Card";
 
@@ -84,62 +85,45 @@ function App() {
             return (
             <div>
                 <Title/>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Solo")}>
-                <Card.Header className="text-center">Solo</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                        Play against an AI to hone your skills.
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setMode("Multiplayer")}>
-                    <Card.Header className="text-center">Multiplayer</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                        Play with your friend on the same device
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card className="mode-select coming-soon">
-                    <Card.Header className="text-center">Online (Coming soon)</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                        Play against a friend, or start a game with a stranger.
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+                <MenuOption 
+                    title={"Solo"} 
+                    contents={"Play against an AI to hone your skills."} 
+                    onClick={() => setMode("Solo")}
+                />
+                <MenuOption 
+                    title={"Multiplayer"} 
+                    contents={"Play with your friend on the same device."} 
+                    onClick={() => setMode("Multiplayer")}
+                />
+                <MenuOption 
+                    title={"Online (Coming Soon)"} 
+                    contents={"Play against a friend, or start a game with a stranger."} 
+                    onClick={() => null}
+                    disabled={true}
+                />
             </div>
             )
         } 
 
         else if (state === "timer"){
             return (
-            <div>
+                <div>
                 <Title/>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle(null)}>
-                <Card.Header className="text-center">No Timer</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                        Classic 2048 Duel with no time limit
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle("Timed")}>
-                    <Card.Header className="text-center">Timed</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                        A timer runs down during your turn. If it reaches 0, your opponent wins!
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card className="cool-fill mode-select" border="secondary" onClick={() => setTimerStyle("Speed")}>
-                    <Card.Header className="text-center">Speed</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                        Each turn, you have a few seconds to move before a random move is chosen for you!
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+                <MenuOption 
+                    title={"No Timer (Beginner-Friendly)"} 
+                    contents={"Play classic 2048 Duel."} 
+                    onClick={() => setTimerStyle(null)}
+                />
+                <MenuOption 
+                    title={"Timed"} 
+                    contents={"A timer runs down during your turn. If it reaches 0, your opponent wins!"} 
+                    onClick={() => setTimerStyle("Timed")}
+                />
+                <MenuOption 
+                    title={"Speed"} 
+                    contents={"Each turn, you have a few seconds to move before a random move is chosen for you."} 
+                    onClick={() => setTimerStyle("Speed")}
+                />
             </div>
             )
         } 

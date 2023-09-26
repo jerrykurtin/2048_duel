@@ -9,6 +9,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 
 import "./Settings.css";
+import HowToPlay from './HowToPlay';
 
 
 function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, difficulty, setDifficulty, timeLimit, setTimeLimit, p1color, setP1color, p2color, setP2color, p1possessive, p2possessive}) {
@@ -161,33 +162,15 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
                         
                     </div>
                 </Tab>
-                <Tab eventKey="controls" title="Controls">
-                    <div className="tab-contents">
-                        <p>
-                            Use the arrow keys (swipe for mobile) to move the pieces.
-                        </p>
-                        <hr />
-                        <p>
-                            For desktop multiplayer, player 1 moves with the arrow keys, and player 2 uses WASD.
-                        </p>
-                    </div>
-                </Tab>
                 <Tab eventKey="how-to" title="How to Play">
+                    <HowToPlay className="tab-contents" winningPiece={winningPiece}/>
+                </Tab>
+                <Tab eventKey="about" title="About">
                     <div className="tab-contents">
-                        <p>
-                            On your turn, choose which direction to move all pieces.
-                            When pieces with the same number move into each other, the
-                            pieces merge and double.  
-                        </p>
-                        <hr />
-                        <p>
-                            Merge one of your pieces with one of your opponents to steal the piece.
-                            Merging two of your pieces (or your opponents') doesn't change the ownership.
-                        </p>
-                        <hr />
-                        <p id="goal-inst">
-                            {"The winner is the first to create the winning piece or the one with the highest score when there are no available moves."}
-                        </p>
+                    <h5>Credit</h5>
+                        <p>This game was created by Jerry Kurtin and inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>. Have fun!</p>
+                    <h5>Feedback</h5>
+                        <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't run any ads on the site, but if you love the game, you can venmo me <strong>@Jerry-Kurtin-1</strong></p>
                     </div>
                 </Tab>
             </Tabs>
