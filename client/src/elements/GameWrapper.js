@@ -46,7 +46,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [activeGame, setActiveGame] = useState(true);
     const [myBoard, setMyBoard] = useState(new BoardClass(winningPiece));
     const [moveType, setMoveType] = useState("reset");
-    const [pauseState, setPauseState] = useState("not_started"); // not_started, paused, null
+    const [pauseState, setPauseState] = useState("notStarted"); // notStarted, paused, null
     var [awaitingCPU, setAwaitingCPU] = useState(false);
     
     // board values
@@ -200,7 +200,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 setPlayer2Finish(false);
                 setResetP1Timer(true);
                 setResetP2Timer(true);
-                setPauseState("not_started")
+                setPauseState("notStarted")
             }
         }
 

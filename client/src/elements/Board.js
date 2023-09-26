@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, forwardRef} from 'react';
+import React, { useState, useEffect, useLayoutEffect, forwardRef} from 'react';
 import "./Board.css";
 import Tile from "./Tile";
 import GameMessage from './GameMessage';
@@ -129,14 +129,8 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
             }
         }
 
-        // start - pause game message
-        if (pauseState === "not_started") {
-            console.log("rendering not started screen");
-            setEndgame(<GameMessage isButton={true} onClick={() => setMoveType("resume")} text="Start Game"/>);
-        }
-
         // endgame message
-        else if (boardState === "tie"){
+        if (boardState === "tie"){
             setEndgame(<GameMessage text="It's a tie!"/>);
         }
         else if (boardState === "win1"){
@@ -156,7 +150,18 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         setSquares(finalSquares);
         setIds(tempIds);
         setIdCounter(squareID);
-    }, [turn, board, owner, actions, pauseState, boardState, refresh]);
+    }, [turn, board, owner, actions, boardState, refresh]);
+
+    // start - pause game message
+    useEffect (() => {
+        if (pauseState === "notStarted") {
+            console.log("rendering not started screen");
+            setEndgame(<GameMessage isButton={true} onClick={() => setMoveType("resume")} text="Start Game"/>);
+        } else {
+            setEndgame(null);
+        }
+
+    }, [refresh, pauseState]);
 
     // generate a new tile
     function newTile(row, col, val, color, id, isNew = true){
