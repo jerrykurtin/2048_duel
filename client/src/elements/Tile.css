@@ -8,8 +8,8 @@ html, body {
 }
 
 .tile {
-    width: 19.26vw;
-    height: 19.26vw;
+    width: calc(19.26 * var(--vw));
+    height: calc(19.26 * var(--vw));
     float: left;
     position: absolute;
 
@@ -20,19 +20,18 @@ html, body {
 
 .tile-inner {
 
-    /* border-radius: 0.54vw; */
     border-radius: var(--border-radius);
-    line-height: 19.26vw;
+    line-height: calc(19.26 * var(--vw));
     text-align: center;
     font-weight: bold;
-    font-size: 10.8vw;
+    font-size: calc(10.8 * var(--vw));
     color: var(--tile-text-color);
 
-    width: 19.26vw;
-    height: 19.26vw;
-    line-height: 19.26vw;
+    width: calc(19.26 * var(--vw));
+    height: calc(19.26 * var(--vw));
+    line-height: calc(19.26 * var(--vw));
 
-    --shadow-size: 0 0 5.4vw 1.8vw;
+    --shadow-size: 0 0 calc(5.4 * var(--vw)) calc(1.8 * var(--vw));
 }
 
 /* Tile deletion object */
@@ -50,25 +49,6 @@ html, body {
     -webkit-animation-fill-mode: backwards;
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
-}
-
-@media screen and (min-width: 520px) {
-    .tile {
-        width: 107px;
-        height: 107px;
-    }
-
-    .tile-inner {
-        border-radius: var(--border-radius-small);
-        line-height: 107px;
-        font-size: 60px;
-
-        width: 107px;
-        height: 107px;
-        line-height: 107px;
-
-        --shadow-size: 0 0 30px 10px;
-    }
 }
 
 /* Tile-Specific */

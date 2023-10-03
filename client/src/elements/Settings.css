@@ -1,5 +1,5 @@
 .tab-contents {
-    padding: 2vw;
+    padding: calc(2 * var(--vw));
     background-color: var(--board-color);
     border-radius:  0 0 var(--border-radius) var(--border-radius);
 }
@@ -22,15 +22,5 @@
 
 
 .bottom-buffer {
-    margin-bottom: 5vw;
-}
-
-@media screen and (min-width: 520px) {
-    .tab-contents {
-        padding: 10px;
-    }
-
-    .bottom-buffer {
-        margin-bottom: 25vw;
-    }
+    margin-bottom: calc(5 * var(--vw));
 }

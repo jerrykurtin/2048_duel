@@ -8,9 +8,9 @@
     right: 0;
     bottom: 0;
     left: 0;
-    line-height: 90vw;
+    line-height: calc(90 * var(--vw));
     text-align: center;
-    font-size: 6.3vw;
+    font-size: calc(6.3 * var(--vw));
     font-weight: bold;
 
     background: var(--board-color);
@@ -22,12 +22,4 @@
     -webkit-animation-fill-mode: backwards;
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
-}
-
-@media screen and (min-width: 520px) {
-
-    .endgame-msg {
-        font-size: 35px;
-        line-height: 500px;
-    }
 }

@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
   // server: {
   //   url: 'http://192.168.0.28:3000',
   //   cleartext: true
-  // }
+  // },
   plugins: {
     CapacitorCookies: {
       enabled: true,

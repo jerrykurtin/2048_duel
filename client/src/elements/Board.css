@@ -1,20 +1,26 @@
 /* animations */
 @import "BoardAnimations.css";
 
+* {
+    --border-width: calc(1 * var(--vw));
+}
+
+.outline {
+    border-width: var(--border-width);
+}
+
 
 .game-container {
-    margin-top: 2.7vw;
-    margin-bottom: 2.7vw;
+    margin: calc(2.7 * var(--vw)) auto;
     position: relative;
-    padding: 2.7vw;
+    padding: calc(2.7 * var(--vw));
     cursor: default;
     -ms-touch-action: none;
     touch-action: none;
     background: var(--board-color);
-    /* background: rgb(238, 238, 238); */
     border-radius: var(--border-radius);
-    width: 90vw;
-    height: 90vw;
+    width: calc(90 * var(--vw));
+    height: calc(90 * var(--vw));
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -27,15 +33,15 @@
 /* Tiles */
 .grid-container {
     position: absolute;
-    width: 84.6vw;
-    height: 84.6vw;
+    width: calc(84.6 * var(--vw));
+    height: calc(84.6 * var(--vw));
     z-index: 1;
 }
 
 .grid-row {
-    margin-bottom: 2.7vw;
-    width: 84.6vw;
-    height: 19.125vw;
+    margin-bottom: calc(2.7 * var(--vw));
+    width: calc(84.6 * var(--vw));
+    height: calc(19.125 * var(--vw));
 }
 
 .final-row {
@@ -43,9 +49,9 @@
 }
 
 .grid-cell {
-    width: 19.125vw;
-    height: 19.125vw;
-    margin-right: 2.7vw;
+    width: calc(19.125 * var(--vw));
+    height: calc(19.125 * var(--vw));
+    margin-right: calc(2.7 * var(--vw));
     float: left;
     border-radius: var(--border-radius-small);
     background: var(--muted-board-color);
@@ -54,54 +60,5 @@
 
 .final-cell {
     margin-right: 0px;
-}
-
-
-
-/* Endgame Message */
-
-@media screen and (min-width: 520px) {
-    .game-container {
-        margin-top: 15px;
-        margin-bottom: 15px;
-        padding: 15px;
-        width: 500px;
-        height: 500px;
-        border-radius: var(--border-radius);
-    }
-
-    .endgame-msg {
-        font-size: 35px;
-        line-height: 500px;
-        border-radius: var(--border-radius);
-    }
-
-    .grid-container {
-        width: 470px;
-        height: 470px;
-    }
-
-    .grid-row {
-        margin-bottom: 15px;
-        width: 470px;
-        height: 106.25px;
-    }
-
-    .final-row {
-        margin-bottom: 0px;
-    }
-
-    .grid-cell {
-        width: 106.25px;
-        height: 106.25px;
-        margin-right: 15px;
-        border-radius: var(--border-radius-small);
-    }
-
-    .final-cell {
-        margin-right: 0px;
-    }
-
-    
 }
 

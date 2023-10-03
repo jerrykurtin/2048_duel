@@ -14,8 +14,7 @@
 
 .board_info-left {
     border-radius: var(--border-radius);
-    /* background-color: var(--board-color); */
-    padding: 1.8vw;
+    padding: calc(1.8 * var(--vw));
     width: var(--card-width);
     float: left;
     margin-left: 0;
@@ -25,7 +24,7 @@
 .board_info-right {
     border-radius: var(--border-radius);
     /* background-color: var(--board-color); */
-    padding: 1.8vw;
+    padding: calc(1.8 * var(--vw));
     width: var(--card-width);
     float: right;
     justify-content: right;
@@ -47,19 +46,18 @@
 }
 
 #reset-button {
-    /* margin-bottom: 0.9vw; */
     border-radius: var(--border-radius);
     width: 100%;
-	margin: 0 auto 1vw;
+	margin: 0 auto calc(1 * var(--vw));
 }
 
 #settings-link {
     margin: 0;
-    font-size: 2.88vw;
+    font-size: calc(2.88 * var(--vw));
 }
 
 .board_info-internal {
-    font-size: 3.6vw;
+    font-size: calc(3.6 * var(--vw));
 }
 
 .timer-container-left {
@@ -81,35 +79,5 @@ pre {
 
 .header {
     text-decoration: underline;
-    margin-bottom: 0.45vw;
-}
-
-@media screen and (min-width: 520px) {
-    .board_info-container {
-        width: 500px;
-    }
-
-    .board_info-left {
-        padding: 10px;
-    }
-
-    .board_info-right {
-        padding: 10px;
-    }
-
-    #reset-button {
-        margin-bottom: 5px;
-    }
-
-    #settings-link {
-        font-size: 16px;
-    }
-
-    .board_info-internal {
-        font-size: 20px;
-    }
-
-    .header {
-        margin-bottom: 2.5px;
-    }
+    margin-bottom: calc(0.45 * var(--vw));
 }

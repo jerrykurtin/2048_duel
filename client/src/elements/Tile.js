@@ -6,21 +6,22 @@ function Tile({row, col, color, val, isNew, isDeleted}) {
     // window.innerWidth is accurate for desktop, and window.screen.availWidth is accurate for mobile
     // both are wrong for the other, but they're always larger than they should be, so min should be sufficient
     var actualWidth = Math.min(window.innerWidth, window.screen.availWidth);
-    const [tileDim, setTileDim] = useState((actualWidth < 520) ? 21.78 : 121);
-    const [measurement, setMeasurement] = useState((actualWidth < 520) ? "vw" : "px");
+    const [tileDim, setTileDim] = useState(21.78); // (actualWidth < 520) ? 21.78 : 121);
+    // const [measurement, setMeasurement] = useState((actualWidth < 520) ? "vw" : "px");
 
     React.useEffect(() => {
         // resize tiles to fit the screen
         function handleResize() {
             actualWidth = Math.min(window.innerWidth, window.screen.availWidth);
-            setTileDim((actualWidth < 520) ? 21.78 : 121);
-            setMeasurement((actualWidth < 520) ? "vw" : "px");
+            // setTileDim((actualWidth < 520) ? 21.78 : 121);
+            // setMeasurement((actualWidth < 520) ? "vw" : "px");
         }
         window.addEventListener("resize", handleResize);
     })
 
     let style = {
-        transform: "translate(" + (col) * tileDim + measurement + ", " + (row) * tileDim + measurement + ")",
+        // transform: "translate(" + (col) * tileDim + measurement + ", " + (row) * tileDim + measurement + ")",
+        transform: "translate( calc(" + col * tileDim + " * var(--vw)), calc(" + row * tileDim + " * var(--vw)))",
     };
 
     return (
