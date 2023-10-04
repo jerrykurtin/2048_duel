@@ -76,8 +76,10 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     function resetBoard() {
         myBoard.reset_board(winningPiece);
+        stopAllTimers();
         setBoardRefresh(!boardRefresh);
         setBoardTimeout(false);
+        
         setBoardInfo(null);
         setActiveGame(true);
         setMoveType(null);
