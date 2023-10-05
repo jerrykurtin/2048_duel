@@ -20,7 +20,7 @@
     --p2color: var(--salmoncolor);
     /* --green: rgb(127, 160, 60);
     --greencolor: 127, 160, 60; */
-    --green: rgb(0, 146, 69);
+    --green: #009245;
     --greencolor: 0, 146, 69;
     --blue: #0055ff;
     --bluecolor: 0, 85, 255;
@@ -37,6 +37,13 @@
     --appear_duration: 250ms;
     --appear_delay: var(--animation_duration);
 }
+
+/* Dark-mode Colors */
+/* * {
+  --primary-color: rgb(255, 255, 255);
+  --board-color: #0e1111;
+  --background-color: #353839;
+} */
 
 @media screen and (min-width: 520px) {
   * {

@@ -37,9 +37,15 @@ npm start
 ```
 Sync ios and android with latest changes
 ```
+npx capacitor-assets generate
 npx cap sync
 ```
 Run in Xcode, and changes should be up-to-date
+
+Generate all assets from logo
+```
+npx @capacitor/assets generate --iconBackgroundColor '#eeeeee' --iconBackgroundColorDark '#222222' --splashBackgroundColor '#eeeeee' --splashBackgroundColorDark '#111111'
+```
 
 ### Developing for deployment
 ```Bash
