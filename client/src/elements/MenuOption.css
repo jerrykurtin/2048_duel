@@ -1,0 +1,112 @@
+.custom-card {
+    border-style: solid;
+    border-width: .1rem;
+    border-radius: var(--border-radius-large);
+    border-color: var(--border-color);
+    overflow: hidden;
+    background-color: var(--board-color);
+
+    display: flex;
+    flex-flow: column;
+
+    --header-color: var(--purple);
+    position: relative;
+}
+
+.custom-card.h3 {
+    margin: 0 !important;
+}
+
+.custom-card:nth-child(odd) {
+    --header-color: var(--green);
+}
+
+@keyframes pop {
+    0% {transform: scale(1.0, 1.0);}
+    40% {transform: scale(1.02, 1.02);}
+    100% {transform: scale(1.0, 1.0);}
+}
+
+@keyframes swing-and-fall {
+    0% { transform: rotate(0deg) translateY(0); z-index: 2; }
+    20% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
+    35% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
+    /* 0% { transform: rotate(-45deg) translateY(30vh); } */
+    100% { transform: rotate(20deg) translateY(40vh) translateX(2vh); ; z-index: 2; }
+  }
+
+.custom-card.selected {
+    /* transition:  transform calc(var(--animation_duration) / 2) ease-in; */
+    /* transform: scale(1.01, 1.01); */
+    animation-name: swing-and-fall;
+    animation-duration: 600ms;
+}
+
+.custom-card.selected.coming-soon {
+    animation-name: pop;
+    animation-duration: 150ms;
+    animation-timing-function: ease-in;
+}
+
+.fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+.vertical-aligner {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-card-header {
+    padding: 0.5rem 1rem;
+    background-color: var(--header-color);
+    color: var(--tile-text-color);
+    border-bottom: .05rem solid var(--muted-primary-color);
+}
+
+.custom-card-body {
+    /* padding: auto 1rem; */
+    vertical-align: middle;
+
+}
+
+
+/* Title screen */
+.mode-select {
+    margin-bottom: calc(4 * var(--vw));
+    height: 20vh;
+    
+    /* text-align: center; */
+}
+
+.coming-soon {
+    opacity: 0.75;
+    background: linear-gradient(
+        0deg,
+        transparent 0%,
+        transparent 100%
+    )
+}
+
+/* .cool-fill {
+    cursor: pointer;
+    background: linear-gradient(
+        130deg, 
+        var(--board-color) 0% 33%, 
+        var(--board-color) 66%,
+        rgb(var(--greencolor)) 100%
+    );
+    background-position: 0% 0%;
+    background-size: 300% 300%;
+    transition: background-position 350ms ease, transform 350ms ease;
+}
+
+.cool-fill:hover {
+    background-position: 100% 100%;
+} */
+
+/* .cool-fill:active {
+    transform: scale(1.1, 1.1);
+} */
