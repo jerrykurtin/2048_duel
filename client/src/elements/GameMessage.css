@@ -23,3 +23,7 @@
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
 }
+
+.game-msg-button {
+    border-radius: var(--border-radius-small);
+}

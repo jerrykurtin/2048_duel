@@ -18,12 +18,12 @@ function MenuOption({title, contents, disabled=false, onClick, ...props}) {
       setClickedWithTimeout(true);
       onClick();
     }}className={"custom-card mode-select text-center" + ((disabled === true) ? " coming-soon" : " cool-fill") + ((clicked == true) ? " selected" : "")} border="secondary" {...props}>
-      <div className="custom-card-header">
+      <div className="mode-select-header">
         <h3>{title}</h3>
       </div>
       <div className="fill-remaining-space">
         <div className="vertical-aligner">
-          <div className="custom-card-body">{contents}</div>
+          <div className="mode-select-body">{contents}</div>
         </div>
       </div>
     </div>

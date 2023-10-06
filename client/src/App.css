@@ -30,9 +30,13 @@
     --purple:#8a45f1;
     --purplecolor: 138, 69, 241;
 
-    --border-radius-large: calc(4 * var(--vw));
-    --border-radius: calc(2 * var(--vw));
-    --border-radius-small: calc(1.5 * var(--vw));
+    --border-radius-large: calc(7 * var(--vw));
+    --border-radius: calc(3.5 * var(--vw));
+    --border-radius-small: calc(2 * var(--vw));
+    --border-width: calc(0.3 * var(--vw));
+    --border-width-small: calc(0.1 * var(--vw));
+    --game-border-width: calc(1 * var(--vw));
+
 
     --animation_duration: 150ms;
     --appear_duration: 250ms;
@@ -76,6 +80,19 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+}
+
+/* Common Elements */
+.custom-card {
+  border-style: solid;
+  border-width: var(--border-width);
+  border-radius: var(--border-radius);
+  border-color: var(--border-color);
+  background-color: var(--board-color);
+}
+
+.small-border {
+  border-width: var(--border-width-small);
 }
 
 /* General settings */

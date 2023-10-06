@@ -14,7 +14,7 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 	return (
 		<div>
 		<div className="board_info-container">
-			<Card className={"board_info-left text text-left " + p1color}>
+			<div className={"custom-card small-border board_info-left text text-left " + p1color}>
 				<div className="board_info-internal text header" id="player1-header"><strong>{p1name}</strong></div>
 				{((timer) ? 
 					<div className="board_info-internal text" id="player1-timer">
@@ -25,7 +25,7 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 					: <></>
 				)}
 				<div className="board_info-internal text" id="player1-score">Score - <strong>{p1score}</strong></div>
-			</Card>
+			</div>
 
 			<div className="board_info-center">
 				<Button id="reset-button" variant="outline-main-color" onClick={() => setMoveType("reset")}>Reset (r)</Button>
@@ -34,7 +34,7 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 				</div>
 			</div>
 
-			<Card className={"board_info-right text text-right " + p2color}>
+			<div className={"custom-card small-border board_info-right text text-right " + p2color}>
 				<div className="board_info-internal text header" id="player2-header"><strong>{p2name}</strong></div>
 				{((timer) ? 
 					<div className="board_info-internal text" id="player2-timer">
@@ -46,7 +46,7 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 				)}
 				
 				<div className="board_info-internal text" id="player2-score"><strong>{p2score}</strong> - Score</div>
-			</Card>
+			</div>
 		</div>
 		</div>
 	)

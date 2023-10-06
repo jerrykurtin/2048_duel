@@ -1,17 +1,11 @@
 /* animations */
 @import "BoardAnimations.css";
 
-* {
-    --border-width: calc(1 * var(--vw));
-}
-
-
-
 .game-container {
     margin: calc(2.7 * var(--vw)) auto;
     position: relative;
 
-    border-width: var(--border-width);
+    border-width: var(--game-border-width);
     border-radius: var(--border-radius);
     padding: calc(2.7 * var(--vw) - var(--border-width));
     width: calc(90 * var(--vw));
