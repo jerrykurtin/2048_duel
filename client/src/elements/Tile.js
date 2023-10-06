@@ -19,14 +19,22 @@ function Tile({row, col, color, val, isNew, isDeleted}) {
         window.addEventListener("resize", handleResize);
     })
 
+    let transformation = "translate( calc(" + col * tileDim + " * var(--vw)), calc(" + row * tileDim + " * var(--vw)))";
     let style = {
-        // transform: "translate(" + (col) * tileDim + measurement + ", " + (row) * tileDim + measurement + ")",
-        transform: "translate( calc(" + col * tileDim + " * var(--vw)), calc(" + row * tileDim + " * var(--vw)))",
+        Transform: transformation,
+        WebkitTransform: transformation,
+        MozTransform: transformation,
     };
 
     return (
         <div className={"tile" + ((isNew) ? " tile-new" : "") + (isDeleted ? " deleted" : "")} style={style}>
-                <div className={"tile-inner background tile-" + val + " " + color}>{val}</div>
+                {/* Shadow must go on tile-inner */}
+                <div className={"tile-inner color " + color + " tile-" + val}>
+                    <div className="tile-layer white"/>
+                    {/* Background must go on a tile-layer so opacity can change */}
+                    <div className={"tile-layer background " + color + " tile-" + val}></div>
+                    <div className="tile-layer" ><div className="tile-text">{val}</div></div>
+                </div>
         </div>
     )
 }

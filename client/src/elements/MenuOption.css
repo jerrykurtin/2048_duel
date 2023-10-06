@@ -29,11 +29,11 @@
 }
 
 .mode-select:nth-child(even) {
-    --header-color: var(--purple);
+    --header-color: var(--muted-purple);
 }
 
 .mode-select:nth-child(odd) {
-    --header-color: var(--green);
+    --header-color: var(--muted-green);
 }
 
 .mode-select.selected {

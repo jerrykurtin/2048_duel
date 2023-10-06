@@ -14,25 +14,26 @@
     --border-color: rgb(140, 129, 119);
 
     --board-color: rgb(255, 255, 255);
-    --muted-board-color: rgb(240, 240, 240);
+    --muted-board-color: #f4f4f7;
     --tile-text-color: rgb(255, 255, 255);
 
-    --p1color: var(--bluecolor);
-    --p2color: var(--salmoncolor);
     /* --green: rgb(127, 160, 60);
     --greencolor: 127, 160, 60; */
     --green: #009245;
+    --muted-green: #1fac61;
     --greencolor: 0, 146, 69;
     --blue: #0055ff;
     --bluecolor: 0, 85, 255;
     --salmon: #ff4747;
     --salmoncolor: 255, 69, 69;
     --purple:#8a45f1;
+    --muted-purple: #9f6cea;
     --purplecolor: 138, 69, 241;
 
-    --border-radius-large: calc(7 * var(--vw));
+    --border-radius-large: calc(6 * var(--vw));
     --border-radius: calc(3.5 * var(--vw));
-    --border-radius-small: calc(2 * var(--vw));
+    --border-radius-small: calc(2.5 * var(--vw));
+
     --border-width: calc(0.3 * var(--vw));
     --border-width-small: calc(0.1 * var(--vw));
     --game-border-width: calc(1 * var(--vw));
@@ -43,19 +44,11 @@
     --appear_delay: var(--animation_duration);
 }
 
-/* Dark-mode Colors */
-/* * {
-  --primary-color: rgb(255, 255, 255);
-  --board-color: #0e1111;
-  --background-color: #353839;
-} */
-
 @media screen and (min-width: 520px) {
   * {
       --vw: 5.2px;
   }
 }
-
 
 .App {
     width: 90%;
@@ -80,6 +73,44 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+}
+
+/* Dark-mode Colors */
+/* * {
+  --primary-color: rgb(255, 255, 255);
+  --board-color: #0e1111;
+  --background-color: #353839;
+} */
+
+/* Current Colors */
+
+.green {
+  --current-color: var(--green);
+}
+
+.blue {
+  --current-color: var(--blue);
+}
+
+.salmon {
+  --current-color: var(--salmon);
+}
+
+.purple {
+  --current-color: var(--purple);
+}
+
+.outline {
+  border-color: var(--current-color);
+}
+
+.background {
+  background: var(--current-color);
+}
+
+.text {
+  opacity: 1;
+  color: var(--current-color);
 }
 
 /* Common Elements */
@@ -144,99 +175,12 @@ a:visited {
   font-weight: 600;
 }
 
-.player1.background {
-  background: rgb(var(--p1color));
-}
-
-.player2.background {
-  background: rgb(var(--p2color));
-}
-
 .outline {
   border-style: solid;
   transition: border-color calc(var(--animation_duration) + var(--appear_duration));
   /* box-shadow: 0 0 0 calc(1 * var(--vw));
   transition: color calc(var(--animation_duration) + var(--appear_duration)); */
 }
-
-.player1.outline {
-  border-color: rgba(var(--p1color), 0.75);
-  /* color: rgba(var(--p1color), 0.75); */
-}
-
-.player2.outline {
-  border-color: rgba(var(--p2color), 0.75);
-  /* color: rgba(var(--p2color), 0.75); */
-}
-
-.green.outline {
-  border-color: rgba(var(--greencolor), 0.75);
-  /* color: rgba(var(--greencolor), 0.75); */
-}
-
-.blue.outline {
-  border-color: rgba(var(--bluecolor), 0.75);
-  /* color: rgba(var(--bluecolor), 0.75); */
-}
-
-.salmon.outline {
-  border-color: rgba(var(--salmoncolor), 0.75);
-  /* color: rgba(var(--salmoncolor), 0.75); */
-}
-
-.purple.outline {
-  border-color: rgba(var(--purplecolor), 0.75);
-  /* color: rgba(var(--purplecolor), 0.75); */
-}
-
-
-.green.background {
-  background: rgb(var(--greencolor));
-}
-
-.blue.background {
-  background: rgb(var(--bluecolor));
-}
-
-.salmon.background {
-  background: rgb(var(--salmoncolor));
-}
-
-.purple.background {
-  background: rgb(var(--purplecolor));
-}
-
-
-.player1.text {
-  color: rgb(var(--p1color));
-  opacity: 0.75;
-}
-
-.player2.text {
-  color: rgb(var(--p2color));
-  opacity: 0.75;
-}
-
-.green.text {
-  color: rgb(var(--greencolor));
-  opacity: 0.75;
-}
-
-.blue.text {
-  color: rgb(var(--bluecolor));
-  opacity: 0.75;
-}
-
-.salmon.text {
-  color: rgb(var(--salmoncolor));
-  opacity: 0.75;
-}
-
-.purple.text {
-  color: rgb(var(--purplecolor));
-  opacity: 0.75;
-}
-
 
 /* Transitions */
 .fade-enter-active,

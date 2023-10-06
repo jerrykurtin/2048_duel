@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+
+import Button from 'react-bootstrap/Button';
 
 import TurnInfo from './TurnInfo';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import Timer from './Timer';
+import ScoreBoard from './ScoreBoard';
 
 import "./BoardInfo.css"
 
@@ -14,27 +15,26 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 	return (
 		<div>
 		<div className="board_info-container">
-			<div className={"custom-card small-border board_info-left text text-left " + p1color}>
-				<div className="board_info-internal text header" id="player1-header"><strong>{p1name}</strong></div>
-				{((timer) ? 
-					<div className="board_info-internal text" id="player1-timer">
-						<div className="timer-container-left">
-						Time -<pre>{" "}</pre><strong><Timer signalFinish={setPlayer1Finish} startValue={timeLimit} startStopTimer={startStopP1Timer} resetTimer={resetP1Timer} setResetTimer={setResetP1Timer}/></strong>
-						</div>
-					</div>
-					: <></>
-				)}
-				<div className="board_info-internal text" id="player1-score">Score - <strong>{p1score}</strong></div>
-			</div>
+			<ScoreBoard
+				isLeft={true} color={p1color} name={p1name} score={p1score} timer={timer}
+				signalFinish={setPlayer1Finish} timeLimit={timeLimit} 
+				startStopTimer={startStopP1Timer} resetTimer={resetP1Timer} setResetTimer={setResetP1Timer}
+			/>
 
 			<div className="board_info-center">
-				<Button id="reset-button" variant="outline-main-color" onClick={() => setMoveType("reset")}>Reset (r)</Button>
+				<Button id="reset-button" variant="outline-main-color" onClick={() => setMoveType("reset")}>Reset</Button>
 				<div className="turn-info-wrapper">
 					<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
 				</div>
 			</div>
 
-			<div className={"custom-card small-border board_info-right text text-right " + p2color}>
+			<ScoreBoard
+				isLeft={false} color={p2color} name={p2name} score={p2score} timer={timer}
+				signalFinish={setPlayer2Finish} timeLimit={timeLimit} 
+				startStopTimer={startStopP2Timer} resetTimer={resetP2Timer} setResetTimer={setResetP2Timer}
+			/>
+
+			{/* <div className={"custom-card small-border board_info-right text text-right " + p2color}>
 				<div className="board_info-internal text header" id="player2-header"><strong>{p2name}</strong></div>
 				{((timer) ? 
 					<div className="board_info-internal text" id="player2-timer">
@@ -46,7 +46,7 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 				)}
 				
 				<div className="board_info-internal text" id="player2-score"><strong>{p2score}</strong> - Score</div>
-			</div>
+			</div> */}
 		</div>
 		</div>
 	)
