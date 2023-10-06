@@ -8,7 +8,6 @@
     0% { transform: rotate(0deg) translateY(0); z-index: 2; }
     20% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
     35% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
-    /* 0% { transform: rotate(-45deg) translateY(30vh); } */
     100% { transform: rotate(20deg) translateY(40vh) translateX(2vh); ; z-index: 2; }
 }
 
@@ -37,8 +36,6 @@
 }
 
 .mode-select.selected {
-    /* transition:  transform calc(var(--animation_duration) / 2) ease-in; */
-    /* transform: scale(1.01, 1.01); */
     animation-name: swing-and-fall;
     animation-duration: 600ms;
 }
@@ -68,7 +65,7 @@
 }
 
 .mode-select-body {
-    /* padding: auto 1rem; */
+    padding: 0.5rem 1rem;
     vertical-align: middle;
 
 }
@@ -76,11 +73,11 @@
 
 .coming-soon {
     opacity: 0.75;
-    background: linear-gradient(
+    /* background: linear-gradient(
         0deg,
         transparent 0%,
         transparent 100%
-    )
+    ) */
 }
 
 /* .cool-fill {
