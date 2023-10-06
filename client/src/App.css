@@ -86,18 +86,22 @@ body {
 
 .green {
   --current-color: var(--green);
+  --current-color-values: var(--greencolor);
 }
 
 .blue {
   --current-color: var(--blue);
+  --current-color-values: var(--bluecolor);
 }
 
 .salmon {
   --current-color: var(--salmon);
+  --current-color-values: var(--salmoncolor);
 }
 
 .purple {
   --current-color: var(--purple);
+  --current-color-values: var(--purplecolor);
 }
 
 .outline {
@@ -255,6 +259,7 @@ a:visited {
 /* Change the bootstrap behavior and add a new button */
 .btn-outline-main-color {
   --button-color: var(--border-color);
+
   --bs-btn-color: var(--button-color);
   --bs-btn-border-color: var(--button-color);
   --bs-btn-hover-color: #fff;
