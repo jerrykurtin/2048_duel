@@ -7,7 +7,7 @@
 @keyframes swing-and-fall {
     0% { transform: rotate(0deg) translateY(0); z-index: 2; }
     20% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
-    35% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
+    30% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
     100% { transform: rotate(20deg) translateY(40vh) translateX(2vh); ; z-index: 2; }
 }
 
