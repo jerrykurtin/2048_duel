@@ -255,23 +255,26 @@ a:visited {
   transform: translateX(100%);
 }
 
-
 /* Change the bootstrap behavior and add a new button */
 .btn-outline-main-color {
   --button-color: var(--border-color);
 
   --bs-btn-color: var(--button-color);
   --bs-btn-border-color: var(--button-color);
-  --bs-btn-hover-color: #fff;
+  --bs-btn-bg: var(--board-color);
+
+  --bs-btn-hover-color: var(--tile-text-color);
   --bs-btn-hover-bg: var(--button-color);
   --bs-btn-hover-border-color: var(--button-color);
   --bs-btn-focus-shadow-rgb: 108, 117, 125;
-  --bs-btn-active-color: #fff;
+
+  --bs-btn-active-color: var(--tile-text-color);
   --bs-btn-active-bg: var(--button-color);
   --bs-btn-active-border-color: var(--button-color);
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+
   --bs-btn-disabled-color: var(--button-color);
-  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-bg: var(--board-color);
   --bs-btn-disabled-border-color: var(--button-color);
   --bs-gradient: none;
 }
@@ -284,14 +287,43 @@ a:visited {
   color: var(--primary-color) !important;
 }
 
+.card-header, .card-body {
+    color: var(--border-color) !important;
+}
+
+/* Change the behavior of tabs */
+.nav {
+  --bs-nav-tabs-border-width: var(--border-width-small);
+  --bs-nav-tabs-border-color: var(--border-color);
+  --bs-nav-tabs-border-radius: var(--border-radius);
+  --bs-nav-tabs-link-hover-border-color: var(--border-color);
+  --bs-nav-tabs-link-active-color: var(--primary-color);
+  --bs-nav-tabs-link-active-bg: var(--board-color);
+  --bs-nav-tabs-link-active-border-color: var(---border-color);
+  --bs-nav-link-color: var(--primary-color);
+}
+
+/* change tab color */
+.nav-link {
+  color: var(--primary-color);
+}
+
 .nav-link:hover {
-  text-decoration: underline;
+  color: var(--primary-color);
 }
 
 .nav-link.active {
-    color: var(--primary-color) !important;
+  border-bottom-color: var(--board-color) !important;
 }
 
-.card-header, .card-body {
-    color: var(--primary-color) !important;
+.tab-content {
+  padding: calc(2 * var(--vw));
+  background-color: var(--board-color);
+
+  border-width: var(--border-width-small);
+  border-style: solid;
+  border-color: var(--border-color);
+  border-radius:  0 0 var(--border-radius) var(--border-radius);
+  border-top: none;
 }
+

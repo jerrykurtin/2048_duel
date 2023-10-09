@@ -1,24 +1,10 @@
-.tab-contents {
-    padding: calc(2 * var(--vw));
-    background-color: var(--board-color);
-    border-radius:  0 0 var(--border-radius) var(--border-radius);
-}
+
 
 .toggle-name {
     color: var(--primary-color) !important;
     opacity: 1 !important;
     /* font-weight: 500; */
 }
-
-/* change tab color */
-.nav-link {
-    color: var(--primary-color);
-}
-
-.nav-link:hover {
-    color: var(--primary-color);
-}
-
 
 
 .bottom-buffer {
