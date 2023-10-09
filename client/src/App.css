@@ -181,12 +181,12 @@ ul {
 }
 
 a:link {
-    color: #776e65;
+    color: var(--pop-color-1);
     font-weight: bold;
 }
 
 a:visited {
-    color: #776e65;
+    color: var(--pop-color-1);
     font-weight: bold;
 }
 
