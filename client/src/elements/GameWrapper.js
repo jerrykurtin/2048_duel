@@ -444,7 +444,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 </strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
-                    <Nav.Link onClick={() => setState("menu")}><UilArrowLeft/>Home</Nav.Link>
+                    <Nav.Link onClick={() => setState("menu")}><UilArrowLeft className="normal-icon"/>Home</Nav.Link>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
