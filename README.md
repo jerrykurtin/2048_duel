@@ -40,6 +40,11 @@ Sync ios and android with latest changes
 npx capacitor-assets generate
 npx cap sync
 ```
+
+Open XCode
+```
+npx cap open ios
+```
 Run in Xcode, and changes should be up-to-date
 
 Generate all assets from logo

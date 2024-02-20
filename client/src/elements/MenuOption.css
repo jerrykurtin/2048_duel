@@ -4,6 +4,12 @@
     100% {transform: scale(1.0, 1.0);}
 }
 
+@keyframes pop-aggressive {
+    0% {transform: scale(1.0, 1.0);}
+    30% {transform: scale(1.05, 1.05);}
+    100% {transform: scale(1.0, 1.0);}
+}
+
 @keyframes swing-and-fall {
     0% { transform: rotate(0deg) translateY(0); z-index: 2; }
     20% { transform: rotate(-10deg) translateY(3.2vh) translateX(1vh); }
@@ -72,7 +78,7 @@
 
 
 .coming-soon {
-    opacity: 0.75;
+    opacity: 0.5;
     /* background: linear-gradient(
         0deg,
         transparent 0%,

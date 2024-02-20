@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 /* Light-mode Colors */
 /* * {
   --bg-color-1: #ffffff;
@@ -16,11 +16,12 @@
 
 /* Dark-mode Colors */
 * {
-  --bg-color-1: #1a1a1d;
+  --bg-color-1: #151515;
   --bg-color-2: #262629;
-  --bg-color-3: #29292c;
-  --bg-color-4: #515159;
-  --pop-color-1: #ffffff;
+  --bg-color-3: #000000;
+  /* --bg-color-3: #29292c; */
+  /* --bg-color-4: #515159; */
+  --pop-color-1: #ebebeb;
   --pop-color-2: #d8d8eb;
 
   --tile-text-color: var(--pop-color-1);
@@ -65,8 +66,8 @@
   --border-radius: calc(3.5 * var(--vw));
   --border-radius-small: calc(2.5 * var(--vw));
 
-  --border-width: calc(0.3 * var(--vw));
-  --border-width-small: calc(0.15 * var(--vw));
+  --border-width: calc(0.0 * var(--vw));
+  --border-width-small: calc(0.00 * var(--vw));
   --game-border-width: calc(1 * var(--vw));
   
   
@@ -94,7 +95,7 @@ body {
     max-width: 532px;
     background: var(--background-color);
     color: var(--primary-color);
-    font-family: 'Arimo', sans-serif;
+    font-family: 'Poppins', 'Arimo', sans-serif;
     font-size: calc(3.24 * var(--vw));
     position: relative;
 }
