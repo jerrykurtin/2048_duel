@@ -170,7 +170,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
                     <h5>Credit</h5>
                         <p>This game was created by Jerry Kurtin and inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>. Thanks for playing!</p>
                     <h5>Feedback</h5>
-                        <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't run any ads on the site, but if you love the game, you can venmo me <strong>@Jerry-Kurtin-1</strong></p>
+                        <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't plan on running any ads here, but if you want to support the app, you can venmo me <strong>@Jerry-Kurtin-1</strong></p>
                     </div>
                 </Tab>
             </Tabs>
