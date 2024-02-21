@@ -11,7 +11,7 @@ function HowToPlay({winningPiece, ...props}) {
         <h5>Duel</h5>
         <ul>
           <li>Your squares are color-coded</li>
-          <li>On your turn, collide one of your squares with your oponnent's to steal it</li>
+          <li>On your turn, collide one of your squares with your opponent's to steal it</li>
           <li>The first to create the {winningPiece} square in their color wins!</li>
         </ul>
     </div>

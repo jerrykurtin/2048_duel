@@ -508,7 +508,7 @@ class BoardClass {
                     dirs[dir][0] = -Number.MAX_VALUE;
             }
 
-            // calculate the best next move based on minimum oponnent's score
+            // calculate the best next move based on minimum opponent's score
             else{
                 let min_max = temp_board.find_move_value();
                 if (player == 0)
