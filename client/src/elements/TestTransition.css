@@ -1,0 +1,52 @@
+@keyframes enter-left {
+    0% { transform: translateX(-100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes enter-right {
+    0% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes exit-left {
+    0% { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes exit-right {
+    0% { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0; }
+}
+
+.slide-window-container {
+    position: relative;
+}
+
+.slide-window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+}
+
+.enter-left {
+    animation-name: enter-left;
+}
+
+.enter-right {
+    animation-name: enter-right;
+}
+
+.exit-left {
+    animation-name: exit-left;
+}
+
+.exit-right {
+    animation-name: exit-right;
+}
+
+.hidden {
+    transform: translateX(100%);
+    opacity: 0;
+}

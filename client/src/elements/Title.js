@@ -1,13 +1,13 @@
 import React from 'react'
 
 import './Title.css'
+import logo from '../assets/big_logo.svg'
 
 function Title() {
   return (
     <div>
       <div className="title-container">
-          <h1 className="title">2048 Duel</h1>
-          <p className="subtitle text-center">Play against your friends or battle an AI in this exciting new take on classic 2048!</p>
+          <img className="title" src={logo} alt="2048 Duel"/>
       </div>
     </div>
   )

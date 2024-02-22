@@ -1,13 +1,12 @@
 .title-container {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .title {
-    text-align: center;
+    width: 90%;
     margin-bottom: 10px;
-}
-
-.subtitle {
-    margin-top: 0;
-    margin-bottom: 20px;
 }

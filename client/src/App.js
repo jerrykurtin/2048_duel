@@ -6,6 +6,7 @@ import Title from './elements/Title.js';
 import MenuOption from "./elements/MenuOption";
 import GameWrapper from "./elements/GameWrapper.js";
 import Card from "react-bootstrap/Card";
+import TestTransition from './elements/TestTransition.js';
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
     const [timer, setTimer] = useState(null);
 
     // states used for loading react elements
-    const [state, setState] = useState("menu");
+    const [state, setState] = useState("home");
     const [prevState, setPrevState] = useState(null);
     const [currState, setCurrState] = useState(state);
     const [animateDir, setAnimateDir] = useState("fade");
@@ -38,11 +39,16 @@ function App() {
     // when previous state is updated, change the fade direction based on current and previous state
     useEffect( () => {
         // decide which direction to animate
-        if (state === "game"){
-            setAnimateDir("fade-fr");
-        }
-        else if (state === "menu"){
+        if (state === "home") {
             if (prevState === "game"){
+                setAnimateDir("fade-rf");
+            }
+            else{
+                setAnimateDir("fade");
+            }
+        }
+        else if (state === "gamemode"){
+            if (prevState == "timer"){
                 setAnimateDir("fade-rf");
             }
             else{
@@ -51,7 +57,15 @@ function App() {
         }
 
         else if (state === "timer"){
-            setAnimateDir("fade");
+            if (prevState === "game"){
+                setAnimateDir("fade-rf");
+            }
+            else{
+                setAnimateDir("fade");
+            }
+        }
+        else if (state === "game"){
+            setAnimateDir("fade-fr");
         }
     }, [prevState]);
 
@@ -81,10 +95,29 @@ function App() {
 
     function renderView(state){
         console.log("rendering component " + state);
-        if (state === "menu"){
+        if (state === "home") {
+            return (
+                <div>
+                    <Title/>
+                    <MenuOption 
+                        title={"Start"} 
+                        onClick={() => setState("gamemode")}
+                    />
+                </div>
+            )
+        }
+
+        else if (state === "gamemode"){
             return (
             <div>
-                <Title/>
+                <MenuOption 
+                    title={"Back"} 
+                    onClick={() => setState("home")}
+                />
+                <MenuOption 
+                    title={"Home"} 
+                    onClick={() => setState("home")}
+                />
                 <MenuOption 
                     title={"Solo"} 
                     contents={"Play against an AI to hone your skills."} 
@@ -108,7 +141,14 @@ function App() {
         else if (state === "timer"){
             return (
                 <div>
-                <Title/>
+                <MenuOption 
+                    title={"Back"} 
+                    onClick={() => setState("gamemode")}
+                />
+                <MenuOption 
+                    title={"Home"} 
+                    onClick={() => setState("home")}
+                />
                 <MenuOption 
                     title={"No Timer (Beginner-Friendly)"} 
                     contents={"Play classic 2048 Duel."} 
@@ -147,7 +187,8 @@ function App() {
 
     return (
         <div className="App">
-            <SwitchTransition mode="out-in">
+            <TestTransition/>
+            {/* <SwitchTransition mode="out-in">
                 <CSSTransition
                     key={state}
                     nodeRef={animateRef}
@@ -160,7 +201,7 @@ function App() {
                     {renderView(state)}
                     </div>
                 </CSSTransition>
-            </SwitchTransition>
+            </SwitchTransition> */}
         </div>
     );
 }
