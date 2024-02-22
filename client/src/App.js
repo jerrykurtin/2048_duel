@@ -23,11 +23,14 @@ function App() {
     const [timer, setTimer] = useState(null);
 
     // states used for loading react elements
-    const [state, setState] = useState("home");
-    const [prevState, setPrevState] = useState(null);
-    const [currState, setCurrState] = useState(state);
-    const [animateDir, setAnimateDir] = useState("fade");
-    const animateRef = useRef(null);
+    // states: home, gamemode, timer, game
+    const [state, setState] = useState(0);
+    const [prevState, setPrevState] = useState(0);
+    const [currState, setCurrState] = useState(0);
+    const [page0Transition, setPage0Transition] = useState("enter-left");
+    const [page1Transition, setPage1Transition] = useState("hidden");
+    const [page2Transition, setPage2Transition] = useState("hidden");
+    const [page3Transition, setPage3Transition] = useState("hidden");
     
     // update previous state when state is changed
     useEffect (() => {
@@ -35,39 +38,20 @@ function App() {
         setCurrState(state);
 
     }, [state]);
-    
-    // when previous state is updated, change the fade direction based on current and previous state
-    useEffect( () => {
-        // decide which direction to animate
-        if (state === "home") {
-            if (prevState === "game"){
-                setAnimateDir("fade-rf");
-            }
-            else{
-                setAnimateDir("fade");
-            }
+
+    useEffect (() => {
+        const stateSetters = [setPage0Transition, setPage1Transition, setPage2Transition, setPage3Transition];
+        if (prevState > currState) {
+            stateSetters[prevState]("exit-right");
+            stateSetters[currState]("enter-left");
         }
-        else if (state === "gamemode"){
-            if (prevState == "timer"){
-                setAnimateDir("fade-rf");
-            }
-            else{
-                setAnimateDir("fade");
-            }
+        else {
+            stateSetters[prevState]("exit-left");
+            stateSetters[currState]("enter-right");
         }
 
-        else if (state === "timer"){
-            if (prevState === "game"){
-                setAnimateDir("fade-rf");
-            }
-            else{
-                setAnimateDir("fade");
-            }
-        }
-        else if (state === "game"){
-            setAnimateDir("fade-fr");
-        }
-    }, [prevState]);
+    }, [currState]);
+    
 
     // setMode sets the gamemode and progresses to the next screen
     function setMode(newMode){
@@ -84,124 +68,86 @@ function App() {
             setP2possessive("Player 2's");
         }
         setGamemode(newMode);
-        setState("timer");
+        setState(2);
     }
 
     function setTimerStyle(newTimer){
         setTimer(newTimer);
-        setState("game");
+        setState(3);
     }
-
-
-    function renderView(state){
-        console.log("rendering component " + state);
-        if (state === "home") {
-            return (
-                <div>
-                    <Title/>
-                    <MenuOption 
-                        title={"Start"} 
-                        onClick={() => setState("gamemode")}
-                    />
-                </div>
-            )
-        }
-
-        else if (state === "gamemode"){
-            return (
-            <div>
-                <MenuOption 
-                    title={"Back"} 
-                    onClick={() => setState("home")}
-                />
-                <MenuOption 
-                    title={"Home"} 
-                    onClick={() => setState("home")}
-                />
-                <MenuOption 
-                    title={"Solo"} 
-                    contents={"Play against an AI to hone your skills."} 
-                    onClick={() => setMode("Solo")}
-                />
-                <MenuOption 
-                    title={"Multiplayer"} 
-                    contents={"Play with your friend on the same device."} 
-                    onClick={() => setMode("Multi")}
-                />
-                <MenuOption 
-                    title={"Online (Coming Soon)"} 
-                    contents={"Play against a friend, or start a game with a stranger."} 
-                    onClick={() => null}
-                    disabled={true}
-                />
-            </div>
-            )
-        } 
-
-        else if (state === "timer"){
-            return (
-                <div>
-                <MenuOption 
-                    title={"Back"} 
-                    onClick={() => setState("gamemode")}
-                />
-                <MenuOption 
-                    title={"Home"} 
-                    onClick={() => setState("home")}
-                />
-                <MenuOption 
-                    title={"No Timer (Beginner-Friendly)"} 
-                    contents={"Play classic 2048 Duel."} 
-                    onClick={() => setTimerStyle(null)}
-                />
-                <MenuOption 
-                    title={"Timed"} 
-                    contents={"A timer runs down during your turn. If it reaches 0, your opponent wins!"} 
-                    onClick={() => setTimerStyle("Timed")}
-                />
-                <MenuOption 
-                    title={"Speed"} 
-                    contents={"Each turn, you have a few seconds to move before a random move is chosen for you."} 
-                    onClick={() => setTimerStyle("Speed")}
-                />
-            </div>
-            )
-        } 
-
-        else if (state === "game") {
-            return (
-            <div>
-                <GameWrapper
-                    p1color={p1color} p2color={p2color}
-                    setP1color={setP1color} setP2color={setP2color}
-                    p1name={p1name} p2name={p2name}
-                    p1possessive={p1possessive} p2possessive={p2possessive}
-                    setState={setState} gamemode={gamemode} timer={timer}
-                />
-            </div>
-            )
-        }
-    }
-
-    
 
     return (
         <div className="App">
-            <TestTransition/>
-            {/* <SwitchTransition mode="out-in">
-                <CSSTransition
-                    key={state}
-                    nodeRef={animateRef}
-                    addEndListener={(done) => {
-                    animateRef.current.addEventListener("transitionend", done, false);
-                    }}
-                    classNames={animateDir}
-                >
-                    <div ref={animateRef} id="rendered-view-div">
-                    {renderView(state)}
-                    </div>
-                </CSSTransition>
-            </SwitchTransition> */}
+            <div className="slide-window-container">
+                <div className={"slide-window " + page0Transition}>
+                    <Title/>
+                    <MenuOption 
+                        title={"Start"} 
+                        onClick={() => setState(1)}
+                    />
+                </div>
+                <div className={"slide-window " + page1Transition}>
+                    <MenuOption 
+                        title={"Back"} 
+                        onClick={() => setState(0)}
+                    />
+                    <MenuOption 
+                        title={"Home"} 
+                        onClick={() => setState(0)}
+                    />
+                    <MenuOption 
+                        title={"Solo"} 
+                        contents={"Play against an AI to hone your skills."} 
+                        onClick={() => setMode("Solo")}
+                    />
+                    <MenuOption 
+                        title={"Multiplayer"} 
+                        contents={"Play with your friend on the same device."} 
+                        onClick={() => setMode("Multi")}
+                    />
+                    <MenuOption 
+                        title={"Online (Coming Soon)"} 
+                        contents={"Play against a friend, or start a game with a stranger."} 
+                        onClick={() => null}
+                        disabled={true}
+                    />
+                </div>
+                <div className={"slide-window " + page2Transition}>
+                    <MenuOption 
+                        title={"Back"} 
+                        onClick={() => setState(1)}
+                    />
+                    <MenuOption 
+                        title={"Home"} 
+                        onClick={() => setState(0)}
+                    />
+                    <MenuOption 
+                        title={"No Timer (Beginner-Friendly)"} 
+                        contents={"Play classic 2048 Duel."} 
+                        onClick={() => setTimerStyle(null)}
+                    />
+                    <MenuOption 
+                        title={"Timed"} 
+                        contents={"A timer runs down during your turn. If it reaches 0, your opponent wins!"} 
+                        onClick={() => setTimerStyle("Timed")}
+                    />
+                    <MenuOption 
+                        title={"Speed"} 
+                        contents={"Each turn, you have a few seconds to move before a random move is chosen for you."} 
+                        onClick={() => setTimerStyle("Speed")}
+                    />
+                </div>
+                <div className={"slide-window " + page3Transition}>
+                    <GameWrapper
+                        p1color={p1color} p2color={p2color}
+                        setP1color={setP1color} setP2color={setP2color}
+                        p1name={p1name} p2name={p2name}
+                        p1possessive={p1possessive} p2possessive={p2possessive}
+                        state={state} setState={setState}
+                        gamemode={gamemode} timer={timer}
+                    />
+                </div>
+            </div>
         </div>
     );
 }

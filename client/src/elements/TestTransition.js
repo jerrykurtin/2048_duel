@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import "./TestTransition.css"
+import "./Animation-Slide.css"
 import Button from 'react-bootstrap/esm/Button';
 
 function TestTransition() {

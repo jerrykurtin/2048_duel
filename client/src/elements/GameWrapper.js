@@ -29,7 +29,7 @@ function swappable(board_state) {
 }
 
 
-function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, setState, gamemode, timer}) {
+function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, state, setState, gamemode, timer}) {
     
     const cpuPlayer = 1;
 
@@ -434,7 +434,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     return (
     <div>
-        <Tutorial winningPiece={winningPiece}/>
+        <Tutorial winningPiece={winningPiece} state={state}/>
         <Navbar variant="light">
             <Container>
                 <Navbar.Brand><strong>{
@@ -444,7 +444,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 </strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end">
-                    <Nav.Link onClick={() => setState("home")}><UilArrowLeft className="normal-icon"/>Home</Nav.Link>
+                    <Nav.Link onClick={() => setState(0)}><UilArrowLeft className="normal-icon"/>Home</Nav.Link>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

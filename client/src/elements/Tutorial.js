@@ -23,7 +23,7 @@ const setCapacitorCookie = async (k, v) => {
   });
 };
 
-function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
+function MyVerticallyCenteredModal({winningPiece, cookies, state, ...props}) {
   return (
     <Modal
       {...props}
@@ -49,7 +49,7 @@ function MyVerticallyCenteredModal({winningPiece, cookies, ...props}) {
   );
 }
 
-function Tutorial({winningPiece}) {
+function Tutorial({winningPiece, state}) {
   const [modalShow, setModalShow] = useState(true);
   const [cookies, setCookies] = useState(getCapacitorCookies());
 
@@ -59,8 +59,8 @@ function Tutorial({winningPiece}) {
 
   return (
     <>
-      {((cookies.get("tutorialShown") !== "shown") 
-      ? <MyVerticallyCenteredModal winningPiece={winningPiece} show={modalShow} onHide={() => setModalShow(false)}/>
+      {((cookies.get("tutorialShown") !== "shown" && state === 3) 
+      ? <MyVerticallyCenteredModal winningPiece={winningPiece} show={modalShow} state={state} onHide={() => setModalShow(false)}/>
       : null)}
     </>
   )
