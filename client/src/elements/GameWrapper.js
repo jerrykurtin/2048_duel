@@ -40,7 +40,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("Easy");
     const [responseTime, setResponseTime] = useState(900);
-    const [timeLimit, setTimeLimit] = useState((timer && timer.toLowerCase() === "timed") ? 60 : 3);
+    const [timeLimit, setTimeLimit] = useState(60);
     
     // board
     const [activeGame, setActiveGame] = useState(true);
@@ -69,6 +69,15 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [startStopP2Timer, setStartStopP2Timer] = useState(false);
     const [resetP2Timer, setResetP2Timer] = useState(false);
 
+
+    // Make sure time is initialized properly
+    useEffect (() => {
+        setTimeLimit((timer && timer.toLowerCase() === "timed") ? 60 : 3);
+        console.log("resetting to get ready for new board");
+        resetBoard();
+
+    }, [timer]);
+
     function stopAllTimers() {
         setStartStopP1Timer(false);
         setStartStopP2Timer(false);
@@ -84,6 +93,15 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         setActiveGame(true);
         setMoveType(null);
         setNewGame(true);
+
+        if (timer) {
+            console.log("resetting timer");
+            setPlayer1Finish(false);
+            setPlayer2Finish(false);
+            setResetP1Timer(true);
+            setResetP2Timer(true);
+            setPauseState("notStarted")
+        }
     }
 
     function finishMove() {
@@ -124,7 +142,8 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     // handle timeout
     useEffect(() => {
-        if (!timer)
+        console.log("player1finish or player2 finish triggered")
+        if (!timer || pauseState === "notStarted")
             return;
         if (player1Finish){
             console.log("player 1 timeout, turn is " + turn);
@@ -196,14 +215,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         else if (moveType === "reset"){
             setPauseState(null);
             resetBoard();
-            if (timer) {
-                console.log("resetting timer");
-                setPlayer1Finish(false);
-                setPlayer2Finish(false);
-                setResetP1Timer(true);
-                setResetP2Timer(true);
-                setPauseState("notStarted")
-            }
         }
 
         else if (moveType === "resume") {

@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { SwitchTransition, CSSTransition } from "react-transition-group";
 import './App.css';
+import './elements/Animation-Slide.css'
 
 import Title from './elements/Title.js';
 import MenuOption from "./elements/MenuOption";
 import GameWrapper from "./elements/GameWrapper.js";
-import Card from "react-bootstrap/Card";
-import TestTransition from './elements/TestTransition.js';
 
 function App() {
 
@@ -23,7 +21,7 @@ function App() {
     const [timer, setTimer] = useState(null);
 
     // states used for loading react elements
-    // states: home, gamemode, timer, game
+    // states: (0) home, (1) gamemode, (2) timer, (3) game
     const [state, setState] = useState(0);
     const [prevState, setPrevState] = useState(0);
     const [currState, setCurrState] = useState(0);
@@ -39,6 +37,7 @@ function App() {
 
     }, [state]);
 
+    // Use current and previous state to choose animations
     useEffect (() => {
         const stateSetters = [setPage0Transition, setPage1Transition, setPage2Transition, setPage3Transition];
         if (prevState > currState) {
