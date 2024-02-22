@@ -5,6 +5,7 @@ import './elements/Animation-Slide.css'
 import Title from './elements/Title.js';
 import MenuOption from "./elements/MenuOption";
 import GameWrapper from "./elements/GameWrapper.js";
+import CustomButton from "./elements/CustomButton.js";
 
 function App() {
 
@@ -84,6 +85,7 @@ function App() {
                         title={"Start"} 
                         onClick={() => setState(1)}
                     />
+                    <CustomButton/>
                 </div>
                 <div className={"slide-window " + page1Transition}>
                     <MenuOption 

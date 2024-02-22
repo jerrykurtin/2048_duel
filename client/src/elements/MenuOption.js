@@ -27,12 +27,6 @@ function MenuOption({title, contents, disabled=false, onClick, ...props}) {
         </div>
       </div>
     </div>
-    // <Card className={"mode-select" + ((disabled === true) ? " coming-soon" : " cool-fill")} border="secondary" {...props}>
-    //     <Card.Header className="text-center">{title}</Card.Header>
-    //     <Card.Body>
-    //         <Card.Text>{contents}</Card.Text>
-    //     </Card.Body>
-    // </Card>
   )
 }
 
