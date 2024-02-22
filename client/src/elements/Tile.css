@@ -45,7 +45,7 @@
     text-align: center;
     font-weight: bold;
     font-size: calc(10.8 * var(--vw));
-    color: var(--tile-text-color);
+    color: var(--text-color);
     z-index: 2;
 }
 

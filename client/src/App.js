@@ -5,7 +5,7 @@ import './elements/Animation-Slide.css'
 import Title from './elements/Title.js';
 import MenuOption from "./elements/MenuOption";
 import GameWrapper from "./elements/GameWrapper.js";
-import CustomButton from "./elements/CustomButton.js";
+import PopBox from "./elements/PopBox.js";
 
 function App() {
 
@@ -85,7 +85,16 @@ function App() {
                         title={"Start"} 
                         onClick={() => setState(1)}
                     />
-                    <CustomButton/>
+                    <PopBox color="green">
+                        <h3>Title Hello There</h3>
+                        <div>Contents</div>
+                        <div>More Contents</div>
+                    </PopBox>
+                    <PopBox color="green">
+                        <h3>Big ol' pop box to measure how it looks large</h3>
+                        <div>Contents</div>
+                        <div>More Contents</div>
+                    </PopBox>
                 </div>
                 <div className={"slide-window " + page1Transition}>
                     <MenuOption 

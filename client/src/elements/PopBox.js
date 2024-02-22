@@ -1,0 +1,52 @@
+import React, {useEffect, useRef} from 'react'
+import './PopBox.css'
+
+function PopBox({color, children}) {
+    const topRef = useRef();
+    const bottomRef = useRef();
+    const wrapperRef = useRef();
+
+    useEffect(() => {
+        const updateSize = () => {
+            if (topRef.current && bottomRef.current && wrapperRef.current) {
+                const { width, height } = window.getComputedStyle(topRef.current);
+                const { left, top } = window.getComputedStyle(bottomRef.current);
+
+                const wrapperWidth = parseFloat(width) + parseFloat(left);
+                const wrapperHeight = parseFloat(height) + parseFloat(top);
+                wrapperRef.current.style.width = wrapperWidth + 'px';
+                wrapperRef.current.style.height = wrapperHeight + 'px';
+                console.log("setting wrapper width and height to ", wrapperWidth + 'px', wrapperHeight + 'px');
+
+                // For some reason, we need to override the top width and height
+                topRef.current.style.width = width;
+                topRef.current.style.height = height;
+
+                bottomRef.current.style.width = width;
+                bottomRef.current.style.height = height;
+                console.log("setting main width and height to ", width, height);
+
+            }
+        }
+
+        // Run the function once to set the initial size
+        updateSize();
+
+        // Add the event listener for window resize
+        window.addEventListener('resize', updateSize);
+
+        // Cleanup function to remove the event listener
+        return () => window.removeEventListener('resize', updateSize);
+    }, [children]);
+
+    return (
+        <div className={"pop-box " + color} ref={wrapperRef}>
+            <div className="pop-box-bottom" ref={bottomRef}/>
+            <div className="pop-box-top" ref={topRef}>
+                {children}
+            </div>
+        </div>
+    )
+}
+
+export default PopBox
