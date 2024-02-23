@@ -1,11 +1,12 @@
 import React, {useEffect, useRef} from 'react'
 import './PopBox.css'
 
-function PopBox({color, children}) {
+function PopBox({color, onClick, className, children}) {
     const topRef = useRef();
     const bottomRef = useRef();
     const wrapperRef = useRef();
 
+    // Update the sizes of the div
     useEffect(() => {
         const updateSize = () => {
             if (topRef.current && bottomRef.current && wrapperRef.current) {
@@ -16,16 +17,13 @@ function PopBox({color, children}) {
                 const wrapperHeight = parseFloat(height) + parseFloat(top);
                 wrapperRef.current.style.width = wrapperWidth + 'px';
                 wrapperRef.current.style.height = wrapperHeight + 'px';
-                console.log("setting wrapper width and height to ", wrapperWidth + 'px', wrapperHeight + 'px');
 
                 // For some reason, we need to override the top width and height
-                topRef.current.style.width = width;
-                topRef.current.style.height = height;
+                // topRef.current.style.width = width;
+                // topRef.current.style.height = height;
 
                 bottomRef.current.style.width = width;
                 bottomRef.current.style.height = height;
-                console.log("setting main width and height to ", width, height);
-
             }
         }
 
@@ -40,7 +38,7 @@ function PopBox({color, children}) {
     }, [children]);
 
     return (
-        <div className={"pop-box " + color} ref={wrapperRef}>
+        <div className={"pop-box " + ((className) ? className + " " : "") + color} onClick={onClick} ref={wrapperRef}>
             <div className="pop-box-bottom" ref={bottomRef}/>
             <div className="pop-box-top" ref={topRef}>
                 {children}

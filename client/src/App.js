@@ -2,10 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import './App.css';
 import './elements/Animation-Slide.css'
 
-import Title from './elements/Title.js';
 import MenuOption from "./elements/MenuOption";
 import GameWrapper from "./elements/GameWrapper.js";
 import PopBox from "./elements/PopBox.js";
+
+import logo from './assets/big_logo.svg';
 
 function App() {
 
@@ -79,50 +80,51 @@ function App() {
     return (
         <div className="App">
             <div className="slide-window-container">
-                <div className={"slide-window " + page0Transition}>
-                    <Title/>
-                    <MenuOption 
-                        title={"Start"} 
-                        onClick={() => setState(1)}
-                    />
-                    <PopBox color="green">
-                        <h3>Title Hello There</h3>
-                        <div>Contents</div>
-                        <div>More Contents</div>
+                <div className={"horizontally-centered slide-window " + page0Transition}>
+                    <img className="title" src={logo} alt="2048 Duel"/>
+                    <div>
+                        <PopBox color="accent" className="start-button" onClick={() => setState(1)}>
+                            <div className="centered start-text">
+                                <div>Start</div>
+                            </div>
+                        </PopBox>
+                        <div className="evenly-spaced">
+                            <PopBox color="accent">
+                                <div className="centered small-text">
+                                    <div>How-To</div>
+                                </div>
+                            </PopBox>
+                            <PopBox color="accent">
+                                <div className="centered small-text">
+                                    <div>About</div>
+                                </div>
+                            </PopBox>
+                        </div>
+                    </div>
+                </div>
+                <div className={"horizontally-centered  slide-window " + page1Transition}>
+                    <div className="evenly-spaced">
+                        <PopBox color="accent" className="right" onClick={() => setState(0)}>
+                            <div>Back</div>
+                        </PopBox>
+                        <PopBox color="accent" className="left" onClick={() => setState(0)}>
+                            <div>Home</div>
+                        </PopBox>
+                    </div>
+                    <PopBox color={p1color} onClick={() => setMode("Solo")}>
+                        <div>Solo</div>
+                        <div>Play against an AI to hone your skills.</div>
                     </PopBox>
-                    <PopBox color="green">
-                        <h3>Big ol' pop box to measure how it looks large</h3>
-                        <div>Contents</div>
-                        <div>More Contents</div>
+                    <PopBox color={p2color} onClick={() => setMode("Multi")}>
+                        <div>Multiplayer</div>
+                        <div>Play with your friend on the same device.</div>
+                    </PopBox>
+                    <PopBox color={p1color} className="disabled">
+                        <div>Online (Coming Soon)</div>
+                        <div>Play against a friend, or start a game with a stranger.</div>
                     </PopBox>
                 </div>
-                <div className={"slide-window " + page1Transition}>
-                    <MenuOption 
-                        title={"Back"} 
-                        onClick={() => setState(0)}
-                    />
-                    <MenuOption 
-                        title={"Home"} 
-                        onClick={() => setState(0)}
-                    />
-                    <MenuOption 
-                        title={"Solo"} 
-                        contents={"Play against an AI to hone your skills."} 
-                        onClick={() => setMode("Solo")}
-                    />
-                    <MenuOption 
-                        title={"Multiplayer"} 
-                        contents={"Play with your friend on the same device."} 
-                        onClick={() => setMode("Multi")}
-                    />
-                    <MenuOption 
-                        title={"Online (Coming Soon)"} 
-                        contents={"Play against a friend, or start a game with a stranger."} 
-                        onClick={() => null}
-                        disabled={true}
-                    />
-                </div>
-                <div className={"slide-window " + page2Transition}>
+                <div className={"horizontally-centered slide-window " + page2Transition}>
                     <MenuOption 
                         title={"Back"} 
                         onClick={() => setState(1)}

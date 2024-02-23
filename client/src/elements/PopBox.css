@@ -3,13 +3,11 @@
     /* border-style: solid;
     border-color: red; */
     overflow: visible;
-}
 
-.pop-box.green {
-    --box-color: var(--green);
+    --box-color: var(--current-color);
 }
-.pop-box.purple {
-    --box-color: var(--purple);
+.pop-box.accent {
+    --box-color: var(--accent-color);
 }
 
 .pop-box-bottom {
@@ -17,14 +15,13 @@
     top: calc(1 * var(--vw));
     left: calc(1 * var(--vw));
     background-color: var(--box-color);
-    border-radius: calc(1.5 * var(--vw))
+    border-radius: calc(1.5 * var(--vw));
 }
 
 .pop-box-top {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 5%;
 
     background-color: var(--bg-color-2);
     border-color: var(--box-color);
