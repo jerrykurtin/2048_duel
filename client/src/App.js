@@ -103,13 +103,21 @@ function App() {
                     </div>
                 </div>
                 <div className={"horizontally-centered  slide-window " + page1Transition}>
+                    <div className="evenly-spaced menu-bar">
+                        <PopBox color="accent" onClick={() => setState(0)}>
+                            <div className="centered menu-select">
+                                <div>Back</div>
+                            </div>
+                        </PopBox>
+                        <PopBox color="accent" onClick={() => setState(0)}>
+                            <div className="centered menu-select">
+                                <div>Home</div>
+                            </div>
+                        </PopBox>
+                    </div>
+                    <div className="choose-text">Choose Your</div>
+                    <div className={"choose-text " + p2color}>Gamemode</div>
                     <div className="evenly-spaced">
-                        <PopBox color="accent" className="right" onClick={() => setState(0)}>
-                            <div>Back</div>
-                        </PopBox>
-                        <PopBox color="accent" className="left" onClick={() => setState(0)}>
-                            <div>Home</div>
-                        </PopBox>
                     </div>
                     <PopBox color={p1color} onClick={() => setMode("Solo")}>
                         <div>Solo</div>

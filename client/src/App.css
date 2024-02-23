@@ -339,7 +339,24 @@ a:visited {
   width: calc(30 * var(--vw));
   height: calc(15 * var(--vw));
   font-size: calc(4 * var(--vw));
-  /* margin: calc(2 * var(--vw)) calc(5 * var(--vw)); */
+}
+
+.menu-bar {
+  margin-top: calc(5 * var(--vw));
+  margin-bottom: calc(10 * var(--vw));
+  width: calc(90 * var(--vw));
+}
+
+.menu-select {
+  width: calc(33 * var(--vw));
+  height: calc(15 * var(--vw));
+  font-size: calc(4 * var(--vw));
+}
+
+.choose-text {
+  font-weight: bold;
+  font-size: calc(10 * var(--vw));
+  color: var(--current-color);
 }
 
 .pop-box.left {
