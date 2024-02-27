@@ -8,6 +8,9 @@ import PopBox from "./elements/PopBox.js";
 
 import logo from './assets/big_logo.svg';
 
+import { UilArrowLeft } from '@iconscout/react-unicons';
+import { UilHome } from '@iconscout/react-unicons'
+
 function App() {
 
     // determine colors
@@ -84,18 +87,18 @@ function App() {
                     <img className="title" src={logo} alt="2048 Duel"/>
                     <div>
                         <PopBox color="accent" className="start-button" onClick={() => setState(1)}>
-                            <div className="centered start-text">
+                            <div className="centered start-text nav-box">
                                 <div>Start</div>
                             </div>
                         </PopBox>
                         <div className="evenly-spaced">
                             <PopBox color="accent">
-                                <div className="centered small-text">
+                                <div className="centered small-box small-text">
                                     <div>How-To</div>
                                 </div>
                             </PopBox>
                             <PopBox color="accent">
-                                <div className="centered small-text">
+                                <div className="centered small-box small-text">
                                     <div>About</div>
                                 </div>
                             </PopBox>
@@ -105,31 +108,36 @@ function App() {
                 <div className={"horizontally-centered  slide-window " + page1Transition}>
                     <div className="evenly-spaced menu-bar">
                         <PopBox color="accent" onClick={() => setState(0)}>
-                            <div className="centered menu-select">
-                                <div>Back</div>
+                            <div className="centered menu-nav">
+                                <div><UilArrowLeft className="menu-icon"/>Back</div>
                             </div>
                         </PopBox>
                         <PopBox color="accent" onClick={() => setState(0)}>
-                            <div className="centered menu-select">
-                                <div>Home</div>
+                            <div className="centered menu-nav">
+                                <div><UilHome className="menu-icon home-icon"/>Home</div>
                             </div>
                         </PopBox>
                     </div>
                     <div className="choose-text">Choose Your</div>
                     <div className={"choose-text " + p2color}>Gamemode</div>
-                    <div className="evenly-spaced">
-                    </div>
-                    <PopBox color={p1color} onClick={() => setMode("Solo")}>
-                        <div>Solo</div>
-                        <div>Play against an AI to hone your skills.</div>
+                    <div className="gap"/>
+                    <PopBox className="menu-spacer" color={p1color} onClick={() => setMode("Solo")}>
+                        <div className="centered nav-box">
+                            <div className="select-header">Solo</div>
+                            <div className="select-body">Play against an AI to hone your skills.</div>
+                        </div>
                     </PopBox>
-                    <PopBox color={p2color} onClick={() => setMode("Multi")}>
-                        <div>Multiplayer</div>
-                        <div>Play with your friend on the same device.</div>
+                    <PopBox className="menu-spacer" color={p2color} onClick={() => setMode("Multi")}>
+                        <div className="centered nav-box">
+                            <div className="select-header">Multiplayer</div>
+                            <div className="select-body">Play with your friend on the same device.</div>
+                        </div>
                     </PopBox>
-                    <PopBox color={p1color} className="disabled">
-                        <div>Online (Coming Soon)</div>
-                        <div>Play against a friend, or start a game with a stranger.</div>
+                    <PopBox className="menu-spacer disabled" color={p1color}>
+                        <div className="centered nav-box">
+                            <div className="select-header">Online (Coming Soon)</div>
+                            <div className="select-body">Play against a friend, or start a game with a stranger.</div>
+                        </div>
                     </PopBox>
                 </div>
                 <div className={"horizontally-centered slide-window " + page2Transition}>
