@@ -61,8 +61,8 @@
 .App {
     width: calc(90 * --vw);
     margin: calc(5 * --vw);
-    border-style: solid;
-    border-color: red;
+    /* border-style: solid; */
+    /* border-color: red; */
 }
 
 html,
@@ -85,17 +85,27 @@ body {
 }
 
 .normal-icon {
-  /* width: calc(5 * var(--vw));
-  height: calc(5 * var(--vw)); */
+  --dim: calc(5 * var(--vw));
+  width: var(--dim);
+  height: var(--dim);
 }
 
-.menu-icon {
-  margin-right: calc(1 * var(--vw));
+.back-icon {
+  --dim: calc(6 * var(--vw)) !important;
+  width: var(--dim);
+  height: var(--dim);
+  margin-bottom: calc(.1 * var(--dim));
+  margin-right: calc(.1 * var(--dim));
 }
 
 .home-icon {
-  width: calc(4 * var(--vw));
+  --dim: calc(4 * var(--vw));
+  width: var(--dim);
+  height: var(--dim);
+  margin-bottom: calc(.2 * var(--dim));
+  margin-right: calc(.3 * var(--dim));
 }
+
 
 
 /* Current Colors */
@@ -329,11 +339,16 @@ a:visited {
 
 .title {
   width: 80%;
-  margin-top: 10%;
-  margin-bottom: 30%;
+  margin-top: 20%;
+  margin-bottom: 20%;
+}
+
+.start-menu-container {
+  display: grid;
 }
 
 .start-button {
+  margin-top: calc(10* var(--vw));
   margin-bottom: calc(5 * var(--vw));
 }
 
@@ -358,6 +373,27 @@ a:visited {
   font-size: calc(4 * var(--vw));
 }
 
+.how-to-box {
+  width: calc(90 * var(--vw));
+  height: calc(120 * var(--vw));
+  padding: calc(5 * var(--vw));
+}
+
+.how-to-container {
+  height: 80%;
+  overflow: auto;
+}
+
+.how-to-container::after {
+  content: "";
+  position: absolute;
+  bottom: 20%; /* this should match 100 - height of how-to-container */
+  left: 0;
+  width: 100%;
+  height: 15%; /* Adjust as needed */
+  background: linear-gradient(transparent, var(--bg-color-0));
+}
+
 .menu-spacer {
   margin-bottom: calc(10 * var(--vw));
 }
@@ -365,13 +401,13 @@ a:visited {
 .menu-bar {
   margin-top: calc(5 * var(--vw));
   margin-bottom: calc(10 * var(--vw));
-  width: calc(90 * var(--vw));
+  width: calc(80 * var(--vw));
 }
 
 .menu-nav {
-  width: calc(25 * var(--vw));
-  height: calc(10 * var(--vw));
-  font-size: calc(4 * var(--vw));
+  width: calc(30 * var(--vw));
+  height: calc(13 * var(--vw));
+  font-size: calc(5 * var(--vw));
 }
 
 .menu-option {
@@ -387,7 +423,7 @@ a:visited {
 
 .select-body {
   font-size: calc(2.7 * var(--vw));
-  padding: 0 calc(7 * var(--vw));
+  padding: 0 calc(5 * var(--vw));
 }
 
 .choose-text {

@@ -37,6 +37,7 @@ npm start
 ```
 Sync ios and android with latest changes
 ```
+npm run build
 npx capacitor-assets generate
 npx cap sync
 ```

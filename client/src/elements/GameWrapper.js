@@ -29,7 +29,7 @@ function swappable(board_state) {
 }
 
 
-function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, state, setState, gamemode, timer}) {
+function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, p1possessive, p2possessive, state, setState, gamemode, timer, winningPiece, setWinningPiece}) {
     
     const cpuPlayer = 1;
 
@@ -37,7 +37,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [actualWidth, setActualWidth] = useState(Math.min(window.innerWidth, window.screen.availWidth));
     
     // settings
-    const [winningPiece, setWinningPiece] = useState(64);
     const [difficulty, setDifficulty] = useState("Easy");
     const [responseTime, setResponseTime] = useState(900);
     const [timeLimit, setTimeLimit] = useState(60);
@@ -69,6 +68,10 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     const [startStopP2Timer, setStartStopP2Timer] = useState(false);
     const [resetP2Timer, setResetP2Timer] = useState(false);
 
+    // Make sure board is reset when loaded
+    useEffect(() => {
+        resetBoard();
+    }, [state]);
 
     // Make sure time is initialized properly
     useEffect (() => {

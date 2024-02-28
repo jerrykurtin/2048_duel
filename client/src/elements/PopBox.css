@@ -4,6 +4,12 @@
 
     --box-color: var(--current-color);
 }
+.selected {
+    animation-name: pop;
+    animation-duration: 150ms;
+    /* animation-timing-function: ease-in; */
+}
+
 .pop-box.accent {
     --box-color: var(--accent-color);
 }
@@ -26,4 +32,8 @@
     border-style: solid;
     border-width: calc(0.2 * var(--vw));
     border-radius: calc(1.5 * var(--vw));
+}
+
+.pop-box-top.dark-background {
+    background-color: var(--bg-color-0);
 }

@@ -1,10 +1,25 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import './PopBox.css'
 
-function PopBox({color, onClick, className, children}) {
+function PopBox({color, onClick, className, children, darkBackground = false}) {
     const topRef = useRef();
     const bottomRef = useRef();
     const wrapperRef = useRef();
+    const [clicked, setClicked] = useState(false);
+
+  function setClickedWithTimeout() {
+    setClicked(true);
+    setTimeout( () => {
+      setClicked(false);
+    }, 200);
+  }
+
+  function runClick() {
+    setClickedWithTimeout();
+    if (onClick) {
+        onClick();
+    }
+  }
 
     // Update the sizes of the div
     useEffect(() => {
@@ -38,9 +53,9 @@ function PopBox({color, onClick, className, children}) {
     }, [children]);
 
     return (
-        <div className={"pop-box " + ((className) ? className + " " : "") + color} onClick={onClick} ref={wrapperRef}>
+        <div className={"pop-box " + ((className) ? className + " " : "") + color + ((clicked == true) ? " selected" : "")} onClick={()=>runClick()} ref={wrapperRef}>
             <div className="pop-box-bottom" ref={bottomRef}/>
-            <div className="pop-box-top" ref={topRef}>
+            <div className={"pop-box-top" + ((darkBackground) ? " dark-background" : "")} ref={topRef}>
                 {children}
             </div>
         </div>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import './App.css';
 import './elements/Animation-Slide.css'
+import './elements/Animation-Select.css'
 
-import MenuOption from "./elements/MenuOption";
 import GameWrapper from "./elements/GameWrapper.js";
 import PopBox from "./elements/PopBox.js";
 
@@ -10,6 +10,8 @@ import logo from './assets/big_logo.svg';
 
 import { UilArrowLeft } from '@iconscout/react-unicons';
 import { UilHome } from '@iconscout/react-unicons'
+import Tutorial from "./elements/Tutorial.js";
+import HowToPlay from "./elements/HowToPlay.js";
 
 function App() {
 
@@ -24,6 +26,7 @@ function App() {
     
     const [gamemode, setGamemode] = useState("Solo");
     const [timer, setTimer] = useState(null);
+    const [winningPiece, setWinningPiece] = useState(64);
 
     // states used for loading react elements
     // states: (0) home, (1) gamemode, (2) timer, (3) game
@@ -34,13 +37,15 @@ function App() {
     const [page1Transition, setPage1Transition] = useState("hidden");
     const [page2Transition, setPage2Transition] = useState("hidden");
     const [page3Transition, setPage3Transition] = useState("hidden");
-    
+
     // update previous state when state is changed
     useEffect (() => {
         setPrevState(currState);
         setCurrState(state);
 
     }, [state]);
+
+    const [startMenuState, setStartMenuState] = useState(0);    // 0: start menu, 1: how-to, 2: about
 
     // Use current and previous state to choose animations
     useEffect (() => {
@@ -80,41 +85,58 @@ function App() {
         setState(3);
     }
 
+    function loadStartScreen() {
+        if (startMenuState === 0) {
+            return (<div>
+                <PopBox color="accent" className="start-button" onClick={() => setState(1)}>
+                    <div className="centered start-text nav-box">
+                        <div>Start</div>
+                    </div>
+                </PopBox>
+                <div className="evenly-spaced">
+                    <PopBox color="accent" onClick={() => setStartMenuState(1)}>
+                        <div className="centered small-box small-text expanded">
+                            <div>How-To</div>
+                        </div>
+                    </PopBox>
+                    <PopBox color="accent">
+                        <div className="centered small-box small-text">
+                            <div>About</div>
+                        </div>
+                    </PopBox>
+                </div>
+            </div>)
+        }
+        else if (startMenuState === 1) {
+            return (<div>
+                <PopBox color="accent" darkBackground={true} onClick={() => setStartMenuState(0)}>
+                    <div className="how-to-box">
+                        <div className="how-to-container">
+                            <HowToPlay winningPiece={winningPiece}/>
+                        </div>
+                    </div>
+                </PopBox>
+            </div>)
+        }
+    }
+
     return (
         <div className="App">
             <div className="slide-window-container">
                 <div className={"horizontally-centered slide-window " + page0Transition}>
                     <img className="title" src={logo} alt="2048 Duel"/>
-                    <div>
-                        <PopBox color="accent" className="start-button" onClick={() => setState(1)}>
-                            <div className="centered start-text nav-box">
-                                <div>Start</div>
-                            </div>
-                        </PopBox>
-                        <div className="evenly-spaced">
-                            <PopBox color="accent">
-                                <div className="centered small-box small-text">
-                                    <div>How-To</div>
-                                </div>
-                            </PopBox>
-                            <PopBox color="accent">
-                                <div className="centered small-box small-text">
-                                    <div>About</div>
-                                </div>
-                            </PopBox>
-                        </div>
-                    </div>
+                    {loadStartScreen()}
                 </div>
                 <div className={"horizontally-centered  slide-window " + page1Transition}>
                     <div className="evenly-spaced menu-bar">
                         <PopBox color="accent" onClick={() => setState(0)}>
                             <div className="centered menu-nav">
-                                <div><UilArrowLeft className="menu-icon"/>Back</div>
+                                <div><UilArrowLeft className="back-icon"/>Back</div>
                             </div>
                         </PopBox>
                         <PopBox color="accent" onClick={() => setState(0)}>
                             <div className="centered menu-nav">
-                                <div><UilHome className="menu-icon home-icon"/>Home</div>
+                                <div><UilHome className="home-icon"/>Home</div>
                             </div>
                         </PopBox>
                     </div>
@@ -141,29 +163,39 @@ function App() {
                     </PopBox>
                 </div>
                 <div className={"horizontally-centered slide-window " + page2Transition}>
-                    <MenuOption 
-                        title={"Back"} 
-                        onClick={() => setState(1)}
-                    />
-                    <MenuOption 
-                        title={"Home"} 
-                        onClick={() => setState(0)}
-                    />
-                    <MenuOption 
-                        title={"No Timer (Beginner-Friendly)"} 
-                        contents={"Play classic 2048 Duel."} 
-                        onClick={() => setTimerStyle(null)}
-                    />
-                    <MenuOption 
-                        title={"Timed"} 
-                        contents={"A timer runs down during your turn. If it reaches 0, your opponent wins!"} 
-                        onClick={() => setTimerStyle("Timed")}
-                    />
-                    <MenuOption 
-                        title={"Speed"} 
-                        contents={"Each turn, you have a few seconds to move before a random move is chosen for you."} 
-                        onClick={() => setTimerStyle("Speed")}
-                    />
+                <div className="evenly-spaced menu-bar">
+                        <PopBox color="accent" onClick={() => setState(1)}>
+                            <div className="centered menu-nav">
+                                <div><UilArrowLeft className="back-icon"/>Back</div>
+                            </div>
+                        </PopBox>
+                        <PopBox color="accent" onClick={() => setState(0)}>
+                            <div className="centered menu-nav">
+                                <div><UilHome className="home-icon"/>Home</div>
+                            </div>
+                        </PopBox>
+                    </div>
+                    <div className="choose-text">Choose Your</div>
+                    <div className={"choose-text " + p1color}>Timer</div>
+                    <div className="gap"/>
+                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle(null)}>
+                        <div className="centered nav-box">
+                            <div className="select-header">No Timer</div>
+                            <div className="select-body">Play classic 2048 Duel.</div>
+                        </div>
+                    </PopBox>
+                    <PopBox className="menu-spacer" color={p1color} onClick={() => setTimerStyle("Timed")}>
+                        <div className="centered nav-box">
+                            <div className="select-header">Timed</div>
+                            <div className="select-body">A timer runs down during your turn. If it reaches 0, your opponent wins!</div>
+                        </div>
+                    </PopBox>
+                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle("Speed")}>
+                        <div className="centered nav-box">
+                            <div className="select-header">Speed</div>
+                            <div className="select-body">Each turn, you have a few seconds to move before a random move is chosen for you.</div>
+                        </div>
+                    </PopBox>
                 </div>
                 <div className={"slide-window " + page3Transition}>
                     <GameWrapper
@@ -173,6 +205,7 @@ function App() {
                         p1possessive={p1possessive} p2possessive={p2possessive}
                         state={state} setState={setState}
                         gamemode={gamemode} timer={timer}
+                        winningPiece={winningPiece} setWinningPiece={setWinningPiece}
                     />
                 </div>
             </div>
