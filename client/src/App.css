@@ -387,6 +387,7 @@ a:visited {
   width: calc(90 * var(--vw));
   height: calc(120 * var(--vw));
   padding: calc(5 * var(--vw));
+  padding-bottom: 0;
 }
 
 .how-to-container {
