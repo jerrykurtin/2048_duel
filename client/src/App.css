@@ -218,6 +218,11 @@ a:visited {
   justify-content: space-between;
 }
 
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .display-reset {
   display: block;
 }
@@ -368,6 +373,11 @@ a:visited {
   height: calc(15 * var(--vw));
 }
 
+.done-box {
+  width: calc(25 * var(--vw));
+  height: calc(13 * var(--vw));
+}
+
 .small-text {
   /* font-weight: bold; */
   font-size: calc(4 * var(--vw));
@@ -382,6 +392,11 @@ a:visited {
 .how-to-container {
   height: 80%;
   overflow: auto;
+}
+
+.how-to-close {
+  height: 20%;
+
 }
 
 .how-to-container::after {

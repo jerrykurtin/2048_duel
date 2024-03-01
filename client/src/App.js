@@ -99,7 +99,7 @@ function App() {
                             <div>How-To</div>
                         </div>
                     </PopBox>
-                    <PopBox color="accent">
+                    <PopBox color="accent" onClick={() => setStartMenuState(2)}>
                         <div className="centered small-box small-text">
                             <div>About</div>
                         </div>
@@ -109,10 +109,44 @@ function App() {
         }
         else if (startMenuState === 1) {
             return (<div>
-                <PopBox color="accent" darkBackground={true} onClick={() => setStartMenuState(0)}>
+                <PopBox color="accent" darkBackground={true} disabled={true}>
                     <div className="how-to-box">
                         <div className="how-to-container">
                             <HowToPlay winningPiece={winningPiece}/>
+                        </div>
+                        <div className="align-right how-to-close">
+                            <div className="centered">
+                                <PopBox color="accent" onClick={() => setStartMenuState(0)}>
+                                    <div className="centered done-box small-text">
+                                        <div>Done</div>
+                                    </div>
+                                </PopBox>
+                            </div>
+                        </div>
+                    </div>
+                </PopBox>
+            </div>)
+        }
+        else if (startMenuState === 2) {
+            return (<div>
+                <PopBox color="accent" darkBackground={true} disabled={true}>
+                    <div className="how-to-box">
+                        <div className="how-to-container">
+                        <div className="tab-contents">
+                            <h5>Credit</h5>
+                            <p>This game was created by Jerry Kurtin and inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>. Thanks for playing!</p>
+                            <h5>Feedback</h5>
+                            <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't plan on running any ads here, but if you want to support the app, you can venmo me <strong>@Jerry-Kurtin-1</strong></p>
+                        </div>
+                        </div>
+                        <div className="align-right how-to-close">
+                            <div className="centered">
+                                <PopBox color="accent" onClick={() => setStartMenuState(0)}>
+                                    <div className="centered done-box small-text">
+                                        <div>Done</div>
+                                    </div>
+                                </PopBox>
+                            </div>
                         </div>
                     </div>
                 </PopBox>

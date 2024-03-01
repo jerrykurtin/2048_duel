@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
 import './PopBox.css'
 
-function PopBox({color, onClick, className, children, darkBackground = false}) {
+function PopBox({color, onClick, className, children, darkBackground = false, disabled = false}) {
     const topRef = useRef();
     const bottomRef = useRef();
     const wrapperRef = useRef();
@@ -53,7 +53,7 @@ function PopBox({color, onClick, className, children, darkBackground = false}) {
     }, [children]);
 
     return (
-        <div className={"pop-box " + ((className) ? className + " " : "") + color + ((clicked == true) ? " selected" : "")} onClick={()=>runClick()} ref={wrapperRef}>
+        <div className={"pop-box " + ((className) ? className + " " : "") + color + ((clicked && !disabled) ? " selected" : "")} onClick={()=>runClick()} ref={wrapperRef}>
             <div className="pop-box-bottom" ref={bottomRef}/>
             <div className={"pop-box-top" + ((darkBackground) ? " dark-background" : "")} ref={topRef}>
                 {children}
