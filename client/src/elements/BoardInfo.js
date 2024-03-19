@@ -14,26 +14,19 @@ function BoardInfo({p1color, p2color, p1score, p2score, p1name, p2name, p1posses
 
 	return (
 		<div>
-			<div className="board_info-container">
+			<div className="evenly-spaced board-info-container">
 				<ScoreBoard
 					isLeft={true} color={p1color} name={p1name} score={p1score} timer={timer}
 					signalFinish={setPlayer1Finish} timeLimit={timeLimit} 
 					startStopTimer={startStopP1Timer} resetTimer={resetP1Timer} setResetTimer={setResetP1Timer}
 				/>
-
-				<div className="board_info-center">
-					<Button id="reset-button" variant="outline-main-color" onClick={() => setMoveType("reset")}>Reset</Button>
-					<div className="turn-info-wrapper">
-						<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
-					</div>
-				</div>
-
 				<ScoreBoard
 					isLeft={false} color={p2color} name={p2name} score={p2score} timer={timer}
 					signalFinish={setPlayer2Finish} timeLimit={timeLimit} 
 					startStopTimer={startStopP2Timer} resetTimer={resetP2Timer} setResetTimer={setResetP2Timer}
 				/>
 			</div>
+			<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
 		</div>
 	)
 }

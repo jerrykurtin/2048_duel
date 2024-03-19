@@ -1,13 +1,7 @@
 .turn-container {
-    width: 80%;
-    margin: auto;
-    border-radius: var(--border-radius-small);
-    border-width: var(--border-width-small);
+    margin: 0 calc(5 * var(--vw));
+    margin-bottom: calc(5 * var(--vw));
 }
-
 .turn {
-    /* border-radius: 1.08vw; */
-    /* background-color: rgb(238, 238, 238); */
-    padding: calc(0.45 * var(--vw)) calc(1.8 * var(--vw));
     text-align: center;
 }

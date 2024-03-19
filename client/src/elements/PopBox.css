@@ -19,7 +19,7 @@
     top: calc(1 * var(--vw));
     left: calc(1 * var(--vw));
     background-color: var(--box-color);
-    border-radius: calc(1.5 * var(--vw));
+    border-radius: var(--border-radius-small);
 }
 
 .pop-box-top {
@@ -31,7 +31,7 @@
     border-color: var(--box-color);
     border-style: solid;
     border-width: calc(0.2 * var(--vw));
-    border-radius: calc(1.5 * var(--vw));
+    border-radius: var(--border-radius-small);
 }
 
 .pop-box-top.dark-background {

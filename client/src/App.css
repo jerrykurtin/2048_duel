@@ -40,9 +40,9 @@
 
   --border-radius-large: calc(6 * var(--vw));
   --border-radius: calc(3.5 * var(--vw));
-  --border-radius-small: calc(2.5 * var(--vw));
+  --border-radius-small: calc(1.5 * var(--vw));
 
-  --border-width: calc(0.0 * var(--vw));
+  --border-width: calc(.2 * var(--vw));
   --border-width-small: calc(0.00 * var(--vw));
   --game-border-width: calc(1 * var(--vw));
   
@@ -95,7 +95,15 @@ body {
   width: var(--dim);
   height: var(--dim);
   margin-bottom: calc(.1 * var(--dim));
-  margin-right: calc(.1 * var(--dim));
+  margin-right: calc(0 * var(--dim));
+}
+
+.redo-icon {
+  --dim: calc(4 * var(--vw)) !important;
+  width: var(--dim);
+  height: var(--dim);
+  margin-bottom: calc(.1 * var(--dim));
+  margin-right: calc(.3 * var(--dim));
 }
 
 .home-icon {
@@ -147,13 +155,9 @@ body {
 .custom-card {
   border-style: solid;
   border-width: var(--border-width);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-small);
   border-color: var(--border-color);
   background-color: var(--board-color);
-}
-
-.small-border {
-  border-width: var(--border-width-small);
 }
 
 /* General settings */

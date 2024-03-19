@@ -47,7 +47,7 @@ function TurnInfo({p1color, p2color, p1name, p1possessive, p2name, p2possessive,
 
     return (
         <>
-            <div className="custom-card sm turn-container">
+            <div className="custom-card turn-container board-info">
                 <div className={"turn text " + msgColor} id="turn">{msg}</div>
             </div>
         </>

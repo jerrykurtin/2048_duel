@@ -1,0 +1,10 @@
+.game-nav {
+    width: calc(25 * var(--vw));
+    height: calc(11 * var(--vw));
+    font-size: calc(4 * var(--vw));
+}
+.game-menu-bar {
+    margin-top: calc(5 * var(--vw));
+    margin-bottom: calc(5 * var(--vw));
+    padding: 0 5%;
+}
