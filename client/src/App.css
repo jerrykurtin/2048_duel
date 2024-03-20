@@ -38,9 +38,9 @@
   --purple:#7d32ed;
   --purplecolor: 125, 50, 237;
 
-  --border-radius-large: calc(6 * var(--vw));
   --border-radius: calc(3.5 * var(--vw));
   --border-radius-small: calc(1.5 * var(--vw));
+  --border-radius-large: calc(6 * var(--vw));
 
   --border-width: calc(.2 * var(--vw));
   --border-width-small: calc(0.00 * var(--vw));
@@ -112,6 +112,27 @@ body {
   height: var(--dim);
   margin-bottom: calc(.2 * var(--dim));
   margin-right: calc(.3 * var(--dim));
+}
+
+.settings-icon {
+  --dim: calc(5 * var(--vw)) !important;
+  width: var(--dim);
+  height: var(--dim);
+  margin-bottom: calc(.15 * var(--dim));
+  margin-right: calc(.2 * var(--dim));
+  margin-left: calc(.2 * var(--dim));
+}
+
+.check-icon {
+  --dim: calc(5 * var(--vw)) !important;
+  width: var(--dim);
+  height: var(--dim);
+  margin-bottom: calc(.1 * var(--dim));
+  margin-right: calc(0 * var(--dim));
+}
+
+.icon-accent {
+  color: var(--accent-color);
 }
 
 
@@ -259,15 +280,16 @@ a:visited {
   --bs-btn-color: var(--text-color);
   --bs-btn-bg: var(--bg-color-1);
   --bs-btn-border-color: var(--bg-color-3);
+  --bs-btn-border-radius: calc(2.5 * var(--vw));
 
   --bs-btn-hover-color: var(--text-color);
   --bs-btn-hover-bg: var(--bg-color-2);
   /* --bs-btn-hover-border-color: var(--pop-color-2); */
   --bs-btn-focus-shadow-rgb: 108, 117, 125;
 
-  --bs-btn-active-color: var(--bg-color-1);
-  --bs-btn-active-bg: var(--text-color);
-  --bs-btn-active-border-color: var(--border-color);
+  --bs-btn-active-color: var(--text-color);
+  --bs-btn-active-bg: var(--accent-color);
+  --bs-btn-active-border-color: var(--accent-color);
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 
   --bs-btn-disabled-color: var(--text-color);

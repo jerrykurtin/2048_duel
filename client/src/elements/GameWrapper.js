@@ -14,8 +14,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import PopBox from './PopBox.js';
 
 import { UilArrowLeft } from '@iconscout/react-unicons';
-import { UilHome } from '@iconscout/react-unicons';
-import { UilRedo } from '@iconscout/react-unicons'
+
 
 /* random number between min and max, inclusive */
 function randint(min, max){
@@ -451,42 +450,18 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     return (
     <div>
-        <Tutorial winningPiece={winningPiece} state={state}/>
-        <div className="evenly-spaced game-menu-bar">
-            <PopBox color="accent" onClick={() => setState(2)}>
-                <div className="centered game-nav">
-                    <div><UilArrowLeft className="back-icon"/>Back</div>
-                </div>
-            </PopBox>
-            <PopBox color="accent" onClick={() => setMoveType("reset")}>
-                <div className="centered game-nav">
-                    <div><strong><UilRedo className="redo-icon"/>Reset</strong></div>
-                </div>
-            </PopBox>
-            <PopBox color="accent" onClick={() => setState(0)}>
-                <div className="centered game-nav">
-                    <div><UilHome className="home-icon"/>Home</div>
-                </div>
-            </PopBox>
-        </div>
-        {/* <Navbar variant="light">
-            <Container>
-                <Navbar.Brand><strong>{
-                    ((p1color === p2color) ? " Blind! " : "2048 Duel: ") + 
-                    ((gamemode.toLowerCase() == "solo") ? difficulty : gamemode) +
-                    ((timer) ? " " + timer : "")}
-                </strong></Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse className="justify-content-end">
-                    <Nav.Link onClick={() => setState(0)}><UilArrowLeft className="normal-icon"/>Home</Nav.Link>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar> */}
-        <BoardInfo p1color={p1color} p2color={p2color} p1score={p1score} p2score={p2score}
+        {/* <Tutorial winningPiece={winningPiece} state={state}/> */}
+        
+        <BoardInfo p1score={p1score} p2score={p2score}
+            p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
-            turn={turn} boardState={boardState} setMoveType={setMoveType} timer={timer} timeLimit={timeLimit} 
+            turn={turn} boardState={boardState} setMoveType={setMoveType} timer={timer}
             setPlayer1Finish={setPlayer1Finish} startStopP1Timer={startStopP1Timer} resetP1Timer={resetP1Timer} setResetP1Timer={setResetP1Timer}
             setPlayer2Finish={setPlayer2Finish} startStopP2Timer={startStopP2Timer} resetP2Timer={resetP2Timer} setResetP2Timer={setResetP2Timer}
+            gamemode={gamemode} setState={setState}
+            winningPiece={winningPiece} setWinningPiece={setWinningPiece}
+            difficulty={difficulty} setDifficulty={setDifficulty}
+            timeLimit={timeLimit} setTimeLimit={setTimeLimit}
         />
         <Board ref={boardRef}
             p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name}
@@ -494,13 +469,13 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             turn={turn} boardState={boardState} refresh={boardRefresh} setRefresh={setBoardRefresh}
             boardTimeout={boardTimeout} newGame={newGame}
         />
-        <Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
+        {/* <Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
             winningPiece={winningPiece} setWinningPiece={setWinningPiece}
             difficulty={difficulty} setDifficulty={setDifficulty}
             timeLimit={timeLimit} setTimeLimit={setTimeLimit}
             p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
             p1possessive={p1possessive} p2possessive={p2possessive}
-        />
+        /> */}
         
     </div>
     )

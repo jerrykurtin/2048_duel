@@ -28,6 +28,15 @@
     font-size: calc(5 * var(--vw));
 }
 
+.long-container {
+    margin: 0 calc(5 * var(--vw));
+    margin-bottom: calc(5 * var(--vw));
+    padding: calc(1.5 * var(--vw));
+}
+.long-text {
+    text-align: center;
+}
+
 .timer-container-left {
     display: flex;
 }
@@ -48,4 +57,24 @@ pre {
 .header {
     text-decoration: underline;
     margin-bottom: calc(0.45 * var(--vw));
+}
+
+.settings-container {
+    position: relative;
+    margin: calc(5 * var(--vw));
+    height: calc(68.4 * var(--vw));
+    padding: calc(3 * var(--vw));
+    background-color: var(--bg-color-0);
+}
+
+.done-button {
+    width: calc(19 * var(--vw));
+    height: calc(8.2 * var(--vw));
+    font-size: calc(3.5 * var(--vw));
+}
+
+.bottom-right-button-container {
+    position: absolute;
+    bottom: calc(3 * var(--vw)); /* padding of container */
+    right: calc(3 * var(--vw)); /* padding of container */
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import "./TurnInfo.css"
 
 function TurnInfo({p1color, p2color, p1name, p1possessive, p2name, p2possessive, turn, boardState}) {
 
@@ -47,8 +46,8 @@ function TurnInfo({p1color, p2color, p1name, p1possessive, p2name, p2possessive,
 
     return (
         <>
-            <div className="custom-card turn-container board-info">
-                <div className={"turn text " + msgColor} id="turn">{msg}</div>
+            <div className="custom-card long-container board-info">
+                <div className={"long-text text " + msgColor} id="turn">{msg}</div>
             </div>
         </>
     )

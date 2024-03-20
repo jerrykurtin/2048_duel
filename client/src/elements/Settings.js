@@ -61,8 +61,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
 
         else if (gamemode.toLowerCase() === "solo"){
             return (<>
-                <hr />
-                <ToggleButtonGroup  type="radio" name="difficulty" defaultValue={difficulty} onClick={(e) => {updateSettings("difficulty", e)}}>
+                <ToggleButtonGroup className="settings-toggle" type="radio" name="difficulty" defaultValue={difficulty} onClick={(e) => {updateSettings("difficulty", e)}}>
                     <ToggleButton variant="outline-main-color" className="toggle-name" id="difficulty-title" value={-1} disabled>Difficulty: </ToggleButton>
                     <ToggleButton variant="outline-main-color" id="difficulty-easy" value={"Easy"}>Easy</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="difficulty-medium" value={"Medium"}>Medium</ToggleButton>
@@ -91,8 +90,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
 
         else if (timer.toLowerCase() === "speed"){
             return (<>
-                <hr />
-                <ToggleButtonGroup  type="radio" name="speed-limit" defaultValue={timeLimit} onClick={(e) => {updateSettings("timeLimit", e)}}>
+                <ToggleButtonGroup className="settings-toggle" type="radio" name="speed-limit" defaultValue={timeLimit} onClick={(e) => {updateSettings("timeLimit", e)}}>
                     <ToggleButton variant="outline-main-color" className="toggle-name" id="speed-limit-title" value={-1} disabled>Turn Time Limit (sec): </ToggleButton>
                     <ToggleButton variant="outline-main-color" id="speed-limit-1" value={1}>1</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="speed-limit-2" value={2}>2</ToggleButton>
@@ -105,8 +103,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
 
         else if (timer.toLowerCase() === "timed"){
             return (<>
-                <hr />
-                <ToggleButtonGroup  type="radio" name="timed-limit" defaultValue={timeLimit} onClick={(e) => {updateSettings("timeLimit", e)}}>
+                <ToggleButtonGroup className="settings-toggle" type="radio" name="timed-limit" defaultValue={timeLimit} onClick={(e) => {updateSettings("timeLimit", e)}}>
                     <ToggleButton variant="outline-main-color" className="toggle-name" id="timed-limit-title" value={-1} disabled>Game Time Limit (sec): </ToggleButton>
                     <ToggleButton variant="outline-main-color" id="timed-limit-30" value={30}>30</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="timed-limit-60" value={60}>60</ToggleButton>
@@ -122,61 +119,36 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
         }
     }
 
-
     return (
         <div>
-            <Tabs
-                defaultActiveKey="settings"
-                justify
-                >
-                <Tab eventKey="settings" title="Settings">
-                    <div className="tab-contents">
-                        <ToggleButtonGroup  type="radio" name="winning-piece" defaultValue={winningPiece} onClick={(e) => {updateSettings("winningPiece", e)}}>
-                            <ToggleButton variant="outline-main-color" className="toggle-name" id="winning-piece-title" value={-1} disabled>Winning Piece: </ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="winning-piece-32" value={32}>32</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="winning-piece-64" value={64}>64</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="winning-piece-128" value={128}>128</ToggleButton>
-                        </ToggleButtonGroup>
+            <div className="tab-contents">
+                <ToggleButtonGroup className="settings-toggle" type="radio" name="winning-piece" defaultValue={winningPiece} onClick={(e) => {updateSettings("winningPiece", e)}}>
+                    <ToggleButton variant="outline-main-color" className="toggle-name" id="winning-piece-title" value={-1} disabled>Winning Piece: </ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="winning-piece-32" value={32}>32</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="winning-piece-64" value={64}>64</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="winning-piece-128" value={128}>128</ToggleButton>
+                </ToggleButtonGroup>
 
-                        {createDifficultySetting(gamemode)}
+                {createDifficultySetting(gamemode)}
 
-                        {createTimeLimitSetting(timer)}
+                {createTimeLimitSetting(timer)}
 
-                        <hr/>
-                        <ToggleButtonGroup  type="radio" name="p1color" defaultValue={p1color} onClick={(e) => {updateSettings("p1color", e)}}>
-                            <ToggleButton variant="outline-main-color" className="toggle-name" id="p1color-title" value={-1} disabled>{ p1possessive + " color: "}</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p1color-green" value={"green"}>Green</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p1color-blue" value={"blue"}>Blue</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p1color-salmon" value={"salmon"}>Salmon</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p1color-purple" value={"purple"}>Purple</ToggleButton>
-                        </ToggleButtonGroup>
+                <ToggleButtonGroup className="settings-toggle" type="radio" name="p1color" defaultValue={p1color} onClick={(e) => {updateSettings("p1color", e)}}>
+                    <ToggleButton variant="outline-main-color" className="toggle-name" id="p1color-title" value={-1} disabled>{ p1possessive + " color: "}</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p1color-green" value={"green"}>Green</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p1color-blue" value={"blue"}>Blue</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p1color-salmon" value={"salmon"}>Salmon</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p1color-purple" value={"purple"}>Purple</ToggleButton>
+                </ToggleButtonGroup>
 
-                        <hr/>
-                        <ToggleButtonGroup  type="radio" name="p2color" defaultValue={p2color} onClick={(e) => {updateSettings("p2color", e)}}>
-                            <ToggleButton variant="outline-main-color" className="toggle-name" id="p2color-title" value={-1} disabled>{ p2possessive + " color: "}</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p2color-green" value={"green"}>Green</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p2color-blue" value={"blue"}>Blue</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p2color-salmon" value={"salmon"}>Salmon</ToggleButton>
-                            <ToggleButton variant="outline-main-color" id="p2color-purple" value={"purple"}>Purple</ToggleButton>
-                        </ToggleButtonGroup>
-                        
-                    </div>
-                </Tab>
-                <Tab eventKey="how-to" title="How to Play">
-                    <HowToPlay className="tab-contents" winningPiece={winningPiece}/>
-                </Tab>
-                <Tab eventKey="about" title="About">
-                    <div className="tab-contents">
-                    <h5>Credit</h5>
-                        <p>This game was created by Jerry Kurtin and inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>. Thanks for playing!</p>
-                    <h5>Feedback</h5>
-                        <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't plan on running any ads here, but if you want to support the app, you can venmo me <strong>@Jerry-Kurtin-1</strong></p>
-                    </div>
-                </Tab>
-            </Tabs>
-
-        <div className="bottom-buffer"/>
-            
+                <ToggleButtonGroup className="settings-toggle" type="radio" name="p2color" defaultValue={p2color} onClick={(e) => {updateSettings("p2color", e)}}>
+                    <ToggleButton variant="outline-main-color" className="toggle-name" id="p2color-title" value={-1} disabled>{ p2possessive + " color: "}</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p2color-green" value={"green"}>Green</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p2color-blue" value={"blue"}>Blue</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p2color-salmon" value={"salmon"}>Salmon</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p2color-purple" value={"purple"}>Purple</ToggleButton>
+                </ToggleButtonGroup>
+            </div>
         </div>
     )
 }

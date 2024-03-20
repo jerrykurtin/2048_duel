@@ -9,3 +9,6 @@
 .bottom-buffer {
     margin-bottom: calc(5 * var(--vw));
 }
+.settings-toggle {
+    margin-bottom: calc(3 * var(--vw));
+}

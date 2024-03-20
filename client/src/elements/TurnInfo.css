@@ -1,7 +1,0 @@
-.turn-container {
-    margin: 0 calc(5 * var(--vw));
-    margin-bottom: calc(5 * var(--vw));
-}
-.turn {
-    text-align: center;
-}
