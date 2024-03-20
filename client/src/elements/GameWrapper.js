@@ -467,9 +467,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
 
     return (
-    <div>
-        {/* <Tutorial winningPiece={winningPiece} state={state}/> */}
-        
+    <div>        
         <BoardInfo p1score={p1score} p2score={p2score}
             p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
@@ -487,13 +485,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             turn={turn} boardState={boardState} refresh={boardRefresh} setRefresh={setBoardRefresh}
             boardTimeout={boardTimeout} newGame={newGame}
         />
-        {/* <Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
-            winningPiece={winningPiece} setWinningPiece={setWinningPiece}
-            difficulty={difficulty} setDifficulty={setDifficulty}
-            timeLimit={timeLimit} setTimeLimit={setTimeLimit}
-            p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
-            p1possessive={p1possessive} p2possessive={p2possessive}
-        /> */}
         
     </div>
     )

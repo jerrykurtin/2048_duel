@@ -47,7 +47,7 @@
   --game-border-width: calc(1 * var(--vw));
   
   
-  --animation_duration: 150ms;
+  --animation_duration: 200ms;
   --appear_duration: 250ms;
   --appear_delay: var(--animation_duration);
 }
@@ -113,12 +113,11 @@ body {
 }
 
 .settings-icon {
-  --dim: calc(5 * var(--vw)) !important;
+  --dim: calc(4 * var(--vw)) !important;
   width: var(--dim);
   height: var(--dim);
   margin-bottom: calc(.15 * var(--dim));
-  margin-right: calc(.2 * var(--dim));
-  margin-left: calc(.2 * var(--dim));
+  margin-right: calc(.1 * var(--dim));
 }
 
 .check-icon {

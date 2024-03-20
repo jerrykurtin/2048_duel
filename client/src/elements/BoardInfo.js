@@ -49,9 +49,9 @@ function BoardInfo({p1score, p2score,
 					</PopBox>
 				</div>
 				<div className="custom-card long-container board-info">
-					<div className={"long-text text"} id="turn" onClick={() => setViewState(1)}>
+					<div className={"centered-text settings-text text"} id="turn" onClick={() => setViewState(1)}>
 						<UilSetting className="settings-icon"/>
-						{((p1color === p2color) ? " Blind! " : "") + 
+						{((p1color === p2color) ? " Blind " : "") + 
 						((gamemode.toLowerCase() == "solo") ? difficulty : gamemode) +
 						((timer) ? " " + timeLimit + " sec " + timer : "") +
 						", First to " + winningPiece}
