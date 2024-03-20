@@ -8,9 +8,10 @@ import PopBox from "./elements/PopBox.js";
 
 import logo from './assets/big_logo.svg';
 
+import profile from './assets/profile-photo.jpg';
+
 import { UilArrowLeft } from '@iconscout/react-unicons';
 import { UilHome } from '@iconscout/react-unicons'
-import Tutorial from "./elements/Tutorial.js";
 import HowToPlay from "./elements/HowToPlay.js";
 
 function App() {
@@ -133,10 +134,14 @@ function App() {
                     <div className="how-to-box">
                         <div className="how-to-container">
                         <div className="tab-contents">
-                            <h5>Credit</h5>
-                            <p>This game was created by Jerry Kurtin and inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>. Thanks for playing!</p>
+                            
+                            <h5>About</h5>
+                            <p>2048 Duel started as a text-based demo that I made in a few hours in late 2022. It was too much fun not to share, so I decided to make it into a real app. It's inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>, and all of the code is public <a href="https://github.com/jerrykurtin/2048_duel">here</a>.</p>
                             <h5>Feedback</h5>
-                            <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't plan on running any ads here, but if you want to support the app, you can venmo me <strong>@Jerry-Kurtin-1</strong></p>
+                            <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't plan on running any ads here, but if you want to support the app, you can venmo me <strong>@Jerry-Kurtin-1</strong>. Thank you for playing!</p>
+                            <div className="horizontally-centered">
+                                <img className="profile-img" src={profile} alt="photo of Jerry"/>
+                            </div>
                         </div>
                         </div>
                         <div className="align-right how-to-close">

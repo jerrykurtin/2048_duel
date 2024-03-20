@@ -1,10 +1,10 @@
 import React from 'react'
 
 import "./HowToPlay.css"
-import movement from '../assets/tutorial-movement.svg';
-import collide from '../assets/tutorial-collide.svg';
-import steal from '../assets/tutorial-steal.svg';
-import win from '../assets/tutorial-win.svg';
+import movement from '../assets/tutorial-movement.png';
+import collide from '../assets/tutorial-collide.png';
+import steal from '../assets/tutorial-steal.png';
+import win from '../assets/tutorial-win.png';
 
 
 function HowToPlay({winningPiece, ...props}) {
