@@ -47,8 +47,8 @@
   --game-border-width: calc(1 * var(--vw));
   
   
-  --animation_duration: 200ms;
-  --appear_duration: 250ms;
+  --animation_duration: 175ms;
+  --appear_duration: 200ms;
   --appear_delay: var(--animation_duration);
 }
   
@@ -265,12 +265,7 @@ a:visited {
   font-weight: 600;
 }
 
-.outline {
-  border-style: solid;
-  transition: border-color calc(var(--animation_duration) + var(--appear_duration));
-  /* box-shadow: 0 0 0 calc(1 * var(--vw));
-  transition: color calc(var(--animation_duration) + var(--appear_duration)); */
-}
+
 
 /* Change the bootstrap behavior and add a new button */
 .btn-outline-main-color {

@@ -50,7 +50,7 @@ Run in Xcode, and changes should be up-to-date
 
 Generate all assets from logo
 ```
-npx @capacitor/assets generate --iconBackgroundColor '#2B2C31' --iconBackgroundColorDark '#2B2C31' --splashBackgroundColor '#202024' --splashBackgroundColorDark '#202024'
+npx @capacitor/assets generate --iconBackgroundColor '#2B2C31' --iconBackgroundColorDark '#2B2C31' --splashBackgroundColor '#000000' --splashBackgroundColorDark '#000000'
 ```
 
 ### Developing for deployment

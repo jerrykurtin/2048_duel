@@ -23,6 +23,11 @@
     background: var(--board-color);
 }
 
+.outline {
+    border-style: solid;
+    transition: border-color calc(var(--animation_duration) + var(--appear_duration));
+  }
+
 .endgame-msg {
     border-radius: var(--border-radius);
 }

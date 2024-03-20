@@ -122,7 +122,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
     return (
         <div>
             <div className="tab-contents">
-                <ToggleButtonGroup className="settings-toggle" type="radio" name="winning-piece" defaultValue={winningPiece} onClick={(e) => {updateSettings("winningPiece", e)}}>
+                <ToggleButtonGroup className="settings-toggle" type="radio" name="winning-piece" defaultValue={winningPiece.toString()} onClick={(e) => {updateSettings("winningPiece", e)}}>
                     <ToggleButton variant="outline-main-color" className="toggle-name" id="winning-piece-title" value={-1} disabled>Winning Piece: </ToggleButton>
                     <ToggleButton variant="outline-main-color" id="winning-piece-32" value={"32"}>32</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="winning-piece-64" value={"64"}>64</ToggleButton>
