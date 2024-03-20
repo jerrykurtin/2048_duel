@@ -7,6 +7,7 @@
     "@capacitor/android": "^5.4.0",
     "@capacitor/core": "^5.4.0",
     "@capacitor/ios": "^5.4.0",
+    "@capacitor/preferences": "^5.0.7",
     "@iconscout/react-unicons": "^2.0.0",
     "@ionic/react": "^7.4.0",
     "@testing-library/jest-dom": "^5.16.5",

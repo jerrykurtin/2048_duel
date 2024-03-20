@@ -5,16 +5,27 @@ import BoardClass from "./BoardClass.js";
 
 import BoardInfo from "./BoardInfo.js";
 import Board from "./Board.js";
-import Settings from "./Settings";
-import Tutorial from "./Tutorial";
 
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import PopBox from './PopBox.js';
+import { Preferences } from '@capacitor/preferences';
 
-import { UilArrowLeft } from '@iconscout/react-unicons';
-
+async function incrementGamesPlayed() {
+    const { value: gamesPlayed } = await Preferences.get({ key: 'gamesPlayed' });
+    console.log("[DEBUG increment] gamesPlayed: ", gamesPlayed);
+    if (!gamesPlayed) {
+        console.log("[DEBUG increment] gamesPlayed not retrieved, setting to 1")
+        await Preferences.set({
+            key: 'gamesPlayed',
+            value: '1',
+        }); 
+    }
+    console.log("[DEBUG increment] gamesPlayed retrieved: ", gamesPlayed);
+    const newGamesPlayed = (parseInt(gamesPlayed) + 1).toString();
+    console.log("[DEBUG increment] newGamesPlayed: ", newGamesPlayed);
+    await Preferences.set({
+        key: 'gamesPlayed',
+        value: newGamesPlayed,
+    }); 
+  }
 
 /* random number between min and max, inclusive */
 function randint(min, max){
@@ -45,6 +56,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     
     // board
     const [activeGame, setActiveGame] = useState(true);
+    const [recordedGame, setRecordedGame] = useState(false);
     const [myBoard, setMyBoard] = useState(new BoardClass(winningPiece));
     const [moveType, setMoveType] = useState("reset");
     const [pauseState, setPauseState] = useState("notStarted"); // notStarted, paused, null
@@ -98,6 +110,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         setActiveGame(true);
         setMoveType(null);
         setNewGame(true);
+        setRecordedGame(false);
 
         if (timer) {
             console.log("resetting timer");
@@ -194,7 +207,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
                 setResponseTime(700);
                 break;
             case "impossible":
-                setResponseTime(500);
+                setResponseTime(600);
                 break;
             default:
                 console.log("ERROR: invalid difficulty when calculating response time");
@@ -248,6 +261,11 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
         else if (activeGame && !pauseState && !awaitingCPU){
             if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
+                if (!recordedGame) {
+                    setRecordedGame(true);
+                    console.log("[DEBUG] recording game!");
+                    incrementGamesPlayed();
+                }
                 
                 console.log("Previous board:\n" + myBoard.build_grid());
                 var tempActions;

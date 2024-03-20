@@ -14,6 +14,23 @@ import { UilArrowLeft } from '@iconscout/react-unicons';
 import { UilHome } from '@iconscout/react-unicons'
 import HowToPlay from "./elements/HowToPlay.js";
 
+import { Preferences } from '@capacitor/preferences';
+
+async function getGamesPlayed() {
+    const { value: gamesPlayed } = await Preferences.get({ key: 'gamesPlayed' });
+    console.log("[DEBUG] gamesPlayed: ", gamesPlayed);
+    if (!gamesPlayed) {
+        console.log("[DEBUG] gamesPlayed not retrieved, setting")
+        await Preferences.set({
+            key: 'gamesPlayed',
+            value: '0',
+        }); 
+        return 0;
+    }
+    console.log("[DEBUG] games played retrieved: ", gamesPlayed);
+    return parseInt(gamesPlayed);
+}
+
 function App() {
 
     // determine colors
@@ -38,6 +55,16 @@ function App() {
     const [page1Transition, setPage1Transition] = useState("hidden");
     const [page2Transition, setPage2Transition] = useState("hidden");
     const [page3Transition, setPage3Transition] = useState("hidden");
+
+    const [gamesPlayed, setGamesPlayed] = useState(null);
+
+    useEffect(() => {
+        const fetchGamesPlayed = async () => {
+            const response = await getGamesPlayed();
+            setGamesPlayed(response);
+        }
+        fetchGamesPlayed();
+    }, [currState]);
 
     // update previous state when state is changed
     useEffect (() => {
@@ -134,12 +161,14 @@ function App() {
                     <div className="how-to-box">
                         <div className="how-to-container">
                         <div className="tab-contents">
-                            
+                            <h5>Stats</h5>
+                            <p>{"Games played: " + gamesPlayed}</p>
                             <h5>About</h5>
                             <p>2048 Duel started as a text-based demo that I made in a few hours in late 2022. It was too much fun not to share, so I decided to make it into a real app. It's inspired by Gabriele Cirulli's <a href="https://play2048.co">2048</a>, and all of the code is public <a href="https://github.com/jerrykurtin/2048_duel">here</a>.</p>
                             <h5>Feedback</h5>
                             <p>Email me <a href = "mailto: visual-fetch-0h@icloud.com">here</a> with feedback or bugs. I don't plan on running any ads here, but if you want to support the app, you can venmo me <strong>@Jerry-Kurtin-1</strong>. Thank you for playing!</p>
                             <div className="horizontally-centered">
+                                <div>This is how I smile when you play my game</div>
                                 <img className="profile-img" src={profile} alt="photo of Jerry"/>
                             </div>
                         </div>
