@@ -4,6 +4,10 @@
 
 .board-info-wrapper {
     position: relative;
+    height: calc(74.5 * var(--vw));
+}
+
+.timer-board-info-wrapper {
     height: calc(82 * var(--vw));
 }
 
@@ -84,7 +88,7 @@ pre {
     background-color: var(--bg-color-0);
 }
 
-.timer-settings {
+.timer-settings-container {
     height: calc(74.4 * var(--vw));
 }
 

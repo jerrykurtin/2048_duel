@@ -38,7 +38,7 @@ function BoardInfo({p1score, p2score,
 	}
 
 	return (
-		<div className="board-info-wrapper">
+		<div className={"board-info-wrapper" +  ((timer) ? " timer-board-info-wrapper" : "")}>
 			<div className="board-info-inner">
 				<div className="evenly-spaced game-menu-bar">
 					<PopBox color="accent" onClick={() => setState(2)}>
@@ -84,7 +84,7 @@ function BoardInfo({p1score, p2score,
 			{((viewState == 1) 
 			?
 				<div className="board-info-inner">
-					<div className={"custom-card settings-container " +  ((timer) ? "timer-settings" : "")}>
+					<div className={"custom-card settings-container" +  ((timer) ? " timer-settings-container" : "")}>
 						<Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
 							winningPiece={winningPiece} setWinningPiece={setWinningPiece}
 							difficulty={difficulty} setDifficulty={setDifficulty}
