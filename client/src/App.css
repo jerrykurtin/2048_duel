@@ -31,12 +31,15 @@
 
   --green: #029347;
   --greencolor: 2, 147, 71;
-  --blue: #0055ff;
-  --bluecolor: 0, 85, 255;
-  --salmon: #ff4747;
-  --salmoncolor: 255, 69, 69;
+  --blue: #0453f2;
+  --bluecolor: 4, 83, 242;
+  --orange: rgb(225, 82, 0);
+  --orangecolor: 225, 82, 0;
   --purple:#7d32ed;
   --purplecolor: 125, 50, 237;
+  /* Colors currently not in use */
+  /* --red: #FF1900; */
+  /* --salmon: #FF6E30; */
 
   --border-radius: calc(3.5 * var(--vw));
   --border-radius-small: calc(1.5 * var(--vw));
@@ -146,9 +149,9 @@ body {
   --current-color-values: var(--bluecolor);
 }
 
-.salmon {
-  --current-color: var(--salmon);
-  --current-color-values: var(--salmoncolor);
+.orange {
+  --current-color: var(--orange);
+  --current-color-values: var(--orangecolor);
 }
 
 .purple {
@@ -243,6 +246,11 @@ a:visited {
 .align-right {
   display: flex;
   justify-content: flex-end;
+}
+
+.align-left {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .display-reset {
@@ -363,7 +371,7 @@ a:visited {
 .title {
   width: 80%;
   margin-top: 20%;
-  margin-bottom: 20%;
+  margin-bottom: 10%;
 }
 
 .start-menu-container {
@@ -371,7 +379,7 @@ a:visited {
 }
 
 .start-button {
-  margin-top: calc(10* var(--vw));
+  margin-top: calc(20* var(--vw));
   margin-bottom: calc(5 * var(--vw));
 }
 

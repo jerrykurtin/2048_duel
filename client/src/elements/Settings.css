@@ -12,5 +12,5 @@
 }
 
 .settings-toggle .btn {
-    font-size: calc(3 * var(--vw));
+    font-size: calc(2.9 * var(--vw));
 }

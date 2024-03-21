@@ -137,7 +137,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
                     <ToggleButton variant="outline-main-color" className="toggle-name" id="p1color-title" value={-1} disabled>{ p1possessive + " color: "}</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="p1color-green" value={"green"}>Green</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="p1color-blue" value={"blue"}>Blue</ToggleButton>
-                    <ToggleButton variant="outline-main-color" id="p1color-salmon" value={"salmon"}>Salmon</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p1color-orange" value={"orange"}>Orange</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="p1color-purple" value={"purple"}>Purple</ToggleButton>
                 </ToggleButtonGroup>
 
@@ -145,7 +145,7 @@ function Settings({gamemode, timer, setMoveType, winningPiece, setWinningPiece, 
                     <ToggleButton variant="outline-main-color" className="toggle-name" id="p2color-title" value={-1} disabled>{ p2possessive + " color: "}</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="p2color-green" value={"green"}>Green</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="p2color-blue" value={"blue"}>Blue</ToggleButton>
-                    <ToggleButton variant="outline-main-color" id="p2color-salmon" value={"salmon"}>Salmon</ToggleButton>
+                    <ToggleButton variant="outline-main-color" id="p2color-orange" value={"orange"}>Orange</ToggleButton>
                     <ToggleButton variant="outline-main-color" id="p2color-purple" value={"purple"}>Purple</ToggleButton>
                 </ToggleButtonGroup>
             </div>
