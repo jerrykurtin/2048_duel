@@ -7,12 +7,24 @@ function round(number, digits=1){
 function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTimer}) {
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0.0);
+    const [prevTime, setPrevTime] = useState(0.0);
 
     // actually count down the timer
     useEffect(() => {
-        if (time == 0){
+        console.log("[DEBUG] time: ", time, "prev time: ", prevTime);
+
+        if (time > prevTime) {
+            console.log("[DEBUG] reset detected, signaling finished = false");
+            signalFinish(false);
+            setPrevTime(time);
+            return;
+        }
+
+        setPrevTime(time);
+        if (time === 0){
             signalFinish(true);
-            setIsPaused(true)
+            setIsPaused(true);
+            console.log("[DEBUG] timeout, signaling finish");
             return;
         }
 
@@ -27,7 +39,7 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
         return () => {
             clearInterval(interval);
         };
-    }, [isPaused, time]);
+    }, [time]);
 
     // pause / continue
     useEffect(() => {
@@ -47,6 +59,7 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
         if (resetTimer){
             setResetTimer(false);
             setTime(startValue * 1000);
+            console.log("[DEBUG] resetting timer to ", startValue * 1000);
         }
     }, [resetTimer]);
 

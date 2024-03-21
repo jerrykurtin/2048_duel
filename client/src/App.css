@@ -397,8 +397,7 @@ a:visited {
 }
 
 .small-text {
-  /* font-weight: bold; */
-  font-size: calc(4 * var(--vw));
+  font-size: calc(4.5 * var(--vw));
 }
 
 .how-to-box {

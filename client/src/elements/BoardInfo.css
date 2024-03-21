@@ -72,6 +72,14 @@ pre {
     background-color: var(--bg-color-0);
 }
 
+/* Prevents user from interacting with board in settings */
+.game-blocker {
+    position: absolute;
+    width: 100%;
+    height: calc(90 * var(--vw));
+    z-index: 100;
+}
+
 .done-button {
     width: calc(19 * var(--vw));
     height: calc(8.2 * var(--vw));

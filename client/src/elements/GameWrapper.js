@@ -110,12 +110,15 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         setActiveGame(true);
         setMoveType(null);
         setNewGame(true);
+
+        // In case pause triggered during cpu move
+        setAwaitingCPU(false);
+        
+        // For metrics
         setRecordedGame(false);
 
         if (timer) {
             console.log("resetting timer");
-            setPlayer1Finish(false);
-            setPlayer2Finish(false);
             setResetP1Timer(true);
             setResetP2Timer(true);
             setPauseState("notStarted")
@@ -160,9 +163,11 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
 
     // handle timeout
     useEffect(() => {
-        console.log("player1finish or player2 finish triggered")
-        if (!timer || pauseState === "notStarted")
+        console.log("player1finish or player2 finish triggered, player1finish: ", player1Finish, ", player2finish:", player2Finish);
+        if (!timer || pauseState === "notStarted") {
+            console.log("ignored, game not started");
             return;
+        }
         if (player1Finish){
             console.log("player 1 timeout, turn is " + turn);
             if (timer.toLowerCase() === "speed"){
@@ -219,11 +224,16 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     
     // Process a move
     useEffect (() => {
+        console.log("[DEBUG] Move type:", moveType);
+        if (!moveType) {
+            console.log("[DEBUG] move type is null, returning");
+            return;
+        }
+
         if (newGame) {
             setNewGame(false);
+            console.log("[DEBUG] no longer a new game");
         }
-        if (!moveType) 
-            return;
 
         if (moveType === "refresh") {
             setBoardRefresh(!boardRefresh);
@@ -259,84 +269,89 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             }
         }
 
-        else if (activeGame && !pauseState && !awaitingCPU){
-            if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
-                if (!recordedGame) {
-                    setRecordedGame(true);
-                    console.log("[DEBUG] recording game!");
-                    incrementGamesPlayed();
-                }
-                
-                console.log("Previous board:\n" + myBoard.build_grid());
-                var tempActions;
-                if (moveType === "random"){
-                    console.log("random move");
-                    do {
-                        tempActions = myBoard.move(randchoice(["left", "up", "right", "down"]));
-                    } while (myBoard.board_state === "no_change");
-                }
-                else{
-                    tempActions = myBoard.move(moveType);
-                }
-                
-                console.log("new board state: " + myBoard.board_state);
-                setBoardInfo(tempActions);
-                
-                // update timer
-                if (timer && swappable(myBoard.board_state)){
-                    if (myBoard.player == 0){
-                        console.log("starting player 1 timer")
-                        setStartStopP1Timer(true);
-                        setStartStopP2Timer(false);
-                        if (timer.toLowerCase() === "speed")
-                            setResetP2Timer(true);
+        else {
+            console.log("[DEBUG] active game: ", activeGame, ", pauseState: ", pauseState, ", awaitingCPU: ", awaitingCPU);
+            console.log("[DEBUG] player1finish: ", player1Finish, "player2finish: ", player2Finish);
+            if (activeGame && !pauseState && !awaitingCPU){
+                console.log("[DEBUG] board state: ", myBoard.board_state);
+                if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
+                    if (!recordedGame) {
+                        setRecordedGame(true);
+                        console.log("[DEBUG] recording game!");
+                        incrementGamesPlayed();
                     }
-    
-                    else {
-                        console.log("starting player 2 timer");
-                        setStartStopP2Timer(true);
-                        setStartStopP1Timer(false);
-                        if (timer.toLowerCase() === "speed")
-                            setResetP1Timer(true);
-                    }
-                }
-                // cpu moves after a delay
-                if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"  && myBoard.player === cpuPlayer){
-                    // use awaitingCPU to prevent user from moving again (kinda like a mutex)
-                    setAwaitingCPU(true);
                     
-                    const cpuMove = setTimeout( () => {
-                        if (player1Finish || player2Finish) {
-                            console.log("cpu returning, game over");
-                            return;
-                        }
-                        // timeout catch
-                        if (myBoard.player === 0) {
-                            console.log("ERROR: cpu returning, timed out");
-                            return;
-                        }
-
-                        let tempActions = myBoard.cpu_move(difficulty);
-                        setBoardInfo(tempActions);
-                        setAwaitingCPU(false);
-
-                        // update timers
-                        if (timer && swappable(myBoard.board_state)){
-                            console.log("board state is " + myBoard.board_state + ",starting player 1 timer")
+                    console.log("Previous board:\n" + myBoard.build_grid());
+                    var tempActions;
+                    if (moveType === "random"){
+                        console.log("random move");
+                        do {
+                            tempActions = myBoard.move(randchoice(["left", "up", "right", "down"]));
+                        } while (myBoard.board_state === "no_change");
+                    }
+                    else{
+                        tempActions = myBoard.move(moveType);
+                    }
+                    
+                    console.log("new board state: " + myBoard.board_state);
+                    setBoardInfo(tempActions);
+                    
+                    // update timer
+                    if (timer && swappable(myBoard.board_state)){
+                        if (myBoard.player == 0){
+                            console.log("starting player 1 timer")
                             setStartStopP1Timer(true);
                             setStartStopP2Timer(false);
                             if (timer.toLowerCase() === "speed")
                                 setResetP2Timer(true);
                         }
-
-                        finishMove();
-                    // 11:11 :)
-                    }, ((timer && timer.toLowerCase() === "speed") ? responseTime + randint(-50, 50) : responseTime + randint(200, 250)));
+        
+                        else {
+                            console.log("starting player 2 timer");
+                            setStartStopP2Timer(true);
+                            setStartStopP1Timer(false);
+                            if (timer.toLowerCase() === "speed")
+                                setResetP1Timer(true);
+                        }
+                    }
+                    // cpu moves after a delay
+                    if (gamemode.toLowerCase() === "solo" && myBoard.board_state === "continue"  && myBoard.player === cpuPlayer){
+                        // use awaitingCPU to prevent user from moving again (kinda like a mutex)
+                        setAwaitingCPU(true);
+                        
+                        const cpuMove = setTimeout( () => {
+                            if (player1Finish || player2Finish) {
+                                console.log("cpu returning, game over. player1Finish: ", player1Finish, ", player2Finish:", player2Finish);
+                                return;
+                            }
+                            // timeout catch
+                            if (myBoard.player === 0) {
+                                console.log("ERROR: cpu returning, timed out");
+                                return;
+                            }
     
+                            let tempActions = myBoard.cpu_move(difficulty);
+                            setBoardInfo(tempActions);
+                            setAwaitingCPU(false);
+    
+                            // update timers
+                            if (timer && swappable(myBoard.board_state)){
+                                console.log("board state is " + myBoard.board_state + ",starting player 1 timer")
+                                setStartStopP1Timer(true);
+                                setStartStopP2Timer(false);
+                                if (timer.toLowerCase() === "speed")
+                                    setResetP2Timer(true);
+                            }
+    
+                            finishMove();
+                        // 11:11 :)
+                        }, ((timer && timer.toLowerCase() === "speed") ? responseTime + randint(-50, 50) : responseTime + randint(200, 250)));
+        
+                    }
                 }
+                finishMove();
             }
 
-            finishMove();
         }
     
     }, [moveType]);

@@ -72,6 +72,7 @@ function BoardInfo({p1score, p2score,
 				<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
 			</div>
 		:
+			<>
 				<div className="custom-card settings-container">
 					<Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
 						winningPiece={winningPiece} setWinningPiece={setWinningPiece}
@@ -88,7 +89,9 @@ function BoardInfo({p1score, p2score,
 						</PopBox>
 					</div>
 				</div>
-			)
+				<div className="game-blocker"/>
+			</>
+		)
 	)
 }
 
