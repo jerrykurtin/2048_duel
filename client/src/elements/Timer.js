@@ -14,7 +14,7 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
         console.log("[DEBUG] time: ", time, "prev time: ", prevTime);
 
         if (time > prevTime) {
-            console.log("[DEBUG] reset detected, signaling finished = false");
+            console.log("[DEBUG] timer reset detected, signaling finished = false");
             signalFinish(false);
         }
         // Only test for 0 if not reset
