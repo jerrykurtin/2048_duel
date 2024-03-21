@@ -16,17 +16,16 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
         if (time > prevTime) {
             console.log("[DEBUG] reset detected, signaling finished = false");
             signalFinish(false);
-            setPrevTime(time);
-            return;
         }
-
-        setPrevTime(time);
-        if (time === 0){
+        // Only test for 0 if not reset
+        else if (time === 0){
             signalFinish(true);
             setIsPaused(true);
             console.log("[DEBUG] timeout, signaling finish");
             return;
         }
+
+        setPrevTime(time);
 
         let interval = null;
         if (!isPaused) {
@@ -39,23 +38,26 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
         return () => {
             clearInterval(interval);
         };
-    }, [time]);
+    }, [time, isPaused]);
 
     // pause / continue
     useEffect(() => {
         // continue timer
         if (startStopTimer){
+            console.log("[DEBUG] continuing timer")
             setIsPaused(false);
         }
 
         // pause timer
         else {
+            console.log("[DEBUG] pausing timer")
             setIsPaused(true);
         }
     }, [startStopTimer]);
 
     // reset timer
     useEffect(() => {
+        console.log("[DEBUG] timer reset");
         if (resetTimer){
             setResetTimer(false);
             setTime(startValue * 1000);
