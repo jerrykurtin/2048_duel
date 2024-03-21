@@ -2,6 +2,18 @@
     --card-width: calc(42.5 * var(--vw));
 }
 
+.board-info-wrapper {
+    position: relative;
+    height: calc(82 * var(--vw));
+}
+
+.board-info-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
 .board-info-container {
     margin-bottom: calc(5 * var(--vw));
     padding: 0 calc(5 * var(--vw));
@@ -72,6 +84,10 @@ pre {
     background-color: var(--bg-color-0);
 }
 
+.timer-settings {
+    height: calc(74.4 * var(--vw));
+}
+
 /* Prevents user from interacting with board in settings */
 .game-blocker {
     position: absolute;
@@ -88,6 +104,6 @@ pre {
 
 .bottom-right-button-container {
     position: absolute;
-    bottom: calc(3 * var(--vw)); /* padding of container */
-    right: calc(3 * var(--vw)); /* padding of container */
+    bottom: calc(3 * var(--vw)); /* match padding of container */
+    right: calc(3 * var(--vw)); /* match padding of container */
 }

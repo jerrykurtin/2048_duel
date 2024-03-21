@@ -27,10 +27,19 @@ function BoardInfo({p1score, p2score,
 
 	const [viewState, setViewState] = useState(0);	// 0: normal, 1: settings
 
+	function closeSettings() {
+		setMoveType("resume");
+		setViewState(0);
+	}
+
+	function openSettings() {
+		setMoveType("pause");
+		setViewState(1);
+	}
+
 	return (
-		((viewState == 0)
-		? 
-			<div>
+		<div className="board-info-wrapper">
+			<div className="board-info-inner">
 				<div className="evenly-spaced game-menu-bar">
 					<PopBox color="accent" onClick={() => setState(2)}>
 						<div className="centered game-nav">
@@ -49,7 +58,7 @@ function BoardInfo({p1score, p2score,
 					</PopBox>
 				</div>
 				<div className="custom-card long-container board-info">
-					<div className={"centered-text settings-text text"} id="turn" onClick={() => setViewState(1)}>
+					<div className={"centered-text settings-text text"} id="turn" onClick={() => openSettings()}>
 						<UilSetting className="settings-icon"/>
 						{((p1color === p2color) ? " Blind " : "") + 
 						((gamemode.toLowerCase() == "solo") ? difficulty : gamemode) +
@@ -71,27 +80,31 @@ function BoardInfo({p1score, p2score,
 				</div>
 				<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>
 			</div>
-		:
-			<>
-				<div className="custom-card settings-container">
-					<Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
-						winningPiece={winningPiece} setWinningPiece={setWinningPiece}
-						difficulty={difficulty} setDifficulty={setDifficulty}
-						timeLimit={timeLimit} setTimeLimit={setTimeLimit}
-						p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
-						p1possessive={p1possessive} p2possessive={p2possessive}
-					/>
-					<div className="bottom-right-button-container">
-						<PopBox color="accent" onClick={() => setViewState(0)}>
-							<div className="centered done-button">
-								<div><UilCheck className="check-icon"/>Done</div>
-							</div>
-						</PopBox>
+
+			{((viewState == 1) 
+			?
+				<div className="board-info-inner">
+					<div className={"custom-card settings-container " +  ((timer) ? "timer-settings" : "")}>
+						<Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
+							winningPiece={winningPiece} setWinningPiece={setWinningPiece}
+							difficulty={difficulty} setDifficulty={setDifficulty}
+							timeLimit={timeLimit} setTimeLimit={setTimeLimit}
+							p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
+							p1possessive={p1possessive} p2possessive={p2possessive}
+						/>
+						<div className="bottom-right-button-container">
+							<PopBox color="accent" onClick={() => closeSettings()}>
+								<div className="centered done-button">
+									<div><UilCheck className="check-icon"/>Done</div>
+								</div>
+							</PopBox>
+						</div>
 					</div>
+					<div className="game-blocker"/>
 				</div>
-				<div className="game-blocker"/>
-			</>
-		)
+			: <></>
+			)}
+		</div>
 	)
 }
 

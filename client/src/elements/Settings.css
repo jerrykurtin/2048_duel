@@ -1,5 +1,3 @@
-
-
 .toggle-name {
     opacity: 1 !important;
     /* font-weight: 500; */
@@ -10,5 +8,9 @@
     margin-bottom: calc(5 * var(--vw));
 }
 .settings-toggle {
-    margin-bottom: calc(3 * var(--vw));
+    margin-bottom: calc(4 * var(--vw));
+}
+
+.settings-toggle .btn {
+    font-size: calc(3 * var(--vw));
 }
