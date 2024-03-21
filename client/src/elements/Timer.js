@@ -11,17 +11,16 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
 
     // actually count down the timer
     useEffect(() => {
-        console.log("[DEBUG] time: ", time, "prev time: ", prevTime);
+        console.log(" time: ", time, "prev time: ", prevTime);
 
         if (time > prevTime) {
-            console.log("[DEBUG] timer reset detected, signaling finished = false");
             signalFinish(false);
         }
         // Only test for 0 if not reset
         else if (time === 0){
             signalFinish(true);
             setIsPaused(true);
-            console.log("[DEBUG] timeout, signaling finish");
+            console.log("[timer] timeout, signaling finish");
             return;
         }
 
@@ -44,24 +43,23 @@ function Timer({signalFinish, startValue, startStopTimer, resetTimer, setResetTi
     useEffect(() => {
         // continue timer
         if (startStopTimer){
-            console.log("[DEBUG] continuing timer")
+            console.log("[timer] continuing timer")
             setIsPaused(false);
         }
 
         // pause timer
         else {
-            console.log("[DEBUG] pausing timer")
+            console.log("[timer] pausing timer")
             setIsPaused(true);
         }
     }, [startStopTimer]);
 
     // reset timer
     useEffect(() => {
-        console.log("[DEBUG] timer reset");
         if (resetTimer){
             setResetTimer(false);
             setTime(startValue * 1000);
-            console.log("[DEBUG] resetting timer to ", startValue * 1000);
+            console.log("[timer] resetting timer to ", startValue * 1000);
         }
     }, [resetTimer]);
 

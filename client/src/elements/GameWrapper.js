@@ -224,15 +224,12 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
     
     // Process a move
     useEffect (() => {
-        console.log("[DEBUG] Move type:", moveType);
         if (!moveType) {
-            console.log("[DEBUG] move type is null, returning");
             return;
         }
 
         if (newGame) {
             setNewGame(false);
-            console.log("[DEBUG] no longer a new game");
         }
 
         if (moveType === "refresh") {
@@ -270,14 +267,10 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         }
 
         else {
-            console.log("[DEBUG] active game: ", activeGame, ", pauseState: ", pauseState, ", awaitingCPU: ", awaitingCPU);
-            console.log("[DEBUG] player1finish: ", player1Finish, "player2finish: ", player2Finish);
             if (activeGame && !pauseState && !awaitingCPU){
-                console.log("[DEBUG] board state: ", myBoard.board_state);
                 if (["continue", "no_change"].indexOf(myBoard.board_state) > -1){
                     if (!recordedGame) {
                         setRecordedGame(true);
-                        console.log("[DEBUG] recording game!");
                         incrementGamesPlayed();
                     }
                     

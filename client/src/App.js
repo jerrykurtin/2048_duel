@@ -18,16 +18,13 @@ import { Preferences } from '@capacitor/preferences';
 
 async function getGamesPlayed() {
     const { value: gamesPlayed } = await Preferences.get({ key: 'gamesPlayed' });
-    console.log("[DEBUG] gamesPlayed: ", gamesPlayed);
     if (!gamesPlayed) {
-        console.log("[DEBUG] gamesPlayed not retrieved, setting")
         await Preferences.set({
             key: 'gamesPlayed',
             value: '0',
         }); 
         return 0;
     }
-    console.log("[DEBUG] games played retrieved: ", gamesPlayed);
     return parseInt(gamesPlayed);
 }
 
