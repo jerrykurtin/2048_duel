@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.example.2048_duel"
+    namespace "com.2048duel"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.example.2048_duel"
+        applicationId "com.2048duel"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

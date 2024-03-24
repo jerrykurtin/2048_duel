@@ -46,7 +46,12 @@ Open XCode
 ```
 npx cap open ios
 ```
-Run in Xcode, and changes should be up-to-date
+Open in Android Studio
+```
+npx cap open android
+```
+
+Run in IDE, and changes should be up-to-date
 
 Generate all assets from logo
 ```

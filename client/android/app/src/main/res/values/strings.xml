@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">2048_duel</string>
-    <string name="title_activity_main">2048_duel</string>
-    <string name="package_name">com.example.2048_duel</string>
-    <string name="custom_url_scheme">com.example.2048_duel</string>
+    <string name="app_name">2048 Duel</string>
+    <string name="title_activity_main">2048 Duel</string>
+    <string name="package_name">com.2048duel</string>
+    <string name="custom_url_scheme">com.2048duel</string>
 </resources>
