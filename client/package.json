@@ -31,7 +31,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "ionic:build": "npm run build",
-    "ionic:serve": "npm run start"
+    "ionic:serve": "npm run start",
+    "sync": "npm run build && npx cap sync",
+    "hardsync": "npm run build && npx capacitor-assets generate && npx cap sync",
+    "android": "ANDROID=true npx cap sync android && npx cap open android"
   },
   "eslintConfig": {
     "extends": [

@@ -1,4 +1,4 @@
-package com.2048duel;
+package com.play2048duel;
 
 import com.getcapacitor.BridgeActivity;
 

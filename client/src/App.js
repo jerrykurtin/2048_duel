@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Capacitor } from '@capacitor/core';
+
 import './App.css';
 import './elements/Animation-Slide.css'
 import './elements/Animation-Select.css'
@@ -29,6 +31,7 @@ async function getGamesPlayed() {
 }
 
 function App() {
+    const platform = Capacitor.getPlatform();
 
     // determine colors
     const [p1color, setP1color] = useState("green");
@@ -54,14 +57,6 @@ function App() {
     const [page3Transition, setPage3Transition] = useState("hidden");
 
     const [gamesPlayed, setGamesPlayed] = useState(null);
-
-    useEffect(() => {
-        const fetchGamesPlayed = async () => {
-            const response = await getGamesPlayed();
-            setGamesPlayed(response);
-        }
-        fetchGamesPlayed();
-    }, [currState]);
 
     // update previous state when state is changed
     useEffect (() => {
@@ -187,7 +182,7 @@ function App() {
 
     return (
         <div className="App">
-            <div className="slide-window-container">
+            <div className={"slide-window-container" + (platform === "ios" ? " slide-window-container-ios" : "")}>
                 <div className={"horizontally-centered slide-window " + page0Transition}>
                     <img className="title" src={logo} alt="2048 Duel"/>
                     {loadStartScreen()}

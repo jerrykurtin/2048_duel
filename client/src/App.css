@@ -20,6 +20,7 @@
   box-sizing: border-box;
 
   --vw: 1vw;
+  --vh: 1vh;
   
   --primary-color: var(--text-color);
   --background-color: var(--bg-color-0);
@@ -58,6 +59,7 @@
 @media screen and (min-width: 520px) {
   * {
     --vw: 5.2px;
+    /* --vh: 12px; */
   }
 }
 

@@ -11,6 +11,13 @@ I'd love to thank Matthew Bullock, Sofia Cortes, and Timmy Kurtin for style idea
 
 # Temporary build instructions
 
+adding IOS / Android (only done once)
+```Bash
+npx cap add ios
+PLATFORM='android' npx cap add android
+```
+(note: )
+
 to run docker:
 ```Bash
 docker-compose up
