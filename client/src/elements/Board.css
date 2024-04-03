@@ -28,9 +28,7 @@
     transition: border-color calc(var(--animation_duration) + var(--appear_duration));
   }
 
-.endgame-msg {
-    border-radius: var(--border-radius);
-}
+
 
 /* Tiles */
 .grid-container {

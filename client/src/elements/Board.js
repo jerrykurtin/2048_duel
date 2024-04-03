@@ -139,9 +139,6 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
         else if (boardState === "win2"){
             setEndgame(<GameMessage color={p2color} text={winMsg(p2name)}/>);
         }
-        else {
-            setEndgame(null);
-        }
 
         // sort squares to get animations to work
         tempSquares.sort();
@@ -154,10 +151,17 @@ const Board = forwardRef(function Board({p1color, p2color, p1name, p2name, board
 
     // start - pause game message
     useEffect(() => {
+        console.log("pause state is", pauseState);
         if (pauseState === "notStarted") {
             console.log("rendering not started screen");
             setEndgame(<GameMessage isButton={true} onClick={() => setMoveType("resume")} text="Start Game"/>);
-        } else {
+        } 
+        else if (pauseState === "paused") {
+            if (boardState == "no_change" || boardState == "continue") {
+                setEndgame(<GameMessage isButton={false} text="Paused"/>);
+            }
+        }
+        else {
             setEndgame(null);
         }
 

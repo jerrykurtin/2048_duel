@@ -10,6 +10,11 @@
     /* animation-timing-function: ease-in; */
 }
 
+.disabled.selected {
+    animation-name: pop-easy;
+    animation-duration: 100ms;
+}
+
 .pop-box.accent {
     --box-color: var(--accent-color);
 }
@@ -27,7 +32,7 @@
     top: 0;
     left: 0;
 
-    background-color: var(--bg-color-2);
+    background-color: var(--bg-color-1);
     border-color: var(--box-color);
     border-style: solid;
     border-width: calc(0.2 * var(--vw));

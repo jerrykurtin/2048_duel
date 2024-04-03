@@ -121,7 +121,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
             console.log("resetting timer");
             setResetP1Timer(true);
             setResetP2Timer(true);
-            setPauseState("notStarted")
+            setPauseState("notStarted");
         }
     }
 
@@ -238,7 +238,6 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         }
 
         else if (moveType === "reset"){
-            setPauseState(null);
             resetBoard();
         }
 
@@ -479,7 +478,7 @@ function GameWrapper({p1color, p2color, setP1color, setP2color, p1name, p2name, 
         <BoardInfo p1score={p1score} p2score={p2score}
             p1color={p1color} setP1color={setP1color} p2color={p2color} setP2color={setP2color}
             p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive}
-            turn={turn} boardState={boardState} setMoveType={setMoveType} timer={timer}
+            turn={turn} boardState={boardState} pauseState={pauseState} setMoveType={setMoveType} timer={timer}
             setPlayer1Finish={setPlayer1Finish} startStopP1Timer={startStopP1Timer} resetP1Timer={resetP1Timer} setResetP1Timer={setResetP1Timer}
             setPlayer2Finish={setPlayer2Finish} startStopP2Timer={startStopP2Timer} resetP2Timer={resetP2Timer} setResetP2Timer={setResetP2Timer}
             gamemode={gamemode} setState={setState}

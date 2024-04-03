@@ -17,7 +17,7 @@ import "./BoardInfo.css"
 function BoardInfo({p1score, p2score, 
 		p1color, setP1color, p2color, setP2color,
 		p1name, p2name, p1possessive, p2possessive,
-		turn, boardState, setMoveType, timer,
+		turn, boardState, pauseState, setMoveType, timer,
 		setPlayer1Finish, startStopP1Timer, resetP1Timer, setResetP1Timer,
 		setPlayer2Finish, startStopP2Timer, resetP2Timer, setResetP2Timer,
 		gamemode, setState,
@@ -28,7 +28,9 @@ function BoardInfo({p1score, p2score,
 	const [viewState, setViewState] = useState(0);	// 0: normal, 1: settings
 
 	function closeSettings() {
-		setMoveType("resume");
+		if (pauseState !== "notStarted") {
+			setMoveType("resume");
+		}
 		setViewState(0);
 	}
 

@@ -244,16 +244,16 @@ function App() {
                             <div className="select-body">Play classic 2048 Duel.</div>
                         </div>
                     </PopBox>
-                    <PopBox className="menu-spacer" color={p1color} onClick={() => setTimerStyle("Timed")}>
-                        <div className="centered nav-box">
-                            <div className="select-header">Timed</div>
-                            <div className="select-body">A timer runs down during your turn. If it reaches 0, your opponent wins!</div>
-                        </div>
-                    </PopBox>
-                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle("Speed")}>
+                    <PopBox className="menu-spacer" color={p1color} onClick={() => setTimerStyle("Speed")}>
                         <div className="centered nav-box">
                             <div className="select-header">Speed</div>
                             <div className="select-body">Each turn, you have a few seconds to move before a random move is chosen for you.</div>
+                        </div>
+                    </PopBox>
+                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle("Timed")}>
+                        <div className="centered nav-box">
+                            <div className="select-header">Timed</div>
+                            <div className="select-body">A timer runs down during your turn. If it reaches 0, your opponent wins!</div>
                         </div>
                     </PopBox>
                 </div>

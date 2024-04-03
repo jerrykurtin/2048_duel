@@ -6,11 +6,12 @@ import "./GameMessage.css"
 function GameMessage({color, text, isButton=false, onClick=null}) {
     return (
         <div>
-            {(isButton)
-            ? <div className="endgame-msg">
-                <Button variant="outline-main-color" className="game-msg-button " onClick={() => onClick()}>{text}</Button>
+            <div className="endgame-bkgd"/>
+            <div className="endgame-msg">
+                {(isButton)
+                ? <Button variant="outline-main-color" className="game-msg game-msg-button " onClick={() => onClick()}>{text}</Button>  
+                : <div className={"game-msg text " + color}>{text}</div>}
             </div>
-            : <div className={"endgame-msg text " + color}>{text}</div>}
         </div>
     )
 }
