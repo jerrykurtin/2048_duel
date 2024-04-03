@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
 import './PopBox.css'
 
-function PopBox({color, onClick, className, children, darkBackground = false, disabled = false}) {
+function PopBox({color, onClick, className, children, darkBackground = false, disabled = false, large = false}) {
     const topRef = useRef();
     const bottomRef = useRef();
     const wrapperRef = useRef();
@@ -11,7 +11,7 @@ function PopBox({color, onClick, className, children, darkBackground = false, di
     setClicked(true);
     setTimeout( () => {
       setClicked(false);
-    }, 200);
+    }, 150);
   }
 
   function runClick() {
@@ -33,10 +33,6 @@ function PopBox({color, onClick, className, children, darkBackground = false, di
                 wrapperRef.current.style.width = wrapperWidth + 'px';
                 wrapperRef.current.style.height = wrapperHeight + 'px';
 
-                // For some reason, we need to override the top width and height
-                // topRef.current.style.width = width;
-                // topRef.current.style.height = height;
-
                 bottomRef.current.style.width = width;
                 bottomRef.current.style.height = height;
             }
@@ -53,7 +49,7 @@ function PopBox({color, onClick, className, children, darkBackground = false, di
     }, [children]);
 
     return (
-        <div className={"pop-box " + ((className) ? className + " " : "") + color + ((clicked && !disabled) ? " selected" : "")} onClick={()=>runClick()} ref={wrapperRef}>
+        <div className={"pop-box " + ((className) ? className + " " : "") + color + ((large) ? " pop-box-large" : "") + ((clicked && !disabled) ? " selected" : "")} onClick={()=>runClick()} ref={wrapperRef}>
             <div className="pop-box-bottom" ref={bottomRef}/>
             <div className={"pop-box-top" + ((darkBackground) ? " dark-background" : "")} ref={topRef}>
                 {children}

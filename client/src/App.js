@@ -108,7 +108,7 @@ function App() {
     function loadStartScreen() {
         if (startMenuState === 0) {
             return (<div>
-                <PopBox color="accent" className="start-button" onClick={() => setState(1)}>
+                <PopBox color="accent" className="start-button" onClick={() => setState(1)} large={true}>
                     <div className="centered start-text nav-box">
                         <div>Start</div>
                     </div>
@@ -203,19 +203,19 @@ function App() {
                     <div className="choose-text">Choose Your</div>
                     <div className={"choose-text " + p2color}>Gamemode</div>
                     <div className="gap"/>
-                    <PopBox className="menu-spacer" color={p1color} onClick={() => setMode("Solo")}>
+                    <PopBox className="menu-spacer" color={p1color} onClick={() => setMode("Solo")} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">Solo</div>
                             <div className="select-body">Play against an AI to hone your skills.</div>
                         </div>
                     </PopBox>
-                    <PopBox className="menu-spacer" color={p2color} onClick={() => setMode("Multi")}>
+                    <PopBox className="menu-spacer" color={p2color} onClick={() => setMode("Multi")} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">Multiplayer</div>
                             <div className="select-body">Play with your friend on the same device.</div>
                         </div>
                     </PopBox>
-                    <PopBox className="menu-spacer disabled" color={p1color}>
+                    <PopBox className="menu-spacer disabled" color={p1color} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">Online (Coming Soon)</div>
                             <div className="select-body">Play against a friend, or start a game with a stranger.</div>
@@ -238,19 +238,19 @@ function App() {
                     <div className="choose-text">Choose Your</div>
                     <div className={"choose-text " + p1color}>Timer</div>
                     <div className="gap"/>
-                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle(null)}>
+                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle(null)} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">No Timer</div>
                             <div className="select-body">Play classic 2048 Duel.</div>
                         </div>
                     </PopBox>
-                    <PopBox className="menu-spacer" color={p1color} onClick={() => setTimerStyle("Speed")}>
+                    <PopBox className="menu-spacer" color={p1color} onClick={() => setTimerStyle("Speed")} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">Speed</div>
                             <div className="select-body">Each turn, you have a few seconds to move before a random move is chosen for you.</div>
                         </div>
                     </PopBox>
-                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle("Timed")}>
+                    <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle("Timed")} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">Timed</div>
                             <div className="select-body">A timer runs down during your turn. If it reaches 0, your opponent wins!</div>

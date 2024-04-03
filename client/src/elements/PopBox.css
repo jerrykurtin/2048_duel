@@ -3,12 +3,19 @@
     overflow: visible;
 
     --box-color: var(--current-color);
+    --offset-size: calc(1 * var(--vw));
+    --box-border-radius: var(--border-radius-small);
 }
-.selected {
+
+.pop-box-large {
+    --offset-size: calc(1.5 * var(--vw));
+    --box-border-radius: calc(2 * var(--vw));
+}
+/* Replaced with transition */
+/* .selected {
     animation-name: pop;
     animation-duration: 150ms;
-    /* animation-timing-function: ease-in; */
-}
+} */
 
 .disabled.selected {
     animation-name: pop-easy;
@@ -21,10 +28,10 @@
 
 .pop-box-bottom {
     position: absolute;
-    top: calc(1 * var(--vw));
-    left: calc(1 * var(--vw));
+    top: var(--offset-size);
+    left: var(--offset-size);
     background-color: var(--box-color);
-    border-radius: var(--border-radius-small);
+    border-radius: var(--box-border-radius);
 }
 
 .pop-box-top {
@@ -36,7 +43,19 @@
     border-color: var(--box-color);
     border-style: solid;
     border-width: calc(0.2 * var(--vw));
-    border-radius: var(--border-radius-small);
+    border-radius: var(--box-border-radius);
+
+    transition: top 50ms ease-out, left 50ms ease-out;
+}
+
+.selected .pop-box-top {
+    top: var(--offset-size);
+    left: var(--offset-size);
+}
+
+.disabled .pop-box-top {
+    top: 0;
+    left: 0;
 }
 
 .pop-box-top.dark-background {
