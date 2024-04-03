@@ -44,6 +44,13 @@
     animation-fill-mode: backwards;
 }
 
+.game-msg-start {
+    width: calc(27 * var(--vw));
+    height: calc(11 * var(--vw));
+    font-size: calc(4 * var(--vw));
+    font-weight: normal;
+}
+
 .game-msg {
     opacity: 1;
 }
