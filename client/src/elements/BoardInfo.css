@@ -4,6 +4,8 @@
 
 .board-info-wrapper {
     position: relative;
+    width: calc(90 * var(--vw));
+    /* margin: 0 calc(5 * var(--vw)); */
     height: calc(74.5 * var(--vw));
 }
 
@@ -20,7 +22,7 @@
 
 .board-info-container {
     margin-bottom: calc(5 * var(--vw));
-    padding: 0 calc(5 * var(--vw));
+    /* padding: 0 calc(5 * var(--vw)); */
 }
 
 .board-info-left {
@@ -45,7 +47,7 @@
 }
 
 .long-container {
-    margin: 0 calc(5 * var(--vw));
+    /* margin: 0 calc(5 * var(--vw)); */
     margin-bottom: calc(5 * var(--vw));
     padding: calc(1.5 * var(--vw));
 }
@@ -82,7 +84,7 @@ pre {
 
 .settings-container {
     position: relative;
-    margin: calc(5 * var(--vw));
+    margin: calc(5 * var(--vw)) 0;
     height: calc(68.4 * var(--vw));
     padding: calc(3 * var(--vw));
     background-color: var(--bg-color-0);

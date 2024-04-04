@@ -3,7 +3,7 @@
 
 
 .game-container {
-    margin: calc(2.7 * var(--vw)) auto;
+    margin: calc(2.7 * var(--vw)) 0;
     position: relative;
 
     border-width: var(--game-border-width);

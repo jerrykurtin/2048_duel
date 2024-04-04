@@ -57,9 +57,9 @@
   --appear_delay: var(--animation_duration);
 }
   
-@media screen and (min-width: 520px) {
+@media screen and (min-width: 450px) {
   * {
-    --vw: 5.2px;
+    --vw: 4.5px;
   }
 }
 
@@ -452,7 +452,7 @@ a:visited {
 
 .menu-bar {
   margin-top: calc(5 * var(--vw));
-  margin-bottom: calc(10 * var(--vw));
+  margin-bottom: calc(5 * var(--vw));
   width: calc(80 * var(--vw));
 }
 
@@ -485,7 +485,7 @@ a:visited {
 }
 
 .gap {
-  margin-bottom: calc(6 * var(--vw));
+  margin-bottom: calc(5 * var(--vw));
 }
 
 .pop-box.left {
