@@ -20,8 +20,8 @@
   box-sizing: border-box;
 
   --vw: 1vw;
-  /* --vh: 1vh; */
-  --vh: calc(0.01 * var(--screen-height));
+  --vh: 1vh;
+  /* --vh: calc(0.01 * var(--screen-height)); */
   
   --primary-color: var(--text-color);
   --background-color: var(--bg-color-0);
@@ -419,6 +419,10 @@ a:visited {
   height: calc(80 * var(--vh));
   padding: calc(5 * var(--vw));
   padding-bottom: 0;
+}
+
+.how-to-box-ios {
+  height: calc(70 * var(--vh));
 }
 
 .how-to-container {

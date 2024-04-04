@@ -34,7 +34,8 @@
     "ionic:serve": "npm run start",
     "sync": "npm run build && npx cap sync",
     "hardsync": "npm run build && npx capacitor-assets generate && npx cap sync",
-    "android": "ANDROID=true npx cap sync android && npx cap open android"
+    "ios": "npm run build && npx cap sync ios && npx cap open ios",
+    "android": "ANDROID=true npm run build && npx cap sync android && npx cap open android"
   },
   "eslintConfig": {
     "extends": [

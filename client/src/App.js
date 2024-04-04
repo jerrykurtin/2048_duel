@@ -32,7 +32,7 @@ async function getGamesPlayed() {
 }
 
 function App() {
-    useScreenHeight();
+    // useScreenHeight();
 
     const platform = Capacitor.getPlatform();
 
@@ -144,7 +144,7 @@ function App() {
         else if (startMenuState === 1) {
             return (<div className="how-to-window">
                 <PopBox color="accent" darkBackground={true} disabled={true}>
-                    <div className="how-to-box">
+                    <div className={"how-to-box" + (platform === "ios" ? " how-to-box-ios" : "")}>
                         <div className="how-to-container">
                             <HowToPlay winningPiece={winningPiece}/>
                         </div>
@@ -164,7 +164,7 @@ function App() {
         else if (startMenuState === 2) {
             return (<div className="how-to-window">
                 <PopBox color="accent" darkBackground={true} disabled={true}>
-                    <div className="how-to-box">
+                    <div className={"how-to-box" + (platform === "ios" ? " how-to-box-ios" : "")}>
                         <div className="how-to-container">
                         <div className="tab-contents">
                             <h5>Stats</h5>
