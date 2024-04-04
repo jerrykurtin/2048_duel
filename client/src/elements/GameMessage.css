@@ -13,9 +13,9 @@
     border-radius: var(--border-radius);
     opacity: 0.8;
 
-    -webkit-animation: appear 200ms ease 100ms;
-    -moz-animation: appear 200ms ease 100ms;
-    animation: appear 200ms ease 100ms;
+    -webkit-animation: appear 200ms ease;
+    -moz-animation: appear 200ms ease;
+    animation: appear 200ms ease;
     -webkit-animation-fill-mode: backwards;
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
@@ -36,9 +36,9 @@
     font-size: calc(6.3 * var(--vw));
     font-weight: bold;
 
-    -webkit-animation: appear 200ms ease 100ms;
-    -moz-animation: appear 200ms ease 100ms;
-    animation: appear 200ms ease 100ms;
+    -webkit-animation: appear 200ms ease;
+    -moz-animation: appear 200ms ease;
+    animation: appear 200ms ease;
     -webkit-animation-fill-mode: backwards;
     -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;

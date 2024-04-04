@@ -5,6 +5,8 @@
     --box-color: var(--current-color);
     --offset-size: calc(1 * var(--vw));
     --box-border-radius: var(--border-radius-small);
+    --animation-duration: 200ms;
+    --animation-duration-half: 100ms;
 }
 
 .pop-box-large {
@@ -18,8 +20,7 @@
 } */
 
 .disabled.selected {
-    animation-name: pop-easy;
-    animation-duration: 100ms;
+    animation: pop-easy var(--animation-duration) ease-out;
 }
 
 .pop-box.accent {
@@ -44,11 +45,11 @@
     border-style: solid;
     border-width: calc(0.2 * var(--vw));
     border-radius: var(--box-border-radius);
-
-    transition: top 50ms ease-out, left 50ms ease-out;
+    transition: top var(--animation-duration-half) ease-in, left var(--animation-duration-half) ease-in;
 }
 
 .selected .pop-box-top {
+    transition: top var(--animation-duration-half) ease-out, left var(--animation-duration-half) ease-out;
     top: var(--offset-size);
     left: var(--offset-size);
 }

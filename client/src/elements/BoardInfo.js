@@ -86,7 +86,7 @@ function BoardInfo({p1score, p2score,
 			{((viewState == 1) 
 			?
 				<div className="board-info-inner">
-					<div className={"custom-card settings-container" +  ((timer) ? " timer-settings-container" : "")}>
+					<div className={"custom-card settings-container appear-animate" +  ((timer) ? " timer-settings-container" : "")}>
 						<Settings gamemode={gamemode} timer={timer} setMoveType={setMoveType}
 							winningPiece={winningPiece} setWinningPiece={setWinningPiece}
 							difficulty={difficulty} setDifficulty={setDifficulty}

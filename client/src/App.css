@@ -470,11 +470,11 @@ a:visited {
 
 .select-header {
   font-weight: bold;
-  font-size: calc(6 * var(--vw));
+  font-size: calc(7.5 * var(--vw));
 }
 
 .select-body {
-  font-size: calc(2.7 * var(--vw));
+  font-size: calc(3 * var(--vw));
   padding: 0 calc(5 * var(--vw));
 }
 

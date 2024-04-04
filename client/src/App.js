@@ -142,8 +142,8 @@ function App() {
             </>)
         }
         else if (startMenuState === 1) {
-            return (<div className="how-to-window">
-                <PopBox color="accent" darkBackground={true} disabled={true}>
+            return (<div className="how-to-window appear-animate">
+                <PopBox color="accent" darkBackground={true} disabled={true} large={true}>
                     <div className={"how-to-box" + (platform === "ios" ? " how-to-box-ios" : "")}>
                         <div className="how-to-container">
                             <HowToPlay winningPiece={winningPiece}/>
@@ -162,8 +162,8 @@ function App() {
             </div>)
         }
         else if (startMenuState === 2) {
-            return (<div className="how-to-window">
-                <PopBox color="accent" darkBackground={true} disabled={true}>
+            return (<div className="how-to-window appear-animate">
+                <PopBox color="accent" darkBackground={true} disabled={true} large={true}>
                     <div className={"how-to-box" + (platform === "ios" ? " how-to-box-ios" : "")}>
                         <div className="how-to-container">
                         <div className="tab-contents">
@@ -230,7 +230,7 @@ function App() {
                     </PopBox>
                     <PopBox className="menu-spacer disabled" color={p1color} large={true}>
                         <div className="centered nav-box">
-                            <div className="select-header">Online (Coming Soon)</div>
+                            <div className="select-header">Online</div>
                             <div className="select-body">Play against a friend, or start a game with a stranger.</div>
                         </div>
                     </PopBox>
@@ -260,13 +260,13 @@ function App() {
                     <PopBox className="menu-spacer" color={p1color} onClick={() => setTimerStyle("Speed")} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">Speed</div>
-                            <div className="select-body">Each turn, you have a few seconds to move before a random move is chosen for you.</div>
+                            <div className="select-body">Move quickly - if the time runs out a random move is chosen for you!</div>
                         </div>
                     </PopBox>
                     <PopBox className="menu-spacer" color={p2color} onClick={() => setTimerStyle("Timed")} large={true}>
                         <div className="centered nav-box">
                             <div className="select-header">Timed</div>
-                            <div className="select-body">A timer runs down during your turn. If it reaches 0, your opponent wins!</div>
+                            <div className="select-body">A timer runs down whenever it's your turn. If it reaches 0, you lose!</div>
                         </div>
                     </PopBox>
                 </div>
