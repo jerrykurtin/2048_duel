@@ -64,8 +64,8 @@
 }
 
 .App {
-    width: calc(90 * --vw);
-    margin: calc(5 * --vw);
+    width: calc(90 * var(--vw));
+    margin: calc(5 * var(--vw));
 }
 
 html,
