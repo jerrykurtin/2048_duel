@@ -24,14 +24,16 @@
 
 .slide-window-container {
     position: relative;
-    width: 100%;
-    height: calc(100 * var(--vh));
+    width: calc(90 * var(--vw));
+    margin: calc(5 * var(--vw));
+
+    height: calc(96 * var(--vh));
     overflow-x: hidden;
 }
 
 /* Hack needed to stop scrolling on ios */
 .slide-window-container-ios {
-    height: calc(90 * var(--vh));
+    height: calc(85 * var(--vh));
 }
 
 .slide-window {

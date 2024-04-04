@@ -64,8 +64,7 @@
 }
 
 .App {
-    width: calc(90 * var(--vw));
-    margin: calc(5 * var(--vw));
+    
 }
 
 html,
@@ -392,7 +391,7 @@ a:visited {
 
 .nav-box {
   width: calc(75 * var(--vw));
-  height: calc(32 * var(--vw));
+  height: calc(30 * var(--vw));
   padding: calc(3 * var(--vw));
 }
 
