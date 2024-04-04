@@ -8,7 +8,7 @@ function App() {
   return (
     <>
     <Routes>
-          <Route path="/" element={<MainRunner />} />
+          <Route path="" element={<MainRunner />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
        </Routes>
     </>
