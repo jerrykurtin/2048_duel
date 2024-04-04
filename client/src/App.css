@@ -20,7 +20,8 @@
   box-sizing: border-box;
 
   --vw: 1vw;
-  --vh: 1vh;
+  /* --vh: 1vh; */
+  --vh: calc(0.01 * var(--screen-height));
   
   --primary-color: var(--text-color);
   --background-color: var(--bg-color-0);
@@ -59,7 +60,6 @@
 @media screen and (min-width: 520px) {
   * {
     --vw: 5.2px;
-    /* --vh: 12px; */
   }
 }
 
@@ -410,9 +410,13 @@ a:visited {
   font-size: calc(4.5 * var(--vw));
 }
 
+.how-to-window {
+  margin-top: calc(10 * var(--vh));
+}
+
 .how-to-box {
   width: calc(90 * var(--vw));
-  height: calc(120 * var(--vw));
+  height: calc(80 * var(--vh));
   padding: calc(5 * var(--vw));
   padding-bottom: 0;
 }

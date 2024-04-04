@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Capacitor } from '@capacitor/core';
+import useScreenHeight from "./UseScreenHeight.js";
 
 import './App.css';
 import './elements/Animation-Slide.css'
@@ -31,6 +32,8 @@ async function getGamesPlayed() {
 }
 
 function App() {
+    useScreenHeight();
+
     const platform = Capacitor.getPlatform();
 
     // determine colors
@@ -57,6 +60,14 @@ function App() {
     const [page3Transition, setPage3Transition] = useState("hidden");
 
     const [gamesPlayed, setGamesPlayed] = useState(null);
+
+    useEffect(() => {
+        const fetchGamesPlayed = async () => {
+            const response = await getGamesPlayed();
+            setGamesPlayed(response);
+        }
+        fetchGamesPlayed();
+    }, [currState]);
 
     // update previous state when state is changed
     useEffect (() => {
@@ -107,28 +118,31 @@ function App() {
 
     function loadStartScreen() {
         if (startMenuState === 0) {
-            return (<div>
-                <PopBox color="accent" className="start-button" onClick={() => setState(1)} large={true}>
-                    <div className="centered start-text nav-box">
-                        <div>Start</div>
+            return (<>
+                <img className="title" src={logo} alt="2048 Duel"/>
+                <div>
+                    <PopBox color="accent" className="start-button" onClick={() => setState(1)} large={true}>
+                        <div className="centered start-text nav-box">
+                            <div>Start</div>
+                        </div>
+                    </PopBox>
+                    <div className="evenly-spaced">
+                        <PopBox color="accent" onClick={() => setStartMenuState(1)}>
+                            <div className="centered small-box small-text expanded">
+                                <div>How-To</div>
+                            </div>
+                        </PopBox>
+                        <PopBox color="accent" onClick={() => setStartMenuState(2)}>
+                            <div className="centered small-box small-text">
+                                <div>About</div>
+                            </div>
+                        </PopBox>
                     </div>
-                </PopBox>
-                <div className="evenly-spaced">
-                    <PopBox color="accent" onClick={() => setStartMenuState(1)}>
-                        <div className="centered small-box small-text expanded">
-                            <div>How-To</div>
-                        </div>
-                    </PopBox>
-                    <PopBox color="accent" onClick={() => setStartMenuState(2)}>
-                        <div className="centered small-box small-text">
-                            <div>About</div>
-                        </div>
-                    </PopBox>
                 </div>
-            </div>)
+            </>)
         }
         else if (startMenuState === 1) {
-            return (<div>
+            return (<div className="how-to-window">
                 <PopBox color="accent" darkBackground={true} disabled={true}>
                     <div className="how-to-box">
                         <div className="how-to-container">
@@ -148,7 +162,7 @@ function App() {
             </div>)
         }
         else if (startMenuState === 2) {
-            return (<div>
+            return (<div className="how-to-window">
                 <PopBox color="accent" darkBackground={true} disabled={true}>
                     <div className="how-to-box">
                         <div className="how-to-container">
@@ -184,7 +198,6 @@ function App() {
         <div className="App">
             <div className={"slide-window-container" + (platform === "ios" ? " slide-window-container-ios" : "")}>
                 <div className={"horizontally-centered slide-window " + page0Transition}>
-                    <img className="title" src={logo} alt="2048 Duel"/>
                     {loadStartScreen()}
                 </div>
                 <div className={"horizontally-centered  slide-window " + page1Transition}>
