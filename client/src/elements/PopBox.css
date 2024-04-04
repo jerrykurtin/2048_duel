@@ -5,13 +5,15 @@
     --box-color: var(--current-color);
     --offset-size: calc(1 * var(--vw));
     --box-border-radius: var(--border-radius-small);
-    --animation-duration: 200ms;
-    --animation-duration-half: 100ms;
+    --animation-duration: 150ms;
+    --animation-duration-half: 75ms;
 }
 
 .pop-box-large {
     --offset-size: calc(1.5 * var(--vw));
     --box-border-radius: calc(2 * var(--vw));
+    --animation-duration: 200ms;
+    --animation-duration-half: 100ms;
 }
 /* Replaced with transition */
 /* .selected {

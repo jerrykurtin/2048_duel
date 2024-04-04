@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import './PopBox.css'
 
 function PopBox({color, onClick, className, children, darkBackground = false, disabled = false, large = false}) {
-    const clickDurationMs = 100;
+    const clickDurationMs = ((large) ? 100 : 75);
     const topRef = useRef();
     const bottomRef = useRef();
     const wrapperRef = useRef();

@@ -51,18 +51,12 @@
 
 /* Tile deletion object */
 .deleted {
-    -webkit-animation: delete-after-move var(--animation_duration);
-    -moz-animation: delete-after-move var(--animation_duration);
     animation: delete-after-move var(--animation_duration);
     visibility: hidden;
 }
 
 .tile-new .tile-inner {
-    -webkit-animation: appear var(--appear_duration) ease-in-out var(--appear_delay);
-    -moz-animation: appear var(--appear_duration) ease-in-out var(--appear_delay);
     animation: appear var(--appear_duration) ease-in-out var(--appear_delay);
-    -webkit-animation-fill-mode: backwards;
-    -moz-animation-fill-mode: backwards;
     animation-fill-mode: backwards;
 }
 
