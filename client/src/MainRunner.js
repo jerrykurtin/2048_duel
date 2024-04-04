@@ -123,7 +123,7 @@ function App() {
                 <div>
                     <PopBox color="accent" className="start-button" onClick={() => setState(1)} large={true}>
                         <div className="centered start-text nav-box">
-                            <div>Start</div>
+                            <div>Start HELLO</div>
                         </div>
                     </PopBox>
                     <div className="evenly-spaced">
