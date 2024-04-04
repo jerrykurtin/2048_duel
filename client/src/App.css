@@ -411,38 +411,39 @@ a:visited {
 }
 
 .how-to-window {
-  margin-top: calc(10 * var(--vh));
+  margin-top: calc(5 * var(--vh));
 }
 
 .how-to-box {
   width: calc(90 * var(--vw));
-  height: calc(80 * var(--vh));
+  height: calc(90 * var(--vh));
   padding: calc(5 * var(--vw));
   padding-bottom: 0;
 }
 
 .how-to-box-ios {
-  height: calc(70 * var(--vh));
+  height: calc(80 * var(--vh));
 }
 
 .how-to-container {
-  height: 80%;
+  height: 85%;
   overflow: auto;
 }
 
 .how-to-close {
-  height: 20%;
+  height: 15%;
 
 }
 
 .how-to-container::after {
   content: "";
   position: absolute;
-  bottom: 19%; /* still not sure how to calculate this. Should depend on container height */
+  bottom: 14%; /* still not sure how to calculate this. Should depend on container height */
   left: 0;
   width: 100%;
   height: 15%; /* Adjust as needed */
   background: linear-gradient(transparent, var(--bg-color-0));
+  pointer-events: none;
 }
 
 .menu-spacer {
