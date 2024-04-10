@@ -59,25 +59,27 @@ function BoardInfo({p1score, p2score,
 						</div>
 					</PopBox>
 				</div>
-				<div className="custom-card long-container board-info">
-					<div className={"centered-text settings-text text"} id="turn" onClick={() => openSettings()}>
-						<UilSetting className="settings-icon"/>
-						{((p1color === p2color) ? " Blind " : "") + 
-						((gamemode.toLowerCase() == "solo") ? difficulty : gamemode) +
-						((timer) ? " " + timeLimit + " sec " + timer : "") +
-						", First to " + winningPiece}
+				<div className="split-wrapper custom-card board-info settings-select-container long-container" onClick={() => openSettings()}>
+					<div className="split-left settings-text text" id="turn">
+							{((p1color === p2color) ? " Blind " : "") + 
+							((gamemode.toLowerCase() == "solo") ? difficulty : gamemode) +
+							((timer) ? " " + timeLimit + " sec " + timer : "") +
+							", First to " + winningPiece}
 					</div>
+					<UilSetting className="split-right settings-icon"/>
 				</div>
 				<div className="evenly-spaced board-info-container">
 					<ScoreBoard
 						isLeft={true} color={p1color} name={p1name} score={p1score} timer={timer}
 						signalFinish={setPlayer1Finish} timeLimit={timeLimit} 
 						startStopTimer={startStopP1Timer} resetTimer={resetP1Timer} setResetTimer={setResetP1Timer}
+						onClickName={openSettings}
 					/>
 					<ScoreBoard
 						isLeft={false} color={p2color} name={p2name} score={p2score} timer={timer}
 						signalFinish={setPlayer2Finish} timeLimit={timeLimit} 
 						startStopTimer={startStopP2Timer} resetTimer={resetP2Timer} setResetTimer={setResetP2Timer}
+						onClickName={openSettings}
 					/>
 				</div>
 				<TurnInfo className="turn-info" p1color={p1color} p2color={p2color} p1name={p1name} p2name={p2name} p1possessive={p1possessive} p2possessive={p2possessive} turn={turn} boardState={boardState}/>

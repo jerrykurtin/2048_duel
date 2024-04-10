@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 import Timer from './Timer';
 
-function ScoreBoard({isLeft, color, name, score, timer, signalFinish, timeLimit, startStopTimer, resetTimer, setResetTimer}) {
+function ScoreBoard({isLeft, color, name, score, timer, signalFinish, timeLimit, startStopTimer, resetTimer, setResetTimer, onClickName}) {
     
     var direction = "right";
     if (isLeft) {
@@ -18,7 +18,7 @@ function ScoreBoard({isLeft, color, name, score, timer, signalFinish, timeLimit,
 
     return (
         <div className={"custom-card board-info board-info-" + direction + " text-" + direction}>
-            <div className={"text header" + " " + color}><strong>{name}</strong></div>
+            <div className={"text header" + " " + color}  onClick={onClickName}><strong>{name}</strong></div>
             {((timer) ? 
                 <div className="text">
                     <div className={"timer-container-" + direction}>

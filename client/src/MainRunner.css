@@ -117,11 +117,12 @@ body {
 }
 
 .settings-icon {
-  --dim: calc(4 * var(--vw)) !important;
+  --dim: calc(5 * var(--vw)) !important;
   width: var(--dim);
   height: var(--dim);
+  margin-top: calc(.1 * var(--dim));
   margin-bottom: calc(.15 * var(--dim));
-  margin-right: calc(.1 * var(--dim));
+  color: var(--accent-color);
 }
 
 .check-icon {

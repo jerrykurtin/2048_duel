@@ -49,15 +49,35 @@
 .long-container {
     /* margin: 0 calc(5 * var(--vw)); */
     margin-bottom: calc(5 * var(--vw));
-    padding: calc(1.5 * var(--vw));
+    padding: calc(1.5 * var(--vw)) calc(3 * var(--vw));
+}
+
+.split-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.split-left {
+    /* Center-align the text */
+    /* margin: auto; */
+}
+
+.split-right {
+    margin-left: auto;
 }
 
 .centered-text {
     text-align: center;
 }
 
+.settings-select-container {
+    border-color: var(--accent-color);
+    border-width: calc(.3 * var(--vw));
+}
+
+
 .settings-text {
-    font-size: calc(4 * var(--vw)) !important;
+    font-size: calc(4.2 * var(--vw)) !important;
 }
 
 .timer-container-left {
@@ -85,6 +105,7 @@ pre {
 .settings-container {
     position: relative;
     margin: calc(5 * var(--vw)) 0;
+    margin-top: calc(2.5 * var(--vw));
     height: calc(68.4 * var(--vw));
     padding: calc(3 * var(--vw));
     background-color: var(--bg-color-0);
